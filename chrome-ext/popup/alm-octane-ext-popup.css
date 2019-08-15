@@ -18,7 +18,7 @@ button[disabled] {
 
 .alm-octane-ext-popup__header {
 	display: flex;
-	background-image: linear-gradient(to right, #2767b0, #c6179d);
+	background-image: linear-gradient(to right, #c6179d, #2767b0);
 	height: 30px;
 	line-height: 30px;
     padding: 10px;

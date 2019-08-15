@@ -1,80 +1,58 @@
-//let extId = 'TBD';
-
 const localStorageConfigKey = 'alm-octane-chrome-ext-config';
-
-logMsg = (msg) => {
-	console.log(`ALM-OCTANE-CHROME-EXT-BACKGROUND | ${msg}`);
+const defaultConfigObj = {
+	url: 'localhost:9090/ui/',
+	color: '#0073e7'
 };
+const cssContentScript = 'content/alm-octane-ext-content.css';
+const jsContentScript = 'content/alm-octane-ext-content.js';
 
-const getDefaultConfigObj = () => {
-	return {
-		sites: [
-			{
-				id: `local-dev`,
-				url: `localhost:9090/ui/`,
-				css: `/content/alm-octane-ext-content.css`,
-				js: `/content/alm-octane-ext-content.js`,
-				mastheadColors: [`#2767b0`, `#c6179d`],
-			},
-			{
-				id: `center`,
-				url: `center.almoctane.com/ui/`,
-				css: `/content/alm-octane-ext-content.css`,
-				js: `/content/alm-octane-ext-content.js`,
-				mastheadColors: [`#014272`, `#0079ef`],
-			},
-		]
-	};
+const log = (msg) => {
+	console.log(`ALM OCTANE CHROME EXT BACKGROUND PAGE | ${msg}`);
 };
 
 const ensureConfigInStorage = () => {
+	log('ensureConfigInStorage');
 	if (localStorage.getItem(localStorageConfigKey) === null) {
-		localStorage.setItem(localStorageConfigKey, JSON.stringify(getDefaultConfigObj()));
+		localStorage.setItem(localStorageConfigKey, JSON.stringify(defaultConfigObj));
 	}
 };
 
+const addMessageListener = () => {
+	chrome.runtime.onMessage.addListener((request, sender, responseFunc) => {
+		if (request.type === 'alm-octane-ext-content-to-background--init') {
+			log(request.type);
+			log('send response to content script');
+			responseFunc(
+				{
+					type: 'alm-octane-ext-background-to-content--config',
+					data: localStorage.getItem(localStorageConfigKey)
+				}
+			);
+		}
+	});
+};
+
 const injectCss = async (tabId, cssFilePath) => {
-	logMsg(`injecting ${cssFilePath}`);
+	log(`injecting ${cssFilePath}`);
 	await chrome.tabs.insertCSS(tabId, {file: cssFilePath});
 };
 
 const injectJs = async (tabId, jsFilePath) => {
-	logMsg(`injecting ${jsFilePath}`);
+	log(`injecting ${jsFilePath}`);
 	await chrome.tabs.executeScript(tabId, {file: jsFilePath});
 };
 
-const onTabUpdateComplete = async (tabId, tab) => {
-	const configObj = JSON.parse(localStorage.getItem(localStorageConfigKey));
-	if (configObj.sites) {
-		const configRec = configObj.sites.find((site) => {
-			return site.url && tab.url.includes(site.url);
-		});
-		if (configRec) {
-			if (configRec.css) {
-				await injectCss(tabId, configRec.css);
-			}
-			if (configRec.js) {
-				await injectJs(tabId, configRec.js);
-			}
-			chrome.tabs.sendMessage(
-				tabId,
-				{
-					kind: 'alm-octane-chrome-ext-init',
-					config: configRec,
-				}
-			);
+const addOnTabCompleteListener = () => {
+	chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+		const config = JSON.parse(localStorage.getItem(localStorageConfigKey));
+		if (changeInfo.status === 'complete' && config.url && tab.url.includes(config.url)) {
+			await injectCss(tabId, cssContentScript);
+			await injectJs(tabId, jsContentScript);
 		}
-	}
+	});
 };
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-	if (changeInfo.status === 'complete') {
-		logMsg(`tab ${tabId} "${tab.title}" update completed`);
-		setTimeout(() => {
-			onTabUpdateComplete(tabId, tab).then(() => {
-			});
-		}, 3000);
-	}
-});
-
+log('background page loaded');
 ensureConfigInStorage();
+addMessageListener();
+addOnTabCompleteListener();

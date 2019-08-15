@@ -1,4 +1,6 @@
-//let extId = 'TBD';
+const log = (msg) => {
+	console.log(`ALM OCTANE CHROME EXT POPUP DIALOG | ${msg}`);
+};
 
 const localStorageConfigKey = 'alm-octane-chrome-ext-config';
 let initialConfigStr;
@@ -7,6 +9,7 @@ let cancelButton;
 let saveButton;
 
 const setDomElements = () => {
+	log('setDomElements');
 	configTextarea = document.getElementById('alm-octane-ext-popup__content__config');
 	cancelButton = document.getElementById('alm-octane-ext-popup-cancel-button');
 	saveButton = document.getElementById('alm-octane-ext-popup-save-button');
@@ -16,6 +19,7 @@ const setDomElements = () => {
 };
 
 const checkConfig = () => {
+	log('checkConfig');
 	const configStr = configTextarea.value;
 	try {
 		JSON.parse(configStr);
@@ -26,12 +30,14 @@ const checkConfig = () => {
 };
 
 const onPopupLoad = () => {
+	log('onPopupLoad');
 	setDomElements();
-	initialConfigStr = JSON.stringify(JSON.parse(localStorage.getItem(localStorageConfigKey)), null, 2);
+	initialConfigStr = JSON.stringify(JSON.parse(localStorage.getItem(localStorageConfigKey) || '{}'), null, 2);
 	configTextarea.value = initialConfigStr;
 };
 
 const onConfigChange = () => {
+	log('onConfigChange');
 	const configOK = checkConfig();
 	const canSave = configOK && (initialConfigStr !== configTextarea.value);
 	const textAreaErrorClass = 'alm-octane-ext-popup__content__config--error';
