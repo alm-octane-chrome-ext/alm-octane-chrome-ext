@@ -9,8 +9,8 @@ button[disabled] {
 }
 
 .octanetopus-popup {
-	height: 310px;
-	width: 500px;
+	height: 370px;
+	width: 600px;
 	font-family: MetricWeb-Regular, arial, sans-serif;
 }
 
@@ -41,7 +41,7 @@ button[disabled] {
 }
 
 .octanetopus-popup__content {
-	height: 210px;
+	height: calc(100% - 100px);
 	margin-top: 10px;
 }
 

@@ -81,7 +81,7 @@ const injectScript = () => {
 
 const updateClocks = () => {
 	config.cityClocks.forEach(async (cc, i) => {
-		const r = await fetch(`http://worldtimeapi.org/api/timezone/${cc.timeZone}`);
+		const r = await fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
 		const j = await r.json();
 		const cityTimeStr = j['datetime'];
 		const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);

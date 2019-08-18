@@ -1,6 +1,9 @@
 const localStorageConfigKey = 'octanetopus-config';
 const defaultConfigObj = {
-	url: 'localhost:9090/ui/',
+	urls: [
+		'localhost:9090/ui/',
+		'center.almoctane.com/ui/'
+	],
 	cityClocks: [
 		{
 			uiName: 'SF',
@@ -58,9 +61,17 @@ const injectJs = async (tabId, jsFilePath) => {
 const addOnTabCompleteListener = () => {
 	chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 		const config = JSON.parse(localStorage.getItem(localStorageConfigKey));
-		if (changeInfo.status === 'complete' && config.url && tab.url.includes(config.url)) {
-			await injectCss(tabId, cssContentScript);
-			await injectJs(tabId, jsContentScript);
+		if (changeInfo.status === 'complete' && config.urls && config.urls.length > 0) {
+			let found = false;
+			config.urls.forEach(url => {
+				if (!found && tab.url.includes(url)) {
+					found = true;
+					(async () => {
+						await injectCss(tabId, cssContentScript);
+						await injectJs(tabId, jsContentScript);
+					})();
+				}
+			});
 		}
 	});
 };
