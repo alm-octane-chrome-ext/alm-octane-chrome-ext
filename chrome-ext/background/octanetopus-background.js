@@ -1,7 +1,20 @@
 const localStorageConfigKey = 'octanetopus-config';
 const defaultConfigObj = {
 	url: 'localhost:9090/ui/',
-	color: '#0073e7'
+	cityClocks: [
+		{
+			uiName: 'SF',
+			timeZone: 'America/Los_Angeles'
+		},
+		{
+			uiName: 'TLV',
+			timeZone: 'Asia/Jerusalem'
+		},
+		{
+			uiName: 'SHA',
+			timeZone: 'Asia/Shanghai'
+		},
+	]
 };
 const cssContentScript = 'content/octanetopus-content.css';
 const jsContentScript = 'content/octanetopus-content.js';
