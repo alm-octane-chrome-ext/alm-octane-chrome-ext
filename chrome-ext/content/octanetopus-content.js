@@ -87,12 +87,10 @@ const updateClocks = () => {
 		const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);
 		if (clockElm) {
 			clockElm.textContent = `${cc.uiName} ${cityTimeStr.substr(11,5)}`;
-			const hour = parseInt(cityTimeStr.substr(11,2));
-			if (hour >= 7 && hour < 19) {
-				clockElm.classList.add('octanetopus-city-clock--day');
-			} else {
-				clockElm.classList.add('octanetopus-city-clock--night');
+			for (i=0; i<=23; i++) {
+				clockElm.classList.remove(`octanetopus-city-clock--hour-${i<10 ? '0'+i : i}`);
 			}
+			clockElm.classList.add(`octanetopus-city-clock--hour-${cityTimeStr.substr(11,2)}`);
 			log(`${cc.uiName} clock updated to ${cityTimeStr.substr(11,5)}`);
 		}
 	});
