@@ -1,4 +1,4 @@
-let config = {};
+let config = null;
 
 const log = (msg) => {
 	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
@@ -23,18 +23,44 @@ const init = () => {
 	);
 };
 
-const waitForAppReady = (selectorToFind, onLoadCallback, maxNumberOfTries = 30, retryFrequencyMillis = 1000, curTryNumber = 1) => {
+const waitForConfigMaxNumberOfTries = 30;
+const waitForConfigRetryFrequencyMillis = 1000;
+const waitForConfig = (onConfigReady, curTryNumber = 1) => {
+	log(`waitForConfig - try #${curTryNumber}`);
+	if (config) {
+		log('config ready');
+		onConfigReady();
+	} else if (curTryNumber < waitForConfigMaxNumberOfTries) {
+		log('No config yet - will try again');
+		setTimeout(() => {
+			waitForConfig(onConfigReady, curTryNumber+1);
+		},
+		waitForConfigRetryFrequencyMillis
+		);
+	} else {
+		log('max number of retries exceeded - give up');
+	}
+};
+
+const onConfigReady = () => {
+	log('onConfigReady');
+	waitForAppReady('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)', onAppReady);
+};
+
+const waitForAppReadyMaxNumberOfTries = 30;
+const waitForAppReadyRetryFrequencyMillis = 1000;
+const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
 	log(`waitForAppReady - try #${curTryNumber}`);
 	const elm = document.querySelector(selectorToFind);
 	if (elm) {
 		log('app ready');
 		onAppReady();
-	} else if (curTryNumber < maxNumberOfTries) {
+	} else if (curTryNumber < waitForAppReadyMaxNumberOfTries) {
 		log('Unable to find DOM element - will try again');
 		setTimeout(() => {
-			waitForAppReady(selectorToFind, onLoadCallback, maxNumberOfTries, retryFrequencyMillis, curTryNumber+1);
+			waitForAppReady(selectorToFind, onAppReady, curTryNumber+1);
 		},
-		retryFrequencyMillis
+		waitForAppReadyRetryFrequencyMillis
 		);
 	} else {
 		log('max number of retries exceeded - give up');
@@ -62,7 +88,7 @@ const addSelfEsteemBooster = () => {
 		btnElm.textContent = 'SELF-ESTEEM++';
 		btnElm.classList.add('button--primary', 'margin-r--sm');
 		btnElm.style['border'] = '1px solid #fff';
-		if (config.color) {
+		if (config && config.color) {
 			btnElm.style['background-color'] = config.color;
 		}
 		btnElm.addEventListener('click', () => {alert('You Are Amazing!');});
@@ -73,4 +99,4 @@ const addSelfEsteemBooster = () => {
 
 log('content script loaded');
 init();
-waitForAppReady('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)', onAppReady);
+waitForConfig(onConfigReady);
