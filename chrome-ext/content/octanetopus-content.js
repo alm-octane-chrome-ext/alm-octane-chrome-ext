@@ -51,7 +51,6 @@ const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
 const onAppReady = () => {
 	log('onAppReady');
 	injectScript();
-	//addSelfEsteemBooster();
 	addCityClocks();
 };
 
@@ -62,35 +61,17 @@ const injectScript = () => {
 	(document.head || document.documentElement).appendChild(script);
 };
 
-// const addSelfEsteemBooster = () => {
-// 	log('add self esteem booster');
-// 	const parentElm = document.querySelector('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)');
-// 	if (parentElm) {
-// 		const btnElm = document.createElement('button');
-// 		btnElm.textContent = 'SELF-ESTEEM++';
-// 		btnElm.classList.add('button--primary', 'margin-r--sm');
-// 		btnElm.style['border'] = '1px solid #fff';
-// 		if (config && config.color) {
-// 			btnElm.style['background-color'] = config.color;
-// 		}
-// 		btnElm.addEventListener('click', () => {alert('You Are Amazing!');});
-// 		parentElm.appendChild(btnElm);
-// 		log('self esteem booster added');
-// 	}
-// };
-
 const updateClocks = () => {
-	config.cityClocks.forEach(async (cc, i) => {
-		const r = await fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
-		const j = await r.json();
-		const cityTimeStr = j['datetime'];
+	config.cityClocks.forEach((cc, i) => {
 		const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);
 		if (clockElm) {
+			const r = await fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
+			const j = await r.json();
+			const cityTimeStr = j['datetime'];		
 			clockElm.textContent = `${cc.uiName} ${cityTimeStr.substr(11,5)}`;
-			for (i=0; i<=23; i++) {
-				clockElm.classList.remove(`octanetopus-city-clock--hour-${i<10 ? '0'+i : i}`);
-			}
-			clockElm.classList.add(`octanetopus-city-clock--hour-${cityTimeStr.substr(11,2)}`);
+			const h = parseInt(cityTimeStr.substr(11,2));
+			clockElm.style['background-position-x'] = `-${50 * h}px`;
+			clockElm.style['color'] = (h>=8 && h>=12) ? '#000': '#fff';
 			log(`${cc.uiName} clock updated to ${cityTimeStr.substr(11,5)}`);
 		}
 	});
