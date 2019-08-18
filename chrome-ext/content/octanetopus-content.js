@@ -4,25 +4,6 @@ const log = (msg) => {
 	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
 };
 
-const init = () => {
-	log('init');
-	document.addEventListener('octanetopus-app-to-content--user', (/*e*/) => {
-		log('octanetopus-app-to-content--user');
-		//alert(`Hi ${e.detail}`);
-	});
-	chrome.runtime.sendMessage(
-		{
-			type: 'octanetopus-content-to-background--init'
-		},
-		(response) => {
-			if (response.type === 'octanetopus-background-to-content--config') {
-				log(response.type);
-				config = JSON.parse(response.data || '{}');
-			}
-		}
-	);
-};
-
 const waitForConfigMaxNumberOfTries = 30;
 const waitForConfigRetryFrequencyMillis = 1000;
 const waitForConfig = (onConfigReady, curTryNumber = 1) => {
@@ -97,6 +78,25 @@ const addSelfEsteemBooster = () => {
 	}
 };
 
+const go = () => {
+	log('go');
+	document.addEventListener('octanetopus-app-to-content--user', (/*e*/) => {
+		log('octanetopus-app-to-content--user');
+		//alert(`Hi ${e.detail}`);
+	});
+	chrome.runtime.sendMessage(
+	{
+		type: 'octanetopus-content-to-background--init'
+	},
+	(response) => {
+		if (response.type === 'octanetopus-background-to-content--config') {
+			log(response.type);
+			config = JSON.parse(response.data || '{}');
+		}
+	}
+	);
+	waitForConfig(onConfigReady);
+};
+
 log('content script loaded');
-init();
-waitForConfig(onConfigReady);
+go();
