@@ -1,13 +1,13 @@
-const localStorageConfigKey = 'alm-octane-chrome-ext-config';
+const localStorageConfigKey = 'octanetopus-config';
 const defaultConfigObj = {
 	url: 'localhost:9090/ui/',
 	color: '#0073e7'
 };
-const cssContentScript = 'content/alm-octane-ext-content.css';
-const jsContentScript = 'content/alm-octane-ext-content.js';
+const cssContentScript = 'content/octanetopus-content.css';
+const jsContentScript = 'content/octanetopus-content.js';
 
 const log = (msg) => {
-	console.log(`ALM OCTANE CHROME EXT BACKGROUND PAGE | ${msg}`);
+	console.log(`OCTANETOPUS BACKGROUND PAGE | ${msg}`);
 };
 
 const ensureConfigInStorage = () => {
@@ -19,12 +19,12 @@ const ensureConfigInStorage = () => {
 
 const addMessageListener = () => {
 	chrome.runtime.onMessage.addListener((request, sender, responseFunc) => {
-		if (request.type === 'alm-octane-ext-content-to-background--init') {
+		if (request.type === 'octanetopus-content-to-background--init') {
 			log(request.type);
 			log('send response to content script');
 			responseFunc(
 				{
-					type: 'alm-octane-ext-background-to-content--config',
+					type: 'octanetopus-background-to-content--config',
 					data: localStorage.getItem(localStorageConfigKey)
 				}
 			);

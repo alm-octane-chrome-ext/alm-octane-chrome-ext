@@ -1,21 +1,21 @@
 let config = {};
 
 const log = (msg) => {
-	console.log(`ALM OCTANE CHROME EXT CONTENT SCRIPT | ${msg}`);
+	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
 };
 
 const init = () => {
 	log('init');
-	document.addEventListener('alm-octane-ext-app-to-content--user', (/*e*/) => {
-		log('alm-octane-ext-app-to-content--user');
+	document.addEventListener('octanetopus-app-to-content--user', (/*e*/) => {
+		log('octanetopus-app-to-content--user');
 		//alert(`Hi ${e.detail}`);
 	});
 	chrome.runtime.sendMessage(
 		{
-			type: 'alm-octane-ext-content-to-background--init'
+			type: 'octanetopus-content-to-background--init'
 		},
 		(response) => {
-			if (response.type === 'alm-octane-ext-background-to-content--config') {
+			if (response.type === 'octanetopus-background-to-content--config') {
 				log(response.type);
 				config = JSON.parse(response.data || '{}');
 			}
@@ -23,7 +23,7 @@ const init = () => {
 	);
 };
 
-const waitForAppReady = (selectorToFind, onLoadCallback, maxNumberOfTries = 10, retryFrequencyMillis = 1000, curTryNumber = 1) => {
+const waitForAppReady = (selectorToFind, onLoadCallback, maxNumberOfTries = 30, retryFrequencyMillis = 1000, curTryNumber = 1) => {
 	log(`waitForAppReady - try #${curTryNumber}`);
 	const elm = document.querySelector(selectorToFind);
 	if (elm) {
@@ -50,7 +50,7 @@ const onAppReady = () => {
 const injectScript = () => {
 	log('injectScript');
 	const script = document.createElement('script');
-	script.src = chrome.runtime.getURL('inject/alm-octane-ext-inject-script.js');
+	script.src = chrome.runtime.getURL('inject/octanetopus-inject-script.js');
 	(document.head || document.documentElement).appendChild(script);
 };
 
