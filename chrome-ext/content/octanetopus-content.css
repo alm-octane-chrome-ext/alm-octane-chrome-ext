@@ -1,0 +1,48 @@
+.mqm-masthead > .masthead-bg-color {
+    background-image: linear-gradient(to right, #2767b0, #c6179d);
+}
+
+.octanetopus-city-clock {
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 16px;
+    border-radius: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: #999;
+    color: #666;
+}
+
+.octanetopus-city-clock--hour-07,
+.octanetopus-city-clock--hour-08,
+.octanetopus-city-clock--hour-09,
+.octanetopus-city-clock--hour-10,
+.octanetopus-city-clock--hour-11,
+.octanetopus-city-clock--hour-12,
+.octanetopus-city-clock--hour-13,
+.octanetopus-city-clock--hour-14,
+.octanetopus-city-clock--hour-15,
+.octanetopus-city-clock--hour-16,
+.octanetopus-city-clock--hour-17,
+.octanetopus-city-clock--hour-18 {
+    background-image: linear-gradient(to right, #ff9, #aa3);
+    color: #000;
+}
+
+.octanetopus-city-clock--hour-00,
+.octanetopus-city-clock--hour-01,
+.octanetopus-city-clock--hour-02,
+.octanetopus-city-clock--hour-03,
+.octanetopus-city-clock--hour-04,
+.octanetopus-city-clock--hour-05,
+.octanetopus-city-clock--hour-06,
+.octanetopus-city-clock--hour-19,
+.octanetopus-city-clock--hour-20,
+.octanetopus-city-clock--hour-21,
+.octanetopus-city-clock--hour-22,
+.octanetopus-city-clock--hour-23 {
+    background-image: linear-gradient(to right, #666, #000);
+    color: #fff;
+}

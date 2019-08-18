@@ -1,2 +1,1 @@
-# alm-octane-chrome-ext
-ALM Octane Chrome extension
+# ALM Octane Chrome Ext
