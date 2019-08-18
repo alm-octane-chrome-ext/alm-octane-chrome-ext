@@ -105,6 +105,7 @@ const addCityClocks = () => {
 		const clockElms = {};
 		config.cityClocks.forEach((cc, i) => {
 			clockElms[i] = document.createElement('div');
+			clockElms[i].textContent = `${cc.uiName} ??:??`;
 			clockElms[i].setAttribute('id', `octanetopus-city-clock--${i}`);
 			clockElms[i].classList.add('octanetopus-city-clock');
 			parentElm.appendChild(clockElms[i]);

@@ -10,14 +10,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    background-color: #999;
+    color: #666;
 }
 
 .octanetopus-city-clock--day {
-    background-color: #cc6;
+    background-image: linear-gradient(to right, #ff9, #aa3);
     color: #000;
 }
 
 .octanetopus-city-clock--night {
-    background-color: #333;
+    background-image: linear-gradient(to right, #666, #000);
     color: #fff;
 }

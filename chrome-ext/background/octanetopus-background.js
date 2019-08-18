@@ -11,7 +11,7 @@ const defaultConfigObj = {
 			timeZone: 'Asia/Jerusalem'
 		},
 		{
-			uiName: 'SHA',
+			uiName: '上海',
 			timeZone: 'Asia/Shanghai'
 		},
 	]
