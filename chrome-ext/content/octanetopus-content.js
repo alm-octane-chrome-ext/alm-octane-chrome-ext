@@ -79,10 +79,11 @@ const addCityClocks = () => {
 	log('add clocks');
 	const parentElm = document.querySelector('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)');
 	if (parentElm && config && config.cityClocks && config.cityClocks.length && config.cityClocks.length > 0) {
-		const clockElms = {};
+		const clocksElm = document.createElement('div');
+		clocksElm.setAttribute('id', 'octanetopus-city-clocks');
+		clocksElm.classList.add('octanetopus-city-clocks');
 		config.cityClocks.forEach((cc, i) => {
 			const clockElm = document.createElement('div');
-			clockElms[i] = clockElm;
 			clockElm.setAttribute('id', `octanetopus-city-clock--${i}`);
 			clockElm.classList.add('octanetopus-city-clock');
 			clockElm.setAttribute('title', cc.uiName);
@@ -99,8 +100,9 @@ const addCityClocks = () => {
 			timeElm.textContent = `??:??`;
 			clockElm.appendChild(timeElm);
 
-			parentElm.appendChild(clockElm);
+			clocksElm.appendChild(clockElm);
 		});
+		parentElm.appendChild(clocksElm);
 		log(`${config.cityClocks.length} clocks added`);
 		updateClocks();
 		setInterval(() => {

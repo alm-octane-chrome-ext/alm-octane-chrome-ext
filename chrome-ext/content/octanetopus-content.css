@@ -2,6 +2,10 @@
     background-image: linear-gradient(to right, #0079ef, #333);
 }
 
+.octanetopus-city-clocks {
+    display: flex;
+}
+
 .octanetopus-city-clock {
     display: flex;
     margin-right: 10px;
