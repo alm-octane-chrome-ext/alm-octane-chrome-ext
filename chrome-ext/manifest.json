@@ -26,6 +26,7 @@
     "https://*/*"
   ],
   "web_accessible_resources": [
-    "inject/octanetopus-inject-script.js"
+    "inject/octanetopus-inject-script.js",
+    "img/flags/*.svg"
   ]
 }

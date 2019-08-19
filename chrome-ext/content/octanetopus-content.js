@@ -63,8 +63,8 @@ const injectScript = () => {
 
 const updateClocks = () => {
 	config.cityClocks.forEach((cc, i) => {
-		const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);
-		if (clockElm) {
+		const timeElm = document.getElementById(`octanetopus-city-clock--${i}--time`);
+		if (timeElm) {
 			(async () => {
 				const r = await	fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
 				const j = await	r.json();
@@ -72,9 +72,9 @@ const updateClocks = () => {
 				const hh = cityTimeStr.substr(11, 2);
 				const mm = cityTimeStr.substr(14, 2);
 				const h = parseInt(hh);
-				clockElm.textContent = `${cc.uiName} ${hh}:${mm}`;
-				clockElm.style['background-position-x'] = `-${50 * h}px`;
-				clockElm.style['color'] = (h >= 8 && h <= 12) ? '#000' : '#fff';
+				timeElm.style['background-position-x'] = `-${25 * h}px`;
+				timeElm.style['color'] = (h >= 8 && h <= 12) ? '#000' : '#fff';
+				timeElm.textContent = `${hh}:${mm}`;
 			})();
 		}
 	});
@@ -86,11 +86,25 @@ const addCityClocks = () => {
 	if (parentElm && config && config.cityClocks && config.cityClocks.length && config.cityClocks.length > 0) {
 		const clockElms = {};
 		config.cityClocks.forEach((cc, i) => {
-			clockElms[i] = document.createElement('div');
-			clockElms[i].textContent = `${cc.uiName} ??:??`;
-			clockElms[i].setAttribute('id', `octanetopus-city-clock--${i}`);
-			clockElms[i].classList.add('octanetopus-city-clock');
-			parentElm.appendChild(clockElms[i]);
+			const clockElm = document.createElement('div');
+			clockElms[i] = clockElm;
+			clockElm.setAttribute('id', `octanetopus-city-clock--${i}`);
+			clockElm.classList.add('octanetopus-city-clock');
+			clockElm.setAttribute('title', cc.uiName);
+
+			const flagElm = document.createElement('img');
+			flagElm.setAttribute('id', `octanetopus-city-clock--${i}--flag`);
+			flagElm.classList.add('octanetopus-city-clock--flag');
+			flagElm.setAttribute('src', chrome.extension.getURL(`img/flags/${cc.countryCode}.svg`));
+			clockElm.appendChild(flagElm);
+
+			const timeElm = document.createElement('div');
+			timeElm.setAttribute('id', `octanetopus-city-clock--${i}--time`);
+			timeElm.classList.add('octanetopus-city-clock--time');
+			timeElm.textContent = `??:??`;
+			clockElm.appendChild(timeElm);
+
+			parentElm.appendChild(clockElm);
 		});
 		log(`${config.cityClocks.length} clocks added`);
 		updateClocks();
