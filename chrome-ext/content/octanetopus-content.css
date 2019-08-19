@@ -1,48 +1,39 @@
 .mqm-masthead > .masthead-bg-color {
-    background-image: linear-gradient(to right, #2767b0, #c6179d);
+    background-image: linear-gradient(to right, #0079ef, #333);
 }
 
 .octanetopus-city-clock {
+    display: flex;
     margin-right: 10px;
-    padding: 5px 10px;
+    height: 28px;
+    border: 1px solid #666;
+    border-radius: 0 15px;
+    overflow: hidden;
+    user-select: none;
+}
+
+.octanetopus-city-clock--flag {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 35px;
+}
+
+.octanetopus-city-clock--time {
+    width: 50px;
+    background-size: 600px;
+    background-image: linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 60%, #f30 70%, #603 80%, #103 90%, #000 95%, #000);
+    padding: 0 5px;
+    line-height: 28px;
     font-family: "Courier New", Courier, monospace;
-    font-size: 16px;
-    border-radius: 17px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #000;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    background-color: #999;
-    color: #666;
 }
 
-.octanetopus-city-clock--hour-07,
-.octanetopus-city-clock--hour-08,
-.octanetopus-city-clock--hour-09,
-.octanetopus-city-clock--hour-10,
-.octanetopus-city-clock--hour-11,
-.octanetopus-city-clock--hour-12,
-.octanetopus-city-clock--hour-13,
-.octanetopus-city-clock--hour-14,
-.octanetopus-city-clock--hour-15,
-.octanetopus-city-clock--hour-16,
-.octanetopus-city-clock--hour-17,
-.octanetopus-city-clock--hour-18 {
-    background-image: linear-gradient(to right, #ff9, #aa3);
-    color: #000;
-}
-
-.octanetopus-city-clock--hour-00,
-.octanetopus-city-clock--hour-01,
-.octanetopus-city-clock--hour-02,
-.octanetopus-city-clock--hour-03,
-.octanetopus-city-clock--hour-04,
-.octanetopus-city-clock--hour-05,
-.octanetopus-city-clock--hour-06,
-.octanetopus-city-clock--hour-19,
-.octanetopus-city-clock--hour-20,
-.octanetopus-city-clock--hour-21,
-.octanetopus-city-clock--hour-22,
-.octanetopus-city-clock--hour-23 {
-    background-image: linear-gradient(to right, #666, #000);
-    color: #fff;
+.octanetopus-transparent {
+    opacity: 0;
 }

@@ -50,48 +50,27 @@ const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
 
 const onAppReady = () => {
 	log('onAppReady');
-	injectScript();
-	//addSelfEsteemBooster();
 	addCityClocks();
 };
 
-const injectScript = () => {
-	log('injectScript');
-	const script = document.createElement('script');
-	script.src = chrome.runtime.getURL('inject/octanetopus-inject-script.js');
-	(document.head || document.documentElement).appendChild(script);
-};
-
-// const addSelfEsteemBooster = () => {
-// 	log('add self esteem booster');
-// 	const parentElm = document.querySelector('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)');
-// 	if (parentElm) {
-// 		const btnElm = document.createElement('button');
-// 		btnElm.textContent = 'SELF-ESTEEM++';
-// 		btnElm.classList.add('button--primary', 'margin-r--sm');
-// 		btnElm.style['border'] = '1px solid #fff';
-// 		if (config && config.color) {
-// 			btnElm.style['background-color'] = config.color;
-// 		}
-// 		btnElm.addEventListener('click', () => {alert('You Are Amazing!');});
-// 		parentElm.appendChild(btnElm);
-// 		log('self esteem booster added');
-// 	}
-// };
-
 const updateClocks = () => {
-	config.cityClocks.forEach(async (cc, i) => {
-		const r = await fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
-		const j = await r.json();
-		const cityTimeStr = j['datetime'];
-		const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);
-		if (clockElm) {
-			clockElm.textContent = `${cc.uiName} ${cityTimeStr.substr(11,5)}`;
-			for (i=0; i<=23; i++) {
-				clockElm.classList.remove(`octanetopus-city-clock--hour-${i<10 ? '0'+i : i}`);
-			}
-			clockElm.classList.add(`octanetopus-city-clock--hour-${cityTimeStr.substr(11,2)}`);
-			log(`${cc.uiName} clock updated to ${cityTimeStr.substr(11,5)}`);
+	config.cityClocks.forEach((cc, i) => {
+		const flagElm = document.getElementById(`octanetopus-city-clock--${i}--flag`);
+		const timeElm = document.getElementById(`octanetopus-city-clock--${i}--time`);
+		if (flagElm && timeElm) {
+			(async () => {
+				const r = await	fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
+				const j = await	r.json();
+				const cityTimeStr = j['datetime'];
+				const hh = cityTimeStr.substr(11, 2);
+				const mm = cityTimeStr.substr(14, 2);
+				const h = parseInt(hh);
+				timeElm.style['background-position-x'] = `-${25 * h}px`;
+				timeElm.style['color'] = (h >= 10 && h <= 15) ? '#000' : '#fff';
+				timeElm.textContent = `${hh}:${mm}`;
+				flagElm.classList.remove('octanetopus-transparent');
+				timeElm.classList.remove('octanetopus-transparent');
+			})();
 		}
 	});
 };
@@ -102,11 +81,25 @@ const addCityClocks = () => {
 	if (parentElm && config && config.cityClocks && config.cityClocks.length && config.cityClocks.length > 0) {
 		const clockElms = {};
 		config.cityClocks.forEach((cc, i) => {
-			clockElms[i] = document.createElement('div');
-			clockElms[i].textContent = `${cc.uiName} ??:??`;
-			clockElms[i].setAttribute('id', `octanetopus-city-clock--${i}`);
-			clockElms[i].classList.add('octanetopus-city-clock');
-			parentElm.appendChild(clockElms[i]);
+			const clockElm = document.createElement('div');
+			clockElms[i] = clockElm;
+			clockElm.setAttribute('id', `octanetopus-city-clock--${i}`);
+			clockElm.classList.add('octanetopus-city-clock');
+			clockElm.setAttribute('title', cc.uiName);
+
+			const flagElm = document.createElement('img');
+			flagElm.setAttribute('id', `octanetopus-city-clock--${i}--flag`);
+			flagElm.classList.add('octanetopus-city-clock--flag', 'octanetopus-transparent');
+			flagElm.setAttribute('src', chrome.extension.getURL(`img/flags/${cc.countryCode}.svg`));
+			clockElm.appendChild(flagElm);
+
+			const timeElm = document.createElement('div');
+			timeElm.setAttribute('id', `octanetopus-city-clock--${i}--time`);
+			timeElm.classList.add('octanetopus-city-clock--time', 'octanetopus-transparent');
+			timeElm.textContent = `??:??`;
+			clockElm.appendChild(timeElm);
+
+			parentElm.appendChild(clockElm);
 		});
 		log(`${config.cityClocks.length} clocks added`);
 		updateClocks();
@@ -118,6 +111,7 @@ const addCityClocks = () => {
 
 const go = () => {
 	log('go');
+	document.body.setAttribute('octanetopus-content-injected', 'true');
 	document.addEventListener('octanetopus-app-to-content--user', (/*e*/) => {
 		log('octanetopus-app-to-content--user');
 		//alert(`Hi ${e.detail}`);
