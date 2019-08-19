@@ -65,14 +65,17 @@ const updateClocks = () => {
 	config.cityClocks.forEach((cc, i) => {
 		const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);
 		if (clockElm) {
-			const r = await fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
-			const j = await r.json();
-			const cityTimeStr = j['datetime'];		
-			clockElm.textContent = `${cc.uiName} ${cityTimeStr.substr(11,5)}`;
-			const h = parseInt(cityTimeStr.substr(11,2));
-			clockElm.style['background-position-x'] = `-${50 * h}px`;
-			clockElm.style['color'] = (h>=8 && h>=12) ? '#000': '#fff';
-			log(`${cc.uiName} clock updated to ${cityTimeStr.substr(11,5)}`);
+			(async () => {
+				const r = await	fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
+				const j = await	r.json();
+				const cityTimeStr = j['datetime'];
+				const hh = cityTimeStr.substr(11, 2);
+				const mm = cityTimeStr.substr(14, 2);
+				const h = parseInt(hh);
+				clockElm.textContent = `${cc.uiName} ${hh}:${mm}`;
+				clockElm.style['background-position-x'] = `-${50 * h}px`;
+				clockElm.style['color'] = (h >= 8 && h <= 12) ? '#000' : '#fff';
+			})();
 		}
 	});
 };

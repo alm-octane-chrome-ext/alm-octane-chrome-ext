@@ -4,14 +4,19 @@
 
 .octanetopus-city-clock {
     margin-right: 10px;
-    width: 100px;
+    width: 120px;
+    height: 26px;
+    border: 1px solid #ccc;
     border-radius: 17px;
     background-size: 1200px;
     background-image: linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 50%, #f30 65%, #603 80%, #103 90%, #000 95%, #000);
+    padding: 0 8px;
+    line-height: 26px;
     text-align: right;
     font-family: "Courier New", Courier, monospace;
-    font-size: 16px;
-    color: #666;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
