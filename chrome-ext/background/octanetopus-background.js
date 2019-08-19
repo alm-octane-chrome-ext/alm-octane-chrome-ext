@@ -83,8 +83,8 @@ const addOnTabCompleteListener = () => {
 			config.urls.forEach(url => {
 				if (!found && tab.url.includes(url)) {
 					found = true;
+					updatedTabId = tabId;
 					(async () => {
-						updatedTabId = tabId;
 						await injectJs(tabId, jsCheckScript);
 					})();
 				}
