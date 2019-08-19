@@ -50,21 +50,14 @@ const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
 
 const onAppReady = () => {
 	log('onAppReady');
-	injectScript();
 	addCityClocks();
-};
-
-const injectScript = () => {
-	log('injectScript');
-	const script = document.createElement('script');
-	script.src = chrome.runtime.getURL('inject/octanetopus-inject-script.js');
-	(document.head || document.documentElement).appendChild(script);
 };
 
 const updateClocks = () => {
 	config.cityClocks.forEach((cc, i) => {
+		const flagElm = document.getElementById(`octanetopus-city-clock--${i}--flag`);
 		const timeElm = document.getElementById(`octanetopus-city-clock--${i}--time`);
-		if (timeElm) {
+		if (flagElm && timeElm) {
 			(async () => {
 				const r = await	fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
 				const j = await	r.json();
@@ -73,8 +66,10 @@ const updateClocks = () => {
 				const mm = cityTimeStr.substr(14, 2);
 				const h = parseInt(hh);
 				timeElm.style['background-position-x'] = `-${25 * h}px`;
-				timeElm.style['color'] = (h >= 8 && h <= 12) ? '#000' : '#fff';
+				timeElm.style['color'] = (h >= 10 && h <= 15) ? '#000' : '#fff';
 				timeElm.textContent = `${hh}:${mm}`;
+				flagElm.classList.remove('octanetopus-transparent');
+				timeElm.classList.remove('octanetopus-transparent');
 			})();
 		}
 	});
@@ -94,13 +89,13 @@ const addCityClocks = () => {
 
 			const flagElm = document.createElement('img');
 			flagElm.setAttribute('id', `octanetopus-city-clock--${i}--flag`);
-			flagElm.classList.add('octanetopus-city-clock--flag');
+			flagElm.classList.add('octanetopus-city-clock--flag', 'octanetopus-transparent');
 			flagElm.setAttribute('src', chrome.extension.getURL(`img/flags/${cc.countryCode}.svg`));
 			clockElm.appendChild(flagElm);
 
 			const timeElm = document.createElement('div');
 			timeElm.setAttribute('id', `octanetopus-city-clock--${i}--time`);
-			timeElm.classList.add('octanetopus-city-clock--time');
+			timeElm.classList.add('octanetopus-city-clock--time', 'octanetopus-transparent');
 			timeElm.textContent = `??:??`;
 			clockElm.appendChild(timeElm);
 
