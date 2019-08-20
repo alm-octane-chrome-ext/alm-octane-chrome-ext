@@ -76,7 +76,7 @@ const addMessageListener = () => {
 };
 
 const addOnTabCompleteListener = () => {
-	chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+	chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 		const config = JSON.parse(localStorage.getItem(localStorageConfigKey));
 		if (changeInfo.status === 'complete' && config.urls && config.urls.length > 0) {
 			let found = false;
@@ -84,9 +84,7 @@ const addOnTabCompleteListener = () => {
 				if (!found && tab.url.includes(url)) {
 					found = true;
 					updatedTabId = tabId;
-					(async () => {
-						await injectJs(tabId, jsCheckScript);
-					})();
+					injectJs(tabId, jsCheckScript).then(()=>{});
 				}
 			});
 		}
