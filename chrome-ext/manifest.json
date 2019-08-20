@@ -1,29 +1,30 @@
 {
   "name": "ALM Octane Chrome Extension",
-  "version": "1.0.0",
+  "short_name": "OctaneExt",
   "description": "ALM Octane Chrome Extension",
+  "version": "1.0.0",
   "manifest_version": 2,
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ],
   "icons": {
     "48": "img/icon48.png",
     "96": "img/icon96.png",
     "128": "img/icon128.png"
-  },
-  "content_scripts": [
-  ],
-  "browser_action": {
-    "default_title": "Octanetopus",
-    "default_icon": "img/icon96.png",
-    "default_popup": "popup/octanetopus-popup.html"
   },
   "background": {
     "scripts": [
       "background/octanetopus-background.js"
     ]
   },
-  "permissions": [
-    "tabs",
-    "http://*/*",
-    "https://*/*"
+  "browser_action": {
+    "default_title": "Octanetopus",
+    "default_icon": "img/icon96.png",
+    "default_popup": "popup/octanetopus-popup.html"
+  },
+  "content_scripts": [
   ],
   "web_accessible_resources": [
     "img/flags/*.svg"
