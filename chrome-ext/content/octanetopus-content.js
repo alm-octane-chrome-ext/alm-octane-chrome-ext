@@ -64,9 +64,9 @@ const updateClocks = () => {
 				const cityTimeStr = j['datetime'];
 				const hh = cityTimeStr.substr(11, 2);
 				const mm = cityTimeStr.substr(14, 2);
-				const h = parseInt(hh);
-				timeElm.style['background-position-x'] = `-${25 * h}px`;
-				timeElm.style['color'] = (h >= 10 && h <= 15) ? '#000' : '#fff';
+				//const h = parseInt(hh);
+				//timeElm.style['background-position-x'] = `-${25 * h}px`;
+				//timeElm.style['color'] = (h >= 10 && h <= 15) ? '#000' : '#fff';
 				timeElm.textContent = `${hh}:${mm}`;
 				flagElm.classList.remove('octanetopus-transparent');
 				timeElm.classList.remove('octanetopus-transparent');
@@ -97,6 +97,8 @@ const addCityClocks = () => {
 			const timeElm = document.createElement('div');
 			timeElm.setAttribute('id', `octanetopus-city-clock--${i}--time`);
 			timeElm.classList.add('octanetopus-city-clock--time', 'octanetopus-transparent');
+			//timeElm.style['background-image'] = 'linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 60%, #f30 70%, #603 80%, #103 90%, #000 95%, #000)';
+			//timeElm.style['background-size'] = '600px';
 			timeElm.textContent = `??:??`;
 			clockElm.appendChild(timeElm);
 

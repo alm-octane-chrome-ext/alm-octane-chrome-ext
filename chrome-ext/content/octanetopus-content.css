@@ -25,14 +25,13 @@
 
 .octanetopus-city-clock--time {
     width: 50px;
-    background-size: 600px;
-    background-image: linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 60%, #f30 70%, #603 80%, #103 90%, #000 95%, #000);
+    background-color: #333;
     padding: 0 5px;
     line-height: 28px;
     font-family: "Courier New", Courier, monospace;
     font-weight: bold;
     font-size: 13px;
-    color: #000;
+    color: #ccc;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
