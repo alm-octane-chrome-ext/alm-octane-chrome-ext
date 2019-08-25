@@ -53,14 +53,13 @@ const onAppReady = () => {
 	addCityClocks();
 };
 
-const updateClocks = () => {
-	config.cityClocks.forEach((cc, i) => {
+const updateClock = async (cc, i) => {
 		const flagElm = document.getElementById(`octanetopus-city-clock--${i}--flag`);
 		const timeElm = document.getElementById(`octanetopus-city-clock--${i}--time`);
 		if (flagElm && timeElm) {
-			(async () => {
-				const r = await	fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
-				const j = await	r.json();
+			try {
+				const r = await fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
+				const j = await r.json();
 				const cityTimeStr = j['datetime'];
 				const hh = cityTimeStr.substr(11, 2);
 				const mm = cityTimeStr.substr(14, 2);
@@ -70,8 +69,17 @@ const updateClocks = () => {
 				timeElm.textContent = `${hh}:${mm}`;
 				flagElm.classList.remove('octanetopus-transparent');
 				timeElm.classList.remove('octanetopus-transparent');
-			})();
+			} catch(err) {
+				log(`Error on updateClock - ${err.message || err.toString()}`);
+				flagElm.classList.add('octanetopus-transparent');
+				timeElm.classList.add('octanetopus-transparent');
+			}
 		}
+};
+
+const updateClocks = () => {
+	config.cityClocks.forEach((cc, i) => {
+		updateClock(cc, i).then(()=>{});
 	});
 };
 
