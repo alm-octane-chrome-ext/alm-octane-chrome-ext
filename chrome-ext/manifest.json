@@ -1,8 +1,8 @@
 {
-  "name": "ALM Octane Chrome Extension",
-  "short_name": "OctaneExt",
-  "description": "ALM Octane Chrome Extension",
-  "version": "1.0.0",
+  "name": "Octanetopus",
+  "short_name": "Octanetopus",
+  "description": "Unofficial extension for ALM Octane",
+  "version": "1.0.1",
   "manifest_version": 2,
   "permissions": [
     "tabs",
