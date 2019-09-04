@@ -1,5 +1,5 @@
 .mqm-masthead > .masthead-bg-color {
-    background-image: linear-gradient(to right, #0079ef, #333);
+    background-image: linear-gradient(to right, #0079ef, #000);
 }
 
 .octanetopus-city-clocks {
@@ -10,8 +10,7 @@
     display: flex;
     margin-right: 10px;
     height: 28px;
-    border: 1px solid #666;
-    border-radius: 0 15px;
+    border: 1px solid #999;
     overflow: hidden;
     user-select: none;
 }
