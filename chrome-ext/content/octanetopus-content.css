@@ -19,6 +19,8 @@
     left: 0;
     top: 0;
     height: 26px;
+    border-top-right-radius: 26px;
+    border-bottom-left-radius: 26px;
 }
 
 .octanetopus-city-clock--text {
