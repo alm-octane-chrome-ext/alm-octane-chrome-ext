@@ -55,9 +55,10 @@ const onAppReady = () => {
 
 const updateClock = async (cc, i, tryNumber=1) => {
 	//log('update clock');
+	const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);
 	const flagElm = document.getElementById(`octanetopus-city-clock--${i}--flag`);
 	const timeElm = document.getElementById(`octanetopus-city-clock--${i}--time`);
-	if (flagElm && timeElm) {
+	if (clockElm && flagElm && timeElm) {
 		try {
 			const r = await fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
 			const j = await r.json();
@@ -68,12 +69,8 @@ const updateClock = async (cc, i, tryNumber=1) => {
 			//timeElm.style['background-position-x'] = `-${25 * h}px`;
 			//timeElm.style['color'] = (h >= 10 && h <= 15) ? '#000' : '#fff';
 			timeElm.textContent = `${hh}:${mm}`;
-			flagElm.classList.remove('octanetopus-transparent');
-			timeElm.classList.remove('octanetopus-transparent');
 		} catch(err) {
 			log(`Error on updateClock - ${err.message || err.toString()}`);
-			flagElm.classList.add('octanetopus-transparent');
-			timeElm.classList.add('octanetopus-transparent');
 			if (tryNumber < 3) {
 				setTimeout(async () => {
 					await updateClock(cc, i, tryNumber+1);
@@ -101,21 +98,31 @@ const addCityClocks = () => {
 			const clockElm = document.createElement('div');
 			clockElm.setAttribute('id', `octanetopus-city-clock--${i}`);
 			clockElm.classList.add('octanetopus-city-clock');
-			clockElm.setAttribute('title', cc.uiName);
+			clockElm.setAttribute('title', cc.longName);
 
 			const flagElm = document.createElement('img');
 			flagElm.setAttribute('id', `octanetopus-city-clock--${i}--flag`);
-			flagElm.classList.add('octanetopus-city-clock--flag', 'octanetopus-transparent');
+			flagElm.classList.add('octanetopus-city-clock--flag');
 			flagElm.setAttribute('src', chrome.extension.getURL(`img/flags/${cc.countryCode}.svg`));
 			clockElm.appendChild(flagElm);
 
+			const textElm = document.createElement('div');
+			textElm.classList.add(`octanetopus-city-clock--text`);
+
+			const nameElm = document.createElement('div');
+			nameElm.classList.add('octanetopus-city-clock--name', 'octanetopus-ellipsis');
+			nameElm.textContent = cc.shortName;
+			textElm.appendChild(nameElm);
+
 			const timeElm = document.createElement('div');
 			timeElm.setAttribute('id', `octanetopus-city-clock--${i}--time`);
-			timeElm.classList.add('octanetopus-city-clock--time', 'octanetopus-transparent');
+			timeElm.classList.add('octanetopus-city-clock--time', 'octanetopus-ellipsis');
 			//timeElm.style['background-image'] = 'linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 60%, #f30 70%, #603 80%, #103 90%, #000 95%, #000)';
 			//timeElm.style['background-size'] = '600px';
 			timeElm.textContent = `??:??`;
-			clockElm.appendChild(timeElm);
+			textElm.appendChild(timeElm);
+
+			clockElm.appendChild(textElm);
 
 			clocksElm.appendChild(clockElm);
 		});

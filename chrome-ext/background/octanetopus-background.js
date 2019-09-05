@@ -6,22 +6,38 @@ const defaultConfigObj = {
 	],
 	cityClocks: [
 		{
-			uiName: 'San Francisco',
+			longName: 'Los Angeles',
+			shortName: 'LA',
 			countryCode: 'us',
 			timeZone: 'America/Los_Angeles'
 		},
 		{
-			uiName: 'London',
+			longName: 'New York',
+			shortName: 'NYC',
+			countryCode: 'us',
+			timeZone: 'America/New_York'
+		},
+		{
+			longName: 'London',
+			shortName: 'LON',
 			countryCode: 'gb',
 			timeZone: 'Europe/London'
 		},
 		{
-			uiName: 'Tel-Aviv',
+			longName: 'Tel-Aviv',
+			shortName: 'TLV',
 			countryCode: 'il',
 			timeZone: 'Asia/Jerusalem'
 		},
 		{
-			uiName: 'Shanghai',
+			longName: 'New Delhi',
+			shortName: 'DL',
+			countryCode: 'in',
+			timeZone: 'Asia/Kolkata'
+		},
+		{
+			longName: 'Shanghai',
+			shortName: 'SHA',
 			countryCode: 'cn',
 			timeZone: 'Asia/Shanghai'
 		},
