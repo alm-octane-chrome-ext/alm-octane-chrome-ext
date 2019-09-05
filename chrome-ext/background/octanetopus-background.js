@@ -24,7 +24,7 @@ const defaultConfigObj = {
 			timeZone: 'Europe/London'
 		},
 		{
-			longName: 'Tel-Aviv',
+			longName: 'Tel Aviv',
 			shortName: 'TLV',
 			countryCode: 'il',
 			timeZone: 'Asia/Jerusalem'
