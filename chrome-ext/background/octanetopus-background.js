@@ -37,7 +37,7 @@ const defaultConfigObj = {
 		},
 		{
 			longName: 'Shanghai',
-			shortName: 'SHA',
+			shortName: 'SH',
 			countryCode: 'cn',
 			timeZone: 'Asia/Shanghai'
 		},
