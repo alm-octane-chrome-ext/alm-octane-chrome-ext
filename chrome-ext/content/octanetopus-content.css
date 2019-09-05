@@ -9,8 +9,7 @@
 .octanetopus-city-clock {
     display: flex;
     margin-right: 10px;
-    height: 28px;
-    border: 1px solid #999;
+    height: 26px;
     overflow: hidden;
     user-select: none;
 }
@@ -23,14 +22,14 @@
 }
 
 .octanetopus-city-clock--text {
-    background-color: #000;
-    padding: 2px 2px;
-    height: 26px;
+    height: 100%;
     font-family: "Courier New", Courier, monospace;
 }
 
 .octanetopus-city-clock--name {
-    width: 40px;
+    margin-left: 2px;
+    margin-top: 6px;
+    width: 44px;
     height: 10px;
     line-height: 10px;
     font-size: 10px;
@@ -38,12 +37,14 @@
 }
 
 .octanetopus-city-clock--time {
-    width: 40px;
+    margin-left: 2px;
+    margin-top: -1px;
+    width: 44px;
     height: 13px;
     line-height: 13px;
     font-size: 13px;
-    color: #fff;
     font-weight: bold;
+    color: #fff;
 }
 
 .octanetopus-ellipsis {
