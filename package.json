@@ -1,0 +1,26 @@
+{
+  "name": "Octanetopus",
+  "version": "1.0.2",
+  "description": "Unofficial extension for ALM Octane",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alm-octane-chrome-ext/alm-octane-chrome-ext.git"
+  },
+  "author": "Uri Kalish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alm-octane-chrome-ext/alm-octane-chrome-ext/issues"
+  },
+  "homepage": "https://github.com/alm-octane-chrome-ext/alm-octane-chrome-ext#readme"
+}
