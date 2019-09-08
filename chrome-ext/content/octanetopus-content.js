@@ -56,6 +56,7 @@ const onAppReady = () => {
 };
 
 const goFetchTime = async(timeZone) => {
+	log(`goFetchTime ${timeZone}`);
 	try {
 		const r = await fetch(`https://worldtimeapi.org/api/timezone/${timeZone}`);
 		return await r.json();
@@ -70,18 +71,31 @@ const updateClock = async (cc, i, tryNumber=1) => {
 	const flagElm = document.getElementById(`octanetopus-city-clock--${i}--flag`);
 	const timeElm = document.getElementById(`octanetopus-city-clock--${i}--time`);
 	if (clockElm && flagElm && timeElm) {
-		const j = await goFetchTime(cc.timeZone);
-		if (j) {
-			const cityTimeStr = j['datetime'];
-			const hh = cityTimeStr.substr(11, 2);
-			const mm = cityTimeStr.substr(14, 2);
+		const cityClock = cityClocks[i];
+		if (cityClock.fetchTimeUnix) {
+			const fetchTotalMinutes = parseInt(cityClock.fetchTimeStr.substr(11, 2), 10) * 60 + parseInt(cityClock.fetchTimeStr.substr(14, 2), 10);
+			const curTotalMinutes = fetchTotalMinutes + Math.trunc(((new Date()).getTime() - cityClock.fetchTimeUnix)/1000.0/60.0);
+			const h = Math.trunc(curTotalMinutes / 60) % 24;
+			const m = curTotalMinutes % 60;
+			const hh = h < 10 ? '0' + h : '' + h;
+			const mm = m < 10 ? '0' + m : '' + m;
 			timeElm.textContent = `${hh}:${mm}`;
 		} else {
-			timeElm.textContent = UNSET_TIME_STR;
-			if (tryNumber < 3) {
-				setTimeout(async () => {
-					await updateClock(cc, i, tryNumber+1);
-				}, 10000);
+			const j = await goFetchTime(cc.timeZone);
+			if (j) {
+				const cityTimeStr = j['datetime'];
+				const hh = cityTimeStr.substr(11, 2);
+				const mm = cityTimeStr.substr(14, 2);
+				cityClocks[i].fetchTimeUnix = (new Date()).getTime();
+				cityClocks[i].fetchTimeStr = cityTimeStr;
+				timeElm.textContent = `${hh}:${mm}`;
+			} else {
+				timeElm.textContent = UNSET_TIME_STR;
+				if (tryNumber < 3) {
+					setTimeout(async () => {
+						await updateClock(cc, i, tryNumber + 1);
+					}, 10000);
+				}
 			}
 		}
 	}
