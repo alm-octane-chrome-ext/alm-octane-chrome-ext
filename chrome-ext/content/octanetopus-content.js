@@ -74,7 +74,7 @@ const updateClock = async (cc, i, tryNumber=1) => {
 		const cityClock = cityClocks[i];
 		if (cityClock.fetchTimeUnix) {
 			const fetchTotalMinutes = parseInt(cityClock.fetchTimeStr.substr(11, 2), 10) * 60 + parseInt(cityClock.fetchTimeStr.substr(14, 2), 10);
-			const curTotalMinutes = fetchTotalMinutes + Math.trunc(((new Date()).getTime() - cityClock.fetchTimeUnix)/1000.0/60.0);
+			const curTotalMinutes = fetchTotalMinutes + Math.trunc(((new Date()).getTime() - cityClock.fetchTimeUnix) / 1000 / 60);
 			const h = Math.trunc(curTotalMinutes / 60) % 24;
 			const m = curTotalMinutes % 60;
 			const hh = h < 10 ? '0' + h : '' + h;
