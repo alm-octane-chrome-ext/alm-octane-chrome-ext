@@ -1,4 +1,6 @@
 let config = null;
+const UNSET_TIME_STR = '??:??';
+let cityClocks = [];
 
 const log = (msg) => {
 	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
@@ -53,35 +55,39 @@ const onAppReady = () => {
 	addCityClocks();
 };
 
+const goFetchTime = async(timeZone) => {
+	try {
+		const r = await fetch(`https://worldtimeapi.org/api/timezone/${timeZone}`);
+		return await r.json();
+	} catch(err) {
+		log(`Error on goFetchTime - ${err.message || err.toString()}`);
+		return null;
+	}
+};
+
 const updateClock = async (cc, i, tryNumber=1) => {
-	//log('update clock');
 	const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);
 	const flagElm = document.getElementById(`octanetopus-city-clock--${i}--flag`);
 	const timeElm = document.getElementById(`octanetopus-city-clock--${i}--time`);
 	if (clockElm && flagElm && timeElm) {
-		try {
-			const r = await fetch(`https://worldtimeapi.org/api/timezone/${cc.timeZone}`);
-			const j = await r.json();
+		const j = await goFetchTime(cc.timeZone);
+		if (j) {
 			const cityTimeStr = j['datetime'];
 			const hh = cityTimeStr.substr(11, 2);
 			const mm = cityTimeStr.substr(14, 2);
-			//const h = parseInt(hh);
-			//timeElm.style['background-position-x'] = `-${25 * h}px`;
-			//timeElm.style['color'] = (h >= 10 && h <= 15) ? '#000' : '#fff';
 			timeElm.textContent = `${hh}:${mm}`;
-		} catch(err) {
-			log(`Error on updateClock - ${err.message || err.toString()}`);
+		} else {
+			timeElm.textContent = UNSET_TIME_STR;
 			if (tryNumber < 3) {
 				setTimeout(async () => {
 					await updateClock(cc, i, tryNumber+1);
-				}, 3000);
+				}, 10000);
 			}
 		}
 	}
 };
 
 const updateClocks = () => {
-	//log('update clocks');
 	config.cityClocks.forEach((cc, i) => {
 		updateClock(cc, i).then(()=>{});
 	});
@@ -89,12 +95,20 @@ const updateClocks = () => {
 
 const addCityClocks = () => {
 	log('add clocks');
+	cityClocks = [];
 	const parentElm = document.querySelector('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)');
 	if (parentElm && config && config.cityClocks && config.cityClocks.length && config.cityClocks.length > 0) {
 		const clocksElm = document.createElement('div');
 		clocksElm.setAttribute('id', 'octanetopus-city-clocks');
 		clocksElm.classList.add('octanetopus-city-clocks');
 		config.cityClocks.forEach((cc, i) => {
+			cityClocks.push({
+				longName: cc.longName,
+				shortName: cc.shortName,
+				countryCode: cc.countryCode,
+				timeZone: cc.timeZone,
+			});
+
 			const clockElm = document.createElement('div');
 			clockElm.setAttribute('id', `octanetopus-city-clock--${i}`);
 			clockElm.classList.add('octanetopus-city-clock');
@@ -119,7 +133,7 @@ const addCityClocks = () => {
 			timeElm.classList.add('octanetopus-city-clock--time', 'octanetopus-ellipsis');
 			//timeElm.style['background-image'] = 'linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 60%, #f30 70%, #603 80%, #103 90%, #000 95%, #000)';
 			//timeElm.style['background-size'] = '600px';
-			timeElm.textContent = `??:??`;
+			timeElm.textContent = UNSET_TIME_STR;
 			textElm.appendChild(timeElm);
 
 			clockElm.appendChild(textElm);
