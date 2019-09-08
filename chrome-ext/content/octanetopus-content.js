@@ -84,10 +84,10 @@ const updateClock = async (cc, i, tryNumber=1) => {
 			const j = await goFetchTime(cc.timeZone);
 			if (j) {
 				const cityTimeStr = j['datetime'];
-				const hh = cityTimeStr.substr(11, 2);
-				const mm = cityTimeStr.substr(14, 2);
 				cityClocks[i].fetchTimeUnix = (new Date()).getTime();
 				cityClocks[i].fetchTimeStr = cityTimeStr;
+				const hh = cityTimeStr.substr(11, 2);
+				const mm = cityTimeStr.substr(14, 2);
 				timeElm.textContent = `${hh}:${mm}`;
 			} else {
 				timeElm.textContent = UNSET_TIME_STR;
