@@ -2,9 +2,10 @@ const localStorageConfigKey = 'octanetopus-config';
 const defaultConfigObj = {
 	urls: [
 		'localhost:9090/ui/',
-		'center.almoctane.com/ui/'
+		'center.almoctane.com/ui/',
+		'octanetopus-test.html',
 	],
-	cityClocks: [
+	clocks: [
 		{
 			longName: 'Los Angeles',
 			shortName: 'LA',

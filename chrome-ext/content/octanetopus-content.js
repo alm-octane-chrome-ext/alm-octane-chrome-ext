@@ -1,6 +1,6 @@
 let config = null;
 const UNSET_TIME_STR = '??:??';
-let cityClocks = [];
+let clocks = [];
 
 const log = (msg) => {
 	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
@@ -52,7 +52,7 @@ const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
 
 const onAppReady = () => {
 	log('onAppReady');
-	addCityClocks();
+	addClocks();
 };
 
 const goFetchTime = async(timeZone) => {
@@ -66,34 +66,34 @@ const goFetchTime = async(timeZone) => {
 	}
 };
 
-const updateClock = async (cc, i, tryNumber=1) => {
-	const clockElm = document.getElementById(`octanetopus-city-clock--${i}`);
-	const flagElm = document.getElementById(`octanetopus-city-clock--${i}--flag`);
-	const timeElm = document.getElementById(`octanetopus-city-clock--${i}--time`);
+const updateClock = async (c, i, tryNumber=1) => {
+	const clockElm = document.getElementById(`octanetopus--clock--${i}`);
+	const flagElm = document.getElementById(`octanetopus--clock--${i}--flag`);
+	const timeElm = document.getElementById(`octanetopus--clock--${i}--time`);
 	if (clockElm && flagElm && timeElm) {
-		const cityClock = cityClocks[i];
-		if (cityClock.fetchTimeUnix) {
-			const fetchTotalMinutes = parseInt(cityClock.fetchTimeStr.substr(11, 2), 10) * 60 + parseInt(cityClock.fetchTimeStr.substr(14, 2), 10);
-			const curTotalMinutes = fetchTotalMinutes + Math.trunc(((new Date()).getTime() - cityClock.fetchTimeUnix) / 1000 / 60);
+		const clock = clocks[i];
+		if (clock.fetchTimeUnix) {
+			const fetchTotalMinutes = parseInt(clock.fetchTimeStr.substr(11, 2), 10) * 60 + parseInt(clock.fetchTimeStr.substr(14, 2), 10);
+			const curTotalMinutes = fetchTotalMinutes + Math.trunc(((new Date()).getTime() - clock.fetchTimeUnix) / 1000 / 60);
 			const h = Math.trunc(curTotalMinutes / 60) % 24;
 			const m = curTotalMinutes % 60;
 			const hh = h < 10 ? '0' + h : '' + h;
 			const mm = m < 10 ? '0' + m : '' + m;
 			timeElm.textContent = `${hh}:${mm}`;
 		} else {
-			const j = await goFetchTime(cc.timeZone);
+			const j = await goFetchTime(c.timeZone);
 			if (j) {
-				const cityTimeStr = j['datetime'];
-				cityClocks[i].fetchTimeUnix = (new Date()).getTime();
-				cityClocks[i].fetchTimeStr = cityTimeStr;
-				const hh = cityTimeStr.substr(11, 2);
-				const mm = cityTimeStr.substr(14, 2);
+				const timeStr = j['datetime'];
+				clocks[i].fetchTimeUnix = (new Date()).getTime();
+				clocks[i].fetchTimeStr = timeStr;
+				const hh = timeStr.substr(11, 2);
+				const mm = timeStr.substr(14, 2);
 				timeElm.textContent = `${hh}:${mm}`;
 			} else {
 				timeElm.textContent = UNSET_TIME_STR;
 				if (tryNumber < 3) {
 					setTimeout(async () => {
-						await updateClock(cc, i, tryNumber + 1);
+						await updateClock(c, i, tryNumber + 1);
 					}, 10000);
 				}
 			}
@@ -102,49 +102,49 @@ const updateClock = async (cc, i, tryNumber=1) => {
 };
 
 const updateClocks = () => {
-	config.cityClocks.forEach((cc, i) => {
-		updateClock(cc, i).then(()=>{});
+	config.clocks.forEach((c, i) => {
+		updateClock(c, i).then(()=>{});
 	});
 };
 
-const addCityClocks = () => {
+const addClocks = () => {
 	log('add clocks');
-	cityClocks = [];
+	clocks = [];
 	const parentElm = document.querySelector('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)');
-	if (parentElm && config && config.cityClocks && config.cityClocks.length && config.cityClocks.length > 0) {
+	if (parentElm && config && config.clocks && config.clocks.length && config.clocks.length > 0) {
 		const clocksElm = document.createElement('div');
-		clocksElm.setAttribute('id', 'octanetopus-city-clocks');
-		clocksElm.classList.add('octanetopus-city-clocks');
-		config.cityClocks.forEach((cc, i) => {
-			cityClocks.push({
-				longName: cc.longName,
-				shortName: cc.shortName,
-				countryCode: cc.countryCode,
-				timeZone: cc.timeZone,
+		clocksElm.setAttribute('id', 'octanetopus--clocks');
+		clocksElm.classList.add('octanetopus--clocks');
+		config.clocks.forEach((c, i) => {
+			clocks.push({
+				longName: c.longName,
+				shortName: c.shortName,
+				countryCode: c.countryCode,
+				timeZone: c.timeZone,
 			});
 
 			const clockElm = document.createElement('div');
-			clockElm.setAttribute('id', `octanetopus-city-clock--${i}`);
-			clockElm.classList.add('octanetopus-city-clock');
-			clockElm.setAttribute('title', cc.longName);
+			clockElm.setAttribute('id', `octanetopus--clock--${i}`);
+			clockElm.classList.add('octanetopus--clock');
+			clockElm.setAttribute('title', c.longName);
 
 			const flagElm = document.createElement('img');
-			flagElm.setAttribute('id', `octanetopus-city-clock--${i}--flag`);
-			flagElm.classList.add('octanetopus-city-clock--flag');
-			flagElm.setAttribute('src', chrome.extension.getURL(`img/flags/${cc.countryCode}.svg`));
+			flagElm.setAttribute('id', `octanetopus--clock--${i}--flag`);
+			flagElm.classList.add('octanetopus--clock--flag');
+			flagElm.setAttribute('src', chrome.extension.getURL(`img/flags/${c.countryCode}.svg`));
 			clockElm.appendChild(flagElm);
 
 			const textElm = document.createElement('div');
-			textElm.classList.add(`octanetopus-city-clock--text`);
+			textElm.classList.add(`octanetopus--clock--text`);
 
 			const nameElm = document.createElement('div');
-			nameElm.classList.add('octanetopus-city-clock--name', 'octanetopus-ellipsis');
-			nameElm.textContent = cc.shortName;
+			nameElm.classList.add('octanetopus--clock--name', 'octanetopus-ellipsis');
+			nameElm.textContent = c.shortName;
 			textElm.appendChild(nameElm);
 
 			const timeElm = document.createElement('div');
-			timeElm.setAttribute('id', `octanetopus-city-clock--${i}--time`);
-			timeElm.classList.add('octanetopus-city-clock--time', 'octanetopus-ellipsis');
+			timeElm.setAttribute('id', `octanetopus--clock--${i}--time`);
+			timeElm.classList.add('octanetopus--clock--time', 'octanetopus-ellipsis');
 			//timeElm.style['background-image'] = 'linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 60%, #f30 70%, #603 80%, #103 90%, #000 95%, #000)';
 			//timeElm.style['background-size'] = '600px';
 			timeElm.textContent = UNSET_TIME_STR;
@@ -155,7 +155,7 @@ const addCityClocks = () => {
 			clocksElm.appendChild(clockElm);
 		});
 		parentElm.insertBefore(clocksElm, parentElm.childNodes[0]);
-		log(`${config.cityClocks.length} clocks added`);
+		log(`${config.clocks.length} clocks added`);
 		updateClocks();
 		setInterval(() => {
 			updateClocks();
