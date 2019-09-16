@@ -52,7 +52,18 @@ const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
 
 const onAppReady = () => {
 	log('onAppReady');
+	colorMasthead();
 	addClocks();
+};
+
+const colorMasthead = () => {
+	log('colorMasthead');
+	if (config.mastheadGradient) {
+		const elm = document.querySelector('.mqm-masthead > .masthead-bg-color');
+		if (elm) {
+			elm.style['background-image'] = `linear-gradient(to right, ${config.mastheadGradient.join(', ')})`;
+		}
+	}
 };
 
 const goFetchTime = async(timeZone) => {
@@ -103,7 +114,7 @@ const updateClock = async (c, i, tryNumber=1) => {
 };
 
 const updateClocks = () => {
-	config.clocks.forEach((c, i) => {
+	config.mastheadClocks.forEach((c, i) => {
 		updateClock(c, i).then(()=>{});
 	});
 };
@@ -112,11 +123,11 @@ const addClocks = () => {
 	log('add clocks');
 	clocks = [];
 	const parentElm = document.querySelector('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)');
-	if (parentElm && config && config.clocks && config.clocks.length && config.clocks.length > 0) {
+	if (parentElm && config && config.mastheadClocks && config.mastheadClocks.length && config.mastheadClocks.length > 0) {
 		const clocksElm = document.createElement('div');
 		clocksElm.setAttribute('id', 'octanetopus--clocks');
 		clocksElm.classList.add('octanetopus--clocks');
-		config.clocks.forEach((c, i) => {
+		config.mastheadClocks.forEach((c, i) => {
 			clocks.push({
 				longName: c.longName,
 				shortName: c.shortName,
@@ -156,7 +167,7 @@ const addClocks = () => {
 			clocksElm.appendChild(clockElm);
 		});
 		parentElm.insertBefore(clocksElm, parentElm.childNodes[0]);
-		log(`${config.clocks.length} clocks added`);
+		log(`${config.mastheadClocks.length} clocks added`);
 		updateClocks();
 		setInterval(() => {
 			updateClocks();

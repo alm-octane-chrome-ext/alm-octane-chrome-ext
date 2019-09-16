@@ -5,7 +5,12 @@ const defaultConfigObj = {
 		'center.almoctane.com/ui/',
 		'octanetopus-test.html',
 	],
-	clocks: [
+	mastheadGradient: [
+		'#9b1e83',
+		'#333',
+		'#333'
+	],
+	mastheadClocks: [
 		{
 			longName: 'Los Angeles',
 			shortName: 'LA',
