@@ -1,5 +1,7 @@
 button[disabled] {
 	pointer-events: none;
+	border: 1px solid #ccc;
+	color: #ccc;
 }
 
 .octanetopus-popup-body {

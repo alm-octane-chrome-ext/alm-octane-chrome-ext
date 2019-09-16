@@ -16,6 +16,7 @@
   },
   "background": {
     "scripts": [
+      "common/octanetopus-common.js",
       "background/octanetopus-background.js"
     ]
   },
