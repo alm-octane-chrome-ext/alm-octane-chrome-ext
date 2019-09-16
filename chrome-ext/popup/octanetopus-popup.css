@@ -18,7 +18,7 @@ button[disabled] {
 
 .octanetopus-popup__header {
 	display: flex;
-	background-image: linear-gradient(to right, #000, #0079ef);
+	background-image: linear-gradient(to right, #000, #888);
 	height: 30px;
 	line-height: 30px;
     padding: 10px;
