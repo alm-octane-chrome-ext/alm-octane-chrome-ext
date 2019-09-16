@@ -73,8 +73,9 @@ const updateClock = async (c, i, tryNumber=1) => {
 	if (clockElm && flagElm && timeElm) {
 		const clock = clocks[i];
 		if (clock.fetchTimeUnix) {
-			const fetchTotalMinutes = parseInt(clock.fetchTimeStr.substr(11, 2), 10) * 60 + parseInt(clock.fetchTimeStr.substr(14, 2), 10);
-			const curTotalMinutes = fetchTotalMinutes + Math.trunc(((new Date()).getTime() - clock.fetchTimeUnix) / 1000 / 60);
+			const fetchTotalSeconds = parseInt(clock.fetchTimeStr.substr(11, 2), 10) * 60 * 60 + parseInt(clock.fetchTimeStr.substr(14, 2), 10) * 60 + parseInt(clock.fetchTimeStr.substr(17, 2), 10);
+			const diffSeconds = ((new Date()).getTime() - clock.fetchTimeUnix) / 1000;
+			const curTotalMinutes = Math.round((fetchTotalSeconds + diffSeconds) / 60);
 			const h = Math.trunc(curTotalMinutes / 60) % 24;
 			const m = curTotalMinutes % 60;
 			const hh = h < 10 ? '0' + h : '' + h;
@@ -83,8 +84,8 @@ const updateClock = async (c, i, tryNumber=1) => {
 		} else {
 			const j = await goFetchTime(c.timeZone);
 			if (j) {
-				const timeStr = j['datetime'];
 				clocks[i].fetchTimeUnix = (new Date()).getTime();
+				const timeStr = j['datetime'];
 				clocks[i].fetchTimeStr = timeStr;
 				const hh = timeStr.substr(11, 2);
 				const mm = timeStr.substr(14, 2);
@@ -94,7 +95,7 @@ const updateClock = async (c, i, tryNumber=1) => {
 				if (tryNumber < 3) {
 					setTimeout(async () => {
 						await updateClock(c, i, tryNumber + 1);
-					}, 10000);
+					}, 5000);
 				}
 			}
 		}
