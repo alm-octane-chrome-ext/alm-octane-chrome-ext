@@ -49,9 +49,9 @@ const addMessageListener = () => {
 const addOnTabCompleteListener = () => {
 	chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 		const config = JSON.parse(localStorage.getItem(localStorageConfigKey));
-		if (changeInfo.status === 'complete' && config.urls && config.urls.length > 0) {
+		if (changeInfo.status === 'complete' && config.octaneUrls && config.octaneUrls.length > 0) {
 			let found = false;
-			config.urls.forEach(url => {
+			config.octaneUrls.forEach(url => {
 				if (!found && tab.url.includes(url)) {
 					found = true;
 					updatedTabId = tabId;

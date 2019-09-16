@@ -1,6 +1,6 @@
 const localStorageConfigKey = 'octanetopus-config';
 const defaultConfigObj = {
-	urls: [
+	octaneUrls: [
 		'localhost:9090/ui/',
 		'center.almoctane.com/ui/',
 		'octanetopus-test.html',
