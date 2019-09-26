@@ -18,7 +18,7 @@ button[disabled] {
 
 .octanetopus-popup__header {
 	display: flex;
-	background-image: linear-gradient(to right, #000, #888);
+	background-color: #444;
 	height: 30px;
 	line-height: 30px;
     padding: 10px;
@@ -27,12 +27,11 @@ button[disabled] {
 .octanetopus-popup__header__image {
 	width: 30px;
 	height: 30px;
-	border-radius: 50%;
 }
 
 .octanetopus-popup__header__title {
 	margin-left: 5px;
-	font-size: 24px;
+	font-size: 25px;
 	color: #fff;
 }
 
