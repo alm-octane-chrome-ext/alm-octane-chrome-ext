@@ -1,5 +1,4 @@
 let config = null;
-const UNSET_TIME_STR = '??:??';
 let clocks = [];
 
 const log = (msg) => {
@@ -77,6 +76,13 @@ const goFetchTime = async(timeZone) => {
 	}
 };
 
+const displayClockTime = (i, h1, h2, m1, m2) => {
+	const timeElm = document.getElementById(`octanetopus--clock--${i}--time`);
+	if (timeElm) {
+		timeElm.textContent = `${h1}${h2}:${m1}${m2}`;
+	}
+};
+
 const updateClock = async (c, i, tryNumber=1) => {
 	const clockElm = document.getElementById(`octanetopus--clock--${i}`);
 	const flagElm = document.getElementById(`octanetopus--clock--${i}--flag`);
@@ -91,18 +97,24 @@ const updateClock = async (c, i, tryNumber=1) => {
 			const m = curTotalMinutes % 60;
 			const hh = h < 10 ? '0' + h : '' + h;
 			const mm = m < 10 ? '0' + m : '' + m;
-			timeElm.textContent = `${hh}:${mm}`;
+			const h1 = hh.substr(0, 1);
+			const h2 = hh.substr(1, 1);
+			const m1 = mm.substr(0, 1);
+			const m2 = mm.substr(1, 1);
+			displayClockTime(i, h1, h2, m1, m2);
 		} else {
 			const j = await goFetchTime(c.timeZone);
 			if (j) {
 				clocks[i].fetchTimeUnix = (new Date()).getTime();
 				const timeStr = j['datetime'];
 				clocks[i].fetchTimeStr = timeStr;
-				const hh = timeStr.substr(11, 2);
-				const mm = timeStr.substr(14, 2);
-				timeElm.textContent = `${hh}:${mm}`;
+				const h1 = timeStr.substr(11, 1);
+				const h2 = timeStr.substr(12, 1);
+				const m1 = timeStr.substr(14, 1);
+				const m2 = timeStr.substr(15, 1);
+				displayClockTime(i, h1, h2, m1, m2);
 			} else {
-				timeElm.textContent = UNSET_TIME_STR;
+				displayClockTime(i, '?', '?', '?', '?');
 				if (tryNumber < 3) {
 					setTimeout(async () => {
 						await updateClock(c, i, tryNumber + 1);
@@ -159,7 +171,6 @@ const addClocks = () => {
 			timeElm.classList.add('octanetopus--clock--time', 'octanetopus-ellipsis');
 			//timeElm.style['background-image'] = 'linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 60%, #f30 70%, #603 80%, #103 90%, #000 95%, #000)';
 			//timeElm.style['background-size'] = '600px';
-			timeElm.textContent = UNSET_TIME_STR;
 			textElm.appendChild(timeElm);
 
 			clockElm.appendChild(textElm);
@@ -167,6 +178,9 @@ const addClocks = () => {
 			clocksElm.appendChild(clockElm);
 		});
 		parentElm.insertBefore(clocksElm, parentElm.childNodes[0]);
+		config.mastheadClocks.forEach((c, i) => {
+			displayClockTime(i, '?', '?', '?', '?');
+		});
 		log(`${config.mastheadClocks.length} clocks added`);
 		updateClocks();
 		setInterval(() => {
