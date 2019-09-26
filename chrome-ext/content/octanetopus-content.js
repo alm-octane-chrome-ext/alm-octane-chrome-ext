@@ -77,10 +77,10 @@ const goFetchTime = async(timeZone) => {
 };
 
 const displayClockTime = (i, h1, h2, m1, m2) => {
-	const timeElm = document.getElementById(`octanetopus--clock--${i}--time`);
-	if (timeElm) {
-		timeElm.textContent = `${h1}${h2}:${m1}${m2}`;
-	}
+	const digits = [h1, h2, m1, m2];
+	digits.forEach((d, i) => {
+		document.getElementById(`octanetopus--clock--${i}--digit-container--0`).style['margin-top'] = digits[d] === '?' ? '-10em' : `-${digits[d]}em`;
+	});
 };
 
 const updateClock = async (c, i, tryNumber=1) => {
@@ -168,9 +168,24 @@ const addClocks = () => {
 
 			const timeElm = document.createElement('div');
 			timeElm.setAttribute('id', `octanetopus--clock--${i}--time`);
-			timeElm.classList.add('octanetopus--clock--time', 'octanetopus-ellipsis');
-			//timeElm.style['background-image'] = 'linear-gradient(to right, #000, #000 20%, #003 30%, #669 35%, #fc0 60%, #f30 70%, #603 80%, #103 90%, #000 95%, #000)';
-			//timeElm.style['background-size'] = '600px';
+			timeElm.classList.add('octanetopus--clock--time');
+
+			for (let ul = 0; ul < 4; ul++) {
+				const digitContainerElm = document.createElement('ul');
+				digitContainerElm.setAttribute('id', `octanetopus--clock--${i}--digit-container--${ul}`);
+				digitContainerElm.classList.add('octanetopus--clock--digit-container');
+
+				['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '?'].forEach(d => {
+					const digitElm = document.createElement('li');
+					digitElm.setAttribute('id', `octanetopus--clock--${i}--digit-item`);
+					digitElm.classList.add('octanetopus--clock--digit-item');
+					digitElm.textContent = d;
+					digitContainerElm.appendChild(digitElm);
+				});
+
+				timeElm.appendChild(digitContainerElm);
+			}
+
 			textElm.appendChild(timeElm);
 
 			clockElm.appendChild(textElm);
