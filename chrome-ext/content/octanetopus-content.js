@@ -70,6 +70,10 @@ const goFetchTime = async(timeZone) => {
 	log(`goFetchTime ${timeZone}`);
 	try {
 		const r = await fetch(`https://worldtimeapi.org/api/timezone/${timeZone}`);
+		if (!r.ok) {
+			log(`Error on goFetchTime - ${r.status} ${r.statusText}`);
+			return null;
+		}
 		return await r.json();
 	} catch(err) {
 		log(`Error on goFetchTime - ${err.message || err.toString()}`);
@@ -85,7 +89,6 @@ const displayClockTime = (clockIdx, ...digits) => {
 };
 
 const updateClock = async (c, i, tryNumber=1) => {
-	console.log(`updateClock #${i}`);
 	const clockElm = document.getElementById(`octanetopus--clock--${i}`);
 	const flagElm = document.getElementById(`octanetopus--clock--${i}--flag`);
 	const timeElm = document.getElementById(`octanetopus--clock--${i}--time`);
