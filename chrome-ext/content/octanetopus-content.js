@@ -76,10 +76,10 @@ const goFetchTime = async(timeZone) => {
 	}
 };
 
-const displayClockTime = (i, h1, h2, m1, m2) => {
-	const digits = [h1, h2, m1, m2];
-	digits.forEach((d, i) => {
-		document.getElementById(`octanetopus--clock--${i}--digit-container--0`).style['margin-top'] = digits[d] === '?' ? '-10em' : `-${digits[d]}em`;
+const displayClockTime = (clockIdx, ...digits) => {
+	digits.forEach((d, digitIdx) => {
+		document.getElementById(`octanetopus--clock--${clockIdx}--digit-container--${digitIdx}`).style['margin-top'] =
+		d === '?' ? '-10em' : `-${d}em`;
 	});
 };
 
@@ -89,20 +89,7 @@ const updateClock = async (c, i, tryNumber=1) => {
 	const timeElm = document.getElementById(`octanetopus--clock--${i}--time`);
 	if (clockElm && flagElm && timeElm) {
 		const clock = clocks[i];
-		if (clock.fetchTimeUnix) {
-			const fetchTotalSeconds = parseInt(clock.fetchTimeStr.substr(11, 2), 10) * 60 * 60 + parseInt(clock.fetchTimeStr.substr(14, 2), 10) * 60 + parseInt(clock.fetchTimeStr.substr(17, 2), 10);
-			const diffSeconds = ((new Date()).getTime() - clock.fetchTimeUnix) / 1000;
-			const curTotalMinutes = Math.round((fetchTotalSeconds + diffSeconds) / 60);
-			const h = Math.trunc(curTotalMinutes / 60) % 24;
-			const m = curTotalMinutes % 60;
-			const hh = h < 10 ? '0' + h : '' + h;
-			const mm = m < 10 ? '0' + m : '' + m;
-			const h1 = hh.substr(0, 1);
-			const h2 = hh.substr(1, 1);
-			const m1 = mm.substr(0, 1);
-			const m2 = mm.substr(1, 1);
-			displayClockTime(i, h1, h2, m1, m2);
-		} else {
+		if (!clock.fetchTimeUnix) {
 			const j = await goFetchTime(c.timeZone);
 			if (j) {
 				clocks[i].fetchTimeUnix = (new Date()).getTime();
@@ -120,7 +107,20 @@ const updateClock = async (c, i, tryNumber=1) => {
 						await updateClock(c, i, tryNumber + 1);
 					}, 5000);
 				}
-			}
+			}			
+		} else {
+			const fetchTotalSeconds = parseInt(clock.fetchTimeStr.substr(11, 2), 10) * 60 * 60 + parseInt(clock.fetchTimeStr.substr(14, 2), 10) * 60 + parseInt(clock.fetchTimeStr.substr(17, 2), 10);
+			const diffSeconds = ((new Date()).getTime() - clock.fetchTimeUnix) / 1000;
+			const curTotalMinutes = Math.round((fetchTotalSeconds + diffSeconds) / 60);
+			const h = Math.trunc(curTotalMinutes / 60) % 24;
+			const m = curTotalMinutes % 60;
+			const hh = h < 10 ? '0' + h : '' + h;
+			const mm = m < 10 ? '0' + m : '' + m;
+			const h1 = hh.substr(0, 1);
+			const h2 = hh.substr(1, 1);
+			const m1 = mm.substr(0, 1);
+			const m2 = mm.substr(1, 1);
+			displayClockTime(i, h1, h2, m1, m2);	
 		}
 	}
 };
