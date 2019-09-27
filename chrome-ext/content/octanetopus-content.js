@@ -66,6 +66,7 @@ const colorMasthead = () => {
 };
 
 const goFetchTime = async(timeZone) => {
+	//return {datetime: "...........12.34.56"};
 	log(`goFetchTime ${timeZone}`);
 	try {
 		const r = await fetch(`https://worldtimeapi.org/api/timezone/${timeZone}`);
@@ -84,6 +85,7 @@ const displayClockTime = (clockIdx, ...digits) => {
 };
 
 const updateClock = async (c, i, tryNumber=1) => {
+	console.log(`updateClock #${i}`);
 	const clockElm = document.getElementById(`octanetopus--clock--${i}`);
 	const flagElm = document.getElementById(`octanetopus--clock--${i}--flag`);
 	const timeElm = document.getElementById(`octanetopus--clock--${i}--time`);
@@ -95,11 +97,7 @@ const updateClock = async (c, i, tryNumber=1) => {
 				clocks[i].fetchTimeUnix = (new Date()).getTime();
 				const timeStr = j['datetime'];
 				clocks[i].fetchTimeStr = timeStr;
-				const h1 = timeStr.substr(11, 1);
-				const h2 = timeStr.substr(12, 1);
-				const m1 = timeStr.substr(14, 1);
-				const m2 = timeStr.substr(15, 1);
-				displayClockTime(i, h1, h2, m1, m2);
+				displayClockTime(i, timeStr.substr(11, 1), timeStr.substr(12, 1), timeStr.substr(14, 1), timeStr.substr(15, 1));
 			} else {
 				displayClockTime(i, '?', '?', '?', '?');
 				if (tryNumber < 3) {
@@ -116,11 +114,7 @@ const updateClock = async (c, i, tryNumber=1) => {
 			const m = curTotalMinutes % 60;
 			const hh = h < 10 ? '0' + h : '' + h;
 			const mm = m < 10 ? '0' + m : '' + m;
-			const h1 = hh.substr(0, 1);
-			const h2 = hh.substr(1, 1);
-			const m1 = mm.substr(0, 1);
-			const m2 = mm.substr(1, 1);
-			displayClockTime(i, h1, h2, m1, m2);	
+			displayClockTime(i, hh.substr(0, 1), hh.substr(1, 1), mm.substr(0, 1), mm.substr(1, 1));			
 		}
 	}
 };
