@@ -2,7 +2,7 @@
   "name": "Octanetopus",
   "short_name": "Octanetopus",
   "description": "Unofficial extension for ALM Octane",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "manifest_version": 2,
   "permissions": [
     "tabs",
