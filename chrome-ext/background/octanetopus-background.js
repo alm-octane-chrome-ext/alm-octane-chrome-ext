@@ -9,7 +9,13 @@ const log = (msg) => {
 
 const ensureConfigInStorage = () => {
 	log('ensureConfigInStorage');
-	if (localStorage.getItem(localStorageConfigKey) === null) {
+	let configOk = false;
+	const savedConfig = localStorage.getItem(localStorageConfigKey);
+	if (savedConfig) {
+		const configObj = JSON.parse(savedConfig);
+		configOk = configObj.configVersion === currentConfigVer;
+	}
+	if (!configOk) {
 		localStorage.setItem(localStorageConfigKey, JSON.stringify(defaultConfigObj));
 	}
 };
@@ -49,10 +55,10 @@ const addMessageListener = () => {
 const addOnTabCompleteListener = () => {
 	chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 		const config = JSON.parse(localStorage.getItem(localStorageConfigKey));
-		if (changeInfo.status === 'complete' && config.octaneUrls && config.octaneUrls.length > 0) {
+		if (changeInfo.status === 'complete' && config.octaneInstances && config.octaneInstances.length > 0) {
 			let found = false;
-			config.octaneUrls.forEach(url => {
-				if (!found && tab.url.includes(url)) {
+			config.octaneInstances.forEach(octaneInstance => {
+				if (!found && tab.url.includes(octaneInstance.urlPart)) {
 					found = true;
 					updatedTabId = tabId;
 					injectJs(tabId, jsCheckScript).then(()=>{});

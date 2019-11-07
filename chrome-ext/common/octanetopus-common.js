@@ -1,14 +1,26 @@
 const localStorageConfigKey = 'octanetopus-config';
+const currentConfigVer = 1;
 const defaultConfigObj = {
-	octaneUrls: [
-		'localhost:9090/ui/',
-		'center.almoctane.com/ui/',
-		'octanetopus-test.html',
-	],
-	mastheadGradient: [
-		'#9b1e83',
-		'#333',
-		'#333'
+	configVersion: 1,
+	octaneInstances: [
+		{
+			name: 'Local',
+			urlPart: 'localhost:9090/ui/',
+			mastheadGradient: [
+				'#9b1e83',
+				'#333',
+				'#333'
+			]
+		},
+		{
+			name: 'Center',
+			urlPart: 'center.almoctane.com/ui/',
+			mastheadGradient: [
+				'#b21646',
+				'#333',
+				'#333'
+			]
+		},
 	],
 	mastheadClocks: [
 		{
@@ -47,5 +59,5 @@ const defaultConfigObj = {
 			countryCode: 'cn',
 			timeZone: 'Asia/Shanghai'
 		},
-	]
+	],
 };

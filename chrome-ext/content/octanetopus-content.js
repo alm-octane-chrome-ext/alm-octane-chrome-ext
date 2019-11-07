@@ -57,12 +57,14 @@ const onAppReady = () => {
 
 const colorMasthead = () => {
 	log('colorMasthead');
-	if (config.mastheadGradient) {
-		const elm = document.querySelector('.mqm-masthead > .masthead-bg-color');
-		if (elm) {
-			elm.style['background-image'] = `linear-gradient(to right, ${config.mastheadGradient.join(', ')})`;
+	config.octaneInstances.forEach(octaneInstance => {
+		if (window.location.href.includes(octaneInstance.urlPart) && octaneInstance.mastheadGradient) {
+			const elm = document.querySelector('.mqm-masthead > .masthead-bg-color');
+			if (elm) {
+				elm.style['background-image'] = `linear-gradient(to right, ${octaneInstance.mastheadGradient.join(', ')})`;
+			}
 		}
-	}
+	});
 };
 
 const goFetchTime = async (timeZone) => {

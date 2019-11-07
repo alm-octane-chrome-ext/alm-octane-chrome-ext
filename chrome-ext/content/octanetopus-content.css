@@ -1,5 +1,9 @@
 .mqm-masthead > .masthead-bg-color {
-    background-image: linear-gradient(to right, #9b1e83, #333, #333);
+    background-image: linear-gradient(to right, #333, #333, #333);
+}
+
+.mqm-masthead .masthead-logo-container {
+    background-color: #333;
 }
 
 .octanetopus--clocks {
