@@ -7,7 +7,7 @@ const defaultConfigObj = {
 			name: 'Local',
 			urlPart: 'localhost:9090/ui/',
 			mastheadGradient: [
-				'#9b1e83',
+				'#c6179d',
 				'#333',
 				'#333'
 			]
@@ -17,6 +17,24 @@ const defaultConfigObj = {
 			urlPart: 'center.almoctane.com/ui/',
 			mastheadGradient: [
 				'#b21646',
+				'#333',
+				'#333'
+			]
+		},
+		{
+			name: 'Extended',
+			urlPart: 'myd-vma00299.swinfra.net:30003/ui/',
+			mastheadGradient: [
+				'#00a989',
+				'#333',
+				'#333'
+			]
+		},
+		{
+			name: 'Nightly',
+			urlPart: 'myd-vma00299.swinfra.net:30004/ui/',
+			mastheadGradient: [
+				'#0b8eac',
 				'#333',
 				'#333'
 			]
