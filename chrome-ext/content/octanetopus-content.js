@@ -231,8 +231,8 @@ const getNews = () => {
 					const newsElm = document.getElementById('octanetopus--news');
 					newsElm.innerHTML = '';
 					const isEnglish = /[a-z]+/i.test(text);
-					newsElm.style['text-align'] = isEnglish ? 'left' : 'right;'
-					newsElm.style['direction'] = isEnglish ? 'ltr' : 'rtl;'
+					newsElm.style['text-align'] = isEnglish ? 'left' : 'right';
+					newsElm.style['direction'] = isEnglish ? 'ltr' : 'rtl';
 					const titleElm = document.createElement('a');
 					titleElm.textContent = text;
 					titleElm.setAttribute('href', item.link);
