@@ -1,10 +1,12 @@
 const jsCheckScript = 'content/octanetopus-check.js';
 const cssContentScript = 'content/octanetopus-content.css';
 const jsContentScript = 'content/octanetopus-content.js';
-const rssFeedCnn = 'http://rss.cnn.com/rss/edition.rss';
-//const rssFeedWalla = 'http://rss.walla.co.il/feed/22';
-//const rssFeedYnet = 'http://www.ynet.co.il/Integration/StoryRss3254.xml';
-const rssFeedDefaultUrl = rssFeedCnn;
+const rssFeeds = {
+	cnn: 'http://rss.cnn.com/rss/edition.rss',
+	ynet: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
+	walla: 'http://rss.walla.co.il/feed/22'
+};
+const rssFeedDefaultUrl = rssFeeds.ynet;
 const rssFeedDefaultRefreshMinutes = 5;
 let updatedTabId = 0;
 
