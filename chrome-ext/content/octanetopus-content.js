@@ -1,6 +1,6 @@
 let config = null;
 let clocks = [];
-let curNewsTitle = '';
+let curNewsText = '';
 const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
 
 const log = (msg) => {
@@ -224,10 +224,9 @@ const getNews = () => {
 			const items = JSON.parse(response || '[]');
 			if (items.length > 0) {
 				const item = items[0];
-				if (item.title !== curNewsTitle) {
-					const timeStr = item.pubDate.substr(17, 5);
-					const text = `[${timeStr}] ${item.title}`;
-					//const text = `${item.title}`;
+				const timeStr = item.pubDate.substr(17, 5);
+				const text = `[${timeStr}] ${item.title}`;
+				if (text !== curNewsText) {					
 					//log(`news item: ${text}`);										
 					const newsElm = document.getElementById('octanetopus--news');
 					newsElm.innerHTML = '';
@@ -240,7 +239,7 @@ const getNews = () => {
 					titleElm.setAttribute('target', '_blank');
 					titleElm.classList.add('octanetopus--news--item', 'octanetopus-ellipsis');
 					newsElm.appendChild(titleElm);
-					curNewsTitle = text;					
+					curNewsText = text;					
 				}
 			}
 		}
