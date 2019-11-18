@@ -1,6 +1,7 @@
 const jsCheckScript = 'content/octanetopus-check.js';
 const cssContentScript = 'content/octanetopus-content.css';
 const jsContentScript = 'content/octanetopus-content.js';
+const rssUrl = 'http://www.ynet.co.il/Integration/StoryRss3254.xml';
 let updatedTabId = 0;
 
 const log = (msg) => {
@@ -48,6 +49,20 @@ const addMessageListener = () => {
 					data: localStorage.getItem(localStorageConfigKey)
 				}
 			);
+		} else if (request.type === 'octanetopus-content-to-background--time') {
+			log(request.type);
+			log('get time');
+			getTime(request.timeZone).then(result => {
+				responseFunc(result && JSON.stringify(result) || '');
+			});
+			return true;
+		} else if (request.type === 'octanetopus-content-to-background--news') {
+			log(request.type);
+			log('get news');
+			getNews().then(result => {
+				responseFunc(JSON.stringify(result));
+			});
+			return true;
 		}
 	});
 };
@@ -66,6 +81,43 @@ const addOnTabCompleteListener = () => {
 			});
 		}
 	});
+};
+
+const getTime = async (timeZone) => {
+	log('getTime');
+	try {
+		const r = await fetch(`https://worldtimeapi.org/api/timezone/${timeZone}`);
+		if (!r.ok) {
+			log(`Error on goFetchTime - ${r.status} ${r.statusText}`);
+			return null;
+		}
+		return await r.json();
+	} catch(err) {
+		log(`Error on getTime - ${err.message || err.toString()}`);
+		return null;
+	}
+};
+
+const getNews = async () => {
+	log('getNews');
+	const result = [];
+	try {
+		const res = await fetch(rssUrl);
+		const txt = await res.text();
+		const xml = (new DOMParser()).parseFromString(txt, 'text/xml');
+		const items = xml.querySelectorAll('item');
+		items.forEach(item => {
+			log(item.querySelectorAll('title')[0].textContent);
+			result.push({
+				title: item.querySelectorAll('title')[0].textContent,
+				link: item.querySelectorAll('link')[0].textContent,
+				pubDate: item.querySelectorAll('pubDate')[0].textContent
+			});
+		});
+	} catch (err) {
+		log(`Error on getNews - ${err.message || err.toString()}`);
+	}
+	return result;
 };
 
 log('background page loaded');
