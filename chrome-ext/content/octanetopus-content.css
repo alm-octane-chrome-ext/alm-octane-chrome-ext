@@ -98,10 +98,12 @@
     color: #ccc;
 }
 
-.octanetopus--news:hover {
+.octanetopus--news:hover,
+.octanetopus--news:focus {
     text-decoration: none;
     color: #fff;
     transition: 0.5s ease all;
+    outline: none;
 }
 
 .octanetopus-ellipsis {
