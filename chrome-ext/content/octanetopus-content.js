@@ -53,7 +53,7 @@ const onAppReady = () => {
 	log('onAppReady');
 	colorMasthead();
 	addClocks();
-	getNews();
+	handleNews();
 };
 
 const colorMasthead = () => {
@@ -66,21 +66,6 @@ const colorMasthead = () => {
 			}
 		}
 	});
-};
-
-const getTime = () => {
-	log('getNews');
-	chrome.runtime.sendMessage(
-	{
-		type: 'octanetopus-content-to-background--time'
-	},
-	response => {
-		const items = JSON.parse(response || '[]');
-		if (items.length > 0) {
-			log(items[0].title);
-		}
-	}
-	);
 };
 
 const displayClockTime = (clockIdx, ...digits) => {
@@ -207,6 +192,16 @@ const addClocks = () => {
 		setInterval(() => {
 			updateClocks();
 		}, 60000);
+	}
+};
+
+const handleNews = () => {
+	log('handleNews');
+	if (config.rssFeed && config.rssFeed.enabled) {
+		getNews();
+		setInterval(() => {
+			getNews();
+		}, config.rssFeed.refreshMinutes*60*1000);
 	}
 };
 

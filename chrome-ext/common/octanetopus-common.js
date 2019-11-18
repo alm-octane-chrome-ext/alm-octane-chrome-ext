@@ -78,4 +78,9 @@ const defaultConfigObj = {
 			timeZone: 'Asia/Shanghai'
 		},
 	],
+	rssFeed: {
+		enabled: true,
+		url: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
+		refreshMinutes: 5
+	},
 };

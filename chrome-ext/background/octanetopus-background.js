@@ -1,7 +1,8 @@
 const jsCheckScript = 'content/octanetopus-check.js';
 const cssContentScript = 'content/octanetopus-content.css';
 const jsContentScript = 'content/octanetopus-content.js';
-const rssUrl = 'http://www.ynet.co.il/Integration/StoryRss3254.xml';
+const rssFeedDefaultUrl = 'http://www.ynet.co.il/Integration/StoryRss3254.xml';
+const rssFeedDefaultRefreshMinutes = 5;
 let updatedTabId = 0;
 
 const log = (msg) => {
@@ -10,13 +11,21 @@ const log = (msg) => {
 
 const ensureConfigInStorage = () => {
 	log('ensureConfigInStorage');
-	let configOk = false;
+	let shouldUseDefaultConfig = true;
 	const savedConfig = localStorage.getItem(localStorageConfigKey);
 	if (savedConfig) {
 		const configObj = JSON.parse(savedConfig);
-		configOk = configObj.configVersion === currentConfigVer;
+		shouldUseDefaultConfig = configObj.configVersion !== currentConfigVer;
+		if (!shouldUseDefaultConfig && !configObj.rssFeed) {
+			configObj.rssFeed = {
+				enabled: true,
+				url: rssFeedDefaultUrl,
+				refreshMinutes: rssFeedDefaultRefreshMinutes
+			};
+			localStorage.setItem(localStorageConfigKey, JSON.stringify(configObj));
+		}
 	}
-	if (!configOk) {
+	if (shouldUseDefaultConfig) {
 		localStorage.setItem(localStorageConfigKey, JSON.stringify(defaultConfigObj));
 	}
 };
@@ -42,7 +51,7 @@ const addMessageListener = () => {
 			})();
 		} else if (request.type === 'octanetopus-content-to-background--init') {
 			log(request.type);
-			log('send response to content script');
+			log('send init response to content script');
 			responseFunc(
 				{
 					type: 'octanetopus-background-to-content--config',
@@ -51,15 +60,15 @@ const addMessageListener = () => {
 			);
 		} else if (request.type === 'octanetopus-content-to-background--time') {
 			log(request.type);
-			log('get time');
 			getTime(request.timeZone).then(result => {
+				log('send time response to content script');
 				responseFunc(result && JSON.stringify(result) || '');
 			});
 			return true;
 		} else if (request.type === 'octanetopus-content-to-background--news') {
 			log(request.type);
-			log('get news');
 			getNews().then(result => {
+				log('send news response to content script');
 				responseFunc(JSON.stringify(result));
 			});
 			return true;
@@ -102,12 +111,12 @@ const getNews = async () => {
 	log('getNews');
 	const result = [];
 	try {
-		const res = await fetch(rssUrl);
+		const res = await fetch(JSON.parse(localStorage.getItem(localStorageConfigKey)).rssFeed.url);
 		const txt = await res.text();
 		const xml = (new DOMParser()).parseFromString(txt, 'text/xml');
 		const items = xml.querySelectorAll('item');
 		items.forEach(item => {
-			log(item.querySelectorAll('title')[0].textContent);
+			log(`news item: ${item.querySelectorAll('title')[0].textContent}`);
 			result.push({
 				title: item.querySelectorAll('title')[0].textContent,
 				link: item.querySelectorAll('link')[0].textContent,
