@@ -224,7 +224,7 @@ const getNews = () => {
 			const items = JSON.parse(response || '[]');
 			if (items.length > 0) {
 				const item = items[0];
-				if (true || item.title !== curNewsTitle) {
+				if (item.title !== curNewsTitle) {
 					//const timeStr = item.pubDate.substr(17, 5);
 					const text = `${item.title}`;
 					//log(`news item: ${text}`);										

@@ -80,7 +80,7 @@ const defaultConfigObj = {
 	],
 	rssFeed: {
 		enabled: true,
-		refreshMinutes: 3,
+		refreshMinutes: 5,
 		url: 'http://rss.walla.co.il/feed/22',
 	},
 };
