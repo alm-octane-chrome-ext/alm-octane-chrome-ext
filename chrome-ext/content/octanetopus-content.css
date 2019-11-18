@@ -90,9 +90,18 @@
     left: 28px;
 }
 
+@keyframes appear-animation {
+    from {
+        max-width: 0%;
+    }
+    to {
+        max-width: 100%;
+    }
+}
+
 .octanetopus--news {
     flex: 1 1 auto;
-    padding-right: 20px;
+    padding: 0 20px;
     text-align: right;
     direction: rtl;
     font-family: arial, sans-serif;
@@ -100,6 +109,7 @@
     text-decoration: none;
     color: #ccc;
     transition: 0.5s ease all;
+    animation: appear-animation 3s linear;
 }
 
 .octanetopus--news:hover,

@@ -1,5 +1,6 @@
 let config = null;
 let clocks = [];
+let curNewsText = '';
 const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
 
 const log = (msg) => {
@@ -215,7 +216,7 @@ const handleNews = () => {
 };
 
 const getNews = () => {
-	log('getNews');
+	//log('getNews');
 	chrome.runtime.sendMessage(
 		{
 			type: 'octanetopus-content-to-background--news'
@@ -223,11 +224,15 @@ const getNews = () => {
 		response => {
 			const items = JSON.parse(response || '[]');
 			if (items.length > 0) {
-				log(items[0].title);
+				const item = items[0];
+				//log(item.title);
 				const newsElm = document.getElementById('octanetopus--news');
 				if (newsElm) {
-					newsElm.textContent = items[0].title;
-					newsElm.setAttribute('href', items[0].link);
+					const timeStr = item.pubDate.substr(17, 5);
+					const text = `${timeStr} ${item.title}`;
+					newsElm.textContent = text;
+					newsElm.setAttribute('href', item.link);
+					curNewsText = text;
 				}
 			}
 		}
