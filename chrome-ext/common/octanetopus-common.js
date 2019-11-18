@@ -80,7 +80,7 @@ const defaultConfigObj = {
 	],
 	rssFeed: {
 		enabled: true,
-		url: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
+		url: 'http://rss.cnn.com/rss/edition.rss',
 		refreshMinutes: 5
 	},
 };
