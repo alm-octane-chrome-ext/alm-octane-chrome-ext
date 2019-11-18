@@ -92,28 +92,32 @@
 
 @keyframes appear-animation {
     from {
-        max-width: 0%;
+        max-width: 0;
     }
     to {
-        max-width: 100%;
+        max-width: 500px;
     }
 }
 
 .octanetopus--news {
-    flex: 1 1 auto;
-    padding: 0 20px;
+    flex: 1 1 auto; 
+    padding: 2px 20px 0 20px;   
     text-align: right;
     direction: rtl;
-    font-family: arial, sans-serif;
-    font-size: 16px;
-    text-decoration: none;
-    color: #ccc;
-    transition: 0.5s ease all;
-    animation: appear-animation 3s linear;
 }
 
-.octanetopus--news:hover,
-.octanetopus--news:focus {
+.octanetopus--news--item {
+    display: inline-block;
+    font-family: arial, sans-serif;
+    font-size: 16px;
+    color: #ccc;
+    text-decoration: none;
+    animation: appear-animation 1s linear;   
+    transition: 0.5s ease all;    
+}
+
+.octanetopus--news--item:hover,
+.octanetopus--news--item:focus {
     color: #fff;
     text-decoration: none;
     outline: none;

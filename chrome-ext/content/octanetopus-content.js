@@ -1,6 +1,6 @@
 let config = null;
 let clocks = [];
-let curNewsText = '';
+let curNewsTitle = '';
 const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
 
 const log = (msg) => {
@@ -202,10 +202,9 @@ const handleNews = () => {
 	const parentElm = document.querySelector(parentElementQuerySelector);
 	if (parentElm && config.rssFeed && config.rssFeed.enabled) {
 
-		const newsElm = document.createElement('a');
+		const newsElm = document.createElement('div');
 		newsElm.setAttribute('id', 'octanetopus--news');
-		newsElm.setAttribute('target', '_blank');
-		newsElm.classList.add('octanetopus--news', 'octanetopus-ellipsis');
+		newsElm.classList.add('octanetopus--news');
 		parentElm.insertBefore(newsElm, parentElm.childNodes[0]);
 
 		getNews();
@@ -225,14 +224,19 @@ const getNews = () => {
 			const items = JSON.parse(response || '[]');
 			if (items.length > 0) {
 				const item = items[0];
-				//log(item.title);
-				const newsElm = document.getElementById('octanetopus--news');
-				if (newsElm) {
-					const timeStr = item.pubDate.substr(17, 5);
-					const text = `${timeStr} ${item.title}`;
-					newsElm.textContent = text;
-					newsElm.setAttribute('href', item.link);
-					curNewsText = text;
+				if (true || item.title !== curNewsTitle) {
+					//const timeStr = item.pubDate.substr(17, 5);
+					const text = `${item.title}`;
+					//log(`news item: ${text}`);										
+					const newsElm = document.getElementById('octanetopus--news');
+					newsElm.innerHTML = '';
+					const titleElm = document.createElement('a');
+					titleElm.textContent = text;
+					titleElm.setAttribute('href', item.link);
+					titleElm.setAttribute('target', '_blank');
+					titleElm.classList.add('octanetopus--news--item', 'octanetopus-ellipsis');
+					newsElm.appendChild(titleElm);
+					curNewsTitle = text;					
 				}
 			}
 		}
