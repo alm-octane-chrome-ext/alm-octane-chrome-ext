@@ -22,8 +22,8 @@ const ensureConfigInStorage = () => {
 		if (!shouldUseDefaultConfig && !configObj.rssFeed) {
 			configObj.rssFeed = {
 				enabled: true,
+				refreshMinutes: rssFeedDefaultRefreshMinutes,
 				url: rssFeedDefaultUrl,
-				refreshMinutes: rssFeedDefaultRefreshMinutes
 			};
 			localStorage.setItem(localStorageConfigKey, JSON.stringify(configObj));
 		}

@@ -80,7 +80,7 @@ const defaultConfigObj = {
 	],
 	rssFeed: {
 		enabled: true,
+		refreshMinutes: 5,
 		url: 'http://rss.cnn.com/rss/edition.rss',
-		refreshMinutes: 5
 	},
 };
