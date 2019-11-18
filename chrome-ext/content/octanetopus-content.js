@@ -1,5 +1,6 @@
 let config = null;
 let clocks = [];
+const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
 
 const log = (msg) => {
 	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
@@ -125,7 +126,7 @@ const updateClocks = () => {
 const addClocks = () => {
 	log('add clocks');
 	clocks = [];
-	const parentElm = document.querySelector('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)');
+	const parentElm = document.querySelector(parentElementQuerySelector);
 	if (parentElm && config && config.mastheadClocks && config.mastheadClocks.length && config.mastheadClocks.length > 0) {
 		const clocksElm = document.createElement('div');
 		clocksElm.setAttribute('id', 'octanetopus--clocks');
@@ -197,7 +198,14 @@ const addClocks = () => {
 
 const handleNews = () => {
 	log('handleNews');
-	if (config.rssFeed && config.rssFeed.enabled) {
+	const parentElm = document.querySelector(parentElementQuerySelector);
+	if (parentElm && config.rssFeed && config.rssFeed.enabled) {
+
+		const newsElm = document.createElement('a');
+		newsElm.setAttribute('id', 'octanetopus--news');
+		newsElm.classList.add('octanetopus--news', 'octanetopus-ellipsis');
+		parentElm.insertBefore(newsElm, parentElm.childNodes[0]);
+
 		getNews();
 		setInterval(() => {
 			getNews();
@@ -215,6 +223,11 @@ const getNews = () => {
 			const items = JSON.parse(response || '[]');
 			if (items.length > 0) {
 				log(items[0].title);
+				const newsElm = document.getElementById('octanetopus--news');
+				if (newsElm) {
+					newsElm.textContent = items[0].title;
+					newsElm.setAttribute('href', items[0].link);
+				}
 			}
 		}
 	);
