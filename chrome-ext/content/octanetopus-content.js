@@ -203,6 +203,7 @@ const handleNews = () => {
 
 		const newsElm = document.createElement('a');
 		newsElm.setAttribute('id', 'octanetopus--news');
+		newsElm.setAttribute('target', '_blank');
 		newsElm.classList.add('octanetopus--news', 'octanetopus-ellipsis');
 		parentElm.insertBefore(newsElm, parentElm.childNodes[0]);
 

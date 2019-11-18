@@ -80,7 +80,7 @@ const defaultConfigObj = {
 	],
 	rssFeed: {
 		enabled: true,
-		refreshMinutes: 5,
-		url: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
+		refreshMinutes: 3,
+		url: 'http://rss.walla.co.il/feed/22',
 	},
 };

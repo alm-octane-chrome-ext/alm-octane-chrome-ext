@@ -6,7 +6,7 @@ const rssFeeds = {
 	ynet: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
 	walla: 'http://rss.walla.co.il/feed/22'
 };
-const rssFeedDefaultUrl = rssFeeds.ynet;
+const rssFeedDefaultUrl = rssFeeds.walla;
 const rssFeedDefaultRefreshMinutes = 5;
 let updatedTabId = 0;
 

@@ -94,15 +94,18 @@
     flex: 1 1 auto;
     padding-right: 20px;
     text-align: right;
+    direction: ltr;
+    font-family: arial, sans-serif;
     font-size: 16px;
+    text-decoration: none;
     color: #ccc;
+    transition: 0.5s ease all;
 }
 
 .octanetopus--news:hover,
 .octanetopus--news:focus {
-    text-decoration: none;
     color: #fff;
-    transition: 0.5s ease all;
+    text-decoration: none;
     outline: none;
 }
 
