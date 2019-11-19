@@ -107,7 +107,7 @@
 .octanetopus--news--item {
     display: inline-block;
     font-family: arial, sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: #ccc;
     text-decoration: none;
     animation: appear-animation 3s linear;   
