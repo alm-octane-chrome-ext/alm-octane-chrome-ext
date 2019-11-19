@@ -1,7 +1,7 @@
 const localStorageConfigKey = 'octanetopus-config';
-const currentConfigVer = 1;
+const currentConfigVer = 2;
 const defaultConfigObj = {
-	configVersion: 1,
+	configVersion: 2,
 	octaneInstances: [
 		{
 			name: 'Local',
@@ -42,16 +42,10 @@ const defaultConfigObj = {
 	],
 	mastheadClocks: [
 		{
-			longName: 'Los Angeles',
-			shortName: 'LA',
+			longName: 'San Fransisco',
+			shortName: 'SF',
 			countryCode: 'us',
 			timeZone: 'America/Los_Angeles'
-		},
-		{
-			longName: 'New York',
-			shortName: 'NYC',
-			countryCode: 'us',
-			timeZone: 'America/New_York'
 		},
 		{
 			longName: 'London',

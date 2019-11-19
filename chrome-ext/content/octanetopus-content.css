@@ -96,24 +96,25 @@
         color: #fff;        
     }
     to {
-        max-width: 800px;
+        max-width: 600px;
         color: #ccc;        
     }
 }
 
 .octanetopus--news {
     flex: 1 1 auto; 
-    padding: 2px 20px 0 20px;
+    padding: 5px 20px 0 20px;
     overflow: hidden;       
 }
 
 .octanetopus--news--item {
     display: inline-block;
+    max-width: 600px;
     font-family: arial, sans-serif;
     font-size: 13px;
     color: #ccc;
     text-decoration: none;
-    animation: appear-animation 3s linear;   
+    animation: appear-animation 2s linear;
     transition: 0.5s ease all;    
 }
 

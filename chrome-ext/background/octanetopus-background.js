@@ -2,9 +2,8 @@ const jsCheckScript = 'content/octanetopus-check.js';
 const cssContentScript = 'content/octanetopus-content.css';
 const jsContentScript = 'content/octanetopus-content.js';
 const rssFeeds = {
-	cnn: 'http://rss.cnn.com/rss/edition.rss',
+	walla: 'http://rss.walla.co.il/feed/22',
 	ynet: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
-	walla: 'http://rss.walla.co.il/feed/22'
 };
 const rssFeedDefaultUrl = rssFeeds.walla;
 const rssFeedDefaultRefreshMinutes = 5;
@@ -21,14 +20,6 @@ const ensureConfigInStorage = () => {
 	if (savedConfig) {
 		const configObj = JSON.parse(savedConfig);
 		shouldUseDefaultConfig = configObj.configVersion !== currentConfigVer;
-		if (!shouldUseDefaultConfig && !configObj.rssFeed) {
-			configObj.rssFeed = {
-				enabled: true,
-				refreshMinutes: rssFeedDefaultRefreshMinutes,
-				url: rssFeedDefaultUrl,
-			};
-			localStorage.setItem(localStorageConfigKey, JSON.stringify(configObj));
-		}
 	}
 	if (shouldUseDefaultConfig) {
 		localStorage.setItem(localStorageConfigKey, JSON.stringify(defaultConfigObj));

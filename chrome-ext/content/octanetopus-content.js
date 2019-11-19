@@ -225,7 +225,7 @@ const getNews = () => {
 			if (items.length > 0) {
 				const item = items[0];
 				const timeStr = item.pubDate.substr(17, 5);
-				const text = `[${timeStr}] ${item.title}`;
+				const text = `(${timeStr}) ${item.title}`;
 				if (text !== curNewsText) {					
 					//log(`news item: ${text}`);										
 					const newsElm = document.getElementById('octanetopus--news');
@@ -237,6 +237,16 @@ const getNews = () => {
 					titleElm.textContent = text;
 					titleElm.setAttribute('href', item.link);
 					titleElm.setAttribute('target', '_blank');
+					let tooltip = '';
+					let count = 0;
+					items.forEach(i => {
+						count++;
+						if (count <= 15) {
+							const timeStr = i.pubDate.substr(17, 5);
+							tooltip += `${count > 1 ? '\n' : ''}${timeStr} - ${i.title}`;
+						}
+					});
+					titleElm.setAttribute('title', tooltip);
 					titleElm.classList.add('octanetopus--news--item', 'octanetopus-ellipsis');
 					newsElm.appendChild(titleElm);
 					curNewsText = text;					
