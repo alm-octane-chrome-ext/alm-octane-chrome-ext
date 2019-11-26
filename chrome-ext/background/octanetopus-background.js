@@ -1,12 +1,11 @@
 const jsCheckScript = 'content/octanetopus-check.js';
 const cssContentScript = 'content/octanetopus-content.css';
 const jsContentScript = 'content/octanetopus-content.js';
-const rssFeeds = {
-	walla: 'http://rss.walla.co.il/feed/22',
-	ynet: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
-};
-const rssFeedDefaultUrl = rssFeeds.walla;
-const rssFeedDefaultRefreshMinutes = 5;
+// const rssFeeds = {
+// 	walla: 'http://rss.walla.co.il/feed/22',
+// 	ynet: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
+//  cnn: 'http://rss.cnn.com/rss/edition_world.rss',
+// };
 let updatedTabId = 0;
 
 const log = (msg) => {

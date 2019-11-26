@@ -230,9 +230,10 @@ const getNews = () => {
 					//log(`news item: ${text}`);										
 					const newsElm = document.getElementById('octanetopus--news');
 					newsElm.innerHTML = '';
-					const isEnglish = /[a-z]+/i.test(text);
-					newsElm.style['text-align'] = isEnglish ? 'left' : 'right';
-					newsElm.style['direction'] = isEnglish ? 'ltr' : 'rtl';
+					const hebrewLetters = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת';
+					const isHebrew = (new RegExp('[' + hebrewLetters + ']+')).test(text);
+					newsElm.style['text-align'] = isHebrew ? 'right' : 'left';
+					newsElm.style['direction'] = isHebrew ? 'rtl' : 'ltr';
 					const titleElm = document.createElement('a');
 					titleElm.textContent = text;
 					titleElm.setAttribute('href', item.link);
