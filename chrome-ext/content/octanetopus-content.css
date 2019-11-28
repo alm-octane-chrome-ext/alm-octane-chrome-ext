@@ -12,7 +12,6 @@
 
 .octanetopus--clock {
     display: flex;
-    margin-right: 10px;
     height: 26px;
     overflow: hidden;
     user-select: none;
