@@ -7,7 +7,7 @@ const log = (msg) => {
 	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
 };
 
-const waitForConfigMaxNumberOfTries = 30;
+const waitForConfigMaxNumberOfTries = 60;
 const waitForConfigRetryFrequencyMillis = 1000;
 const waitForConfig = (onConfigReady, curTryNumber = 1) => {
 	log(`waitForConfig - try #${curTryNumber}`);
