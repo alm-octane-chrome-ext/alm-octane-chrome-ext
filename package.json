@@ -1,6 +1,6 @@
 {
   "name": "octanetopus",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Unofficial extension for ALM Octane",
   "main": "index.js",
   "directories": {
