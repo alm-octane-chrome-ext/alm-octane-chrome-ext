@@ -7,8 +7,8 @@ let audioStreams = [];
 let audioStreamIndex = 0;
 const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
 
-const log = (msg) => {
-	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
+const log = (/*msg*/) => {
+	//console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
 };
 
 const waitForConfigMaxNumberOfTries = 60;
@@ -261,34 +261,34 @@ const onClickRadio = async () => {
 	}
 };
 
-const getPrevStation = () => {
+const getPrevStream = () => {
 	return (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
 };
 
-const getNextStation = () => {
+const getNextStream = () => {
 	return (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
 };
 
-const onClickPrevStation = async () => {
-	log('onClickPrevStation');
+const onClickPrevStream = async () => {
+	log('onClickPrevStream');
 	if (isPlayTriggered) {
 		return;
 	}
 	const startIndex = audioStreamIndex;
 	do {
-		audioStreamIndex = getPrevStation();
+		audioStreamIndex = getPrevStream();
 		await playRadio();
 	} while(!isAudioOn && audioStreamIndex !== startIndex);
 };
 
-const onClickNextStation = async () => {
-	log('onClickNextStation');
+const onClickNextStream = async () => {
+	log('onClickNextStream');
 	if (isPlayTriggered) {
 		return;
 	}
 	const startIndex = audioStreamIndex;
 	do {
-		audioStreamIndex = getNextStation();
+		audioStreamIndex = getNextStream();
 		await playRadio();
 	} while(!isAudioOn && audioStreamIndex !== startIndex);
 };
@@ -312,8 +312,8 @@ const addPlayer = () => {
 
 	const leftArrow = document.createElement('img');
 	leftArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-left.svg`));
-	leftArrow.classList.add('octanetopus--player--station--button', 'octanetopus--player--station--prev');
-	leftArrow.addEventListener('click', onClickPrevStation, false);
+	leftArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--prev');
+	leftArrow.addEventListener('click', onClickPrevStream, false);
 	playerElm.appendChild(leftArrow);
 
 	const radioElm = document.createElement('img');
@@ -325,8 +325,8 @@ const addPlayer = () => {
 
 	const rightArrow = document.createElement('img');
 	rightArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-right.svg`));
-	rightArrow.classList.add('octanetopus--player--station--button', 'octanetopus--player--station--next');
-	rightArrow.addEventListener('click', onClickNextStation, false);
+	rightArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--next');
+	rightArrow.addEventListener('click', onClickNextStream, false);
 	playerElm.appendChild(rightArrow);
 
 	const audioElm = document.createElement('audio');
