@@ -212,10 +212,12 @@ const playRadio = async () => {
 	const playerElm = document.getElementById('octanetopus--player');
 	const radioElm = document.getElementById('octanetopus--player--radio');
 	const audioElm = document.getElementById('octanetopus--player--audio');
+	const streamNameElm = document.getElementById('octanetopus--player--stream-name');
 	try {
 		playerElm.classList.add('octanetopus--player--active');
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
+		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
 		radioElm.setAttribute('title', audioStreams[audioStreamIndex].name);
 		isAudioOn = true;
 	} catch (err) {
@@ -231,8 +233,10 @@ const stopRadio = () => {
 	const playerElm = document.getElementById('octanetopus--player');
 	const radioElm = document.getElementById('octanetopus--player--radio');
 	const audioElm = document.getElementById('octanetopus--player--audio');
+	const streamNameElm = document.getElementById('octanetopus--player--stream-name');
 	playerElm.classList.remove('octanetopus--player--active');
 	audioElm.pause();
+	streamNameElm.textContent = '';
 	radioElm.setAttribute('title', '');
 	isAudioOn = false;
 };
@@ -328,6 +332,12 @@ const addPlayer = () => {
 	rightArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--next');
 	rightArrow.addEventListener('click', onClickNextStream, false);
 	playerElm.appendChild(rightArrow);
+
+	const streamName = document.createElement('div');
+	streamName.setAttribute('id', 'octanetopus--player--stream-name');
+	streamName.classList.add('octanetopus--player--stream-name');
+	streamName.textContent = '';
+	playerElm.appendChild(streamName);
 
 	const audioElm = document.createElement('audio');
 	audioElm.pause();

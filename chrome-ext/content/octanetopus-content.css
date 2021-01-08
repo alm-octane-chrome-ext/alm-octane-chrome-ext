@@ -117,6 +117,7 @@
 }
 
 .octanetopus--player {
+    position: relative;
     display: flex;
     min-width: 94px;
     height: 26px;
@@ -196,4 +197,14 @@
 .octanetopus--player--navigate--prev {
 }
 .octanetopus--player--navigate--next {
+}
+.octanetopus--player--stream-name {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -14px;
+    white-space: nowrap;
+    color: #999;
+    font-family: arial, sans-serif;
+    font-size: 11px;
 }
