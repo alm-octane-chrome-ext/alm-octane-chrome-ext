@@ -7,16 +7,34 @@ const log = (msg) => {
 	console.log(`OCTANETOPUS BACKGROUND PAGE | ${msg}`);
 };
 
+const ensureConfigOk = (configObj) => {
+	let isSaveNeeded = false;
+	if (configObj.rssFeed && configObj.rssFeed.url === 'http://rss.walla.co.il/feed/22') {
+		configObj.rssFeed.url = 'https://rss.walla.co.il/feed/22';
+		isSaveNeeded = true;
+	}
+	if (!configObj.radio) {
+		configObj.radio = {...defaultConfigObj.radio};
+		isSaveNeeded = true;
+	}
+	if (isSaveNeeded) {
+		localStorage.setItem(localStorageConfigKey, JSON.stringify(configObj));
+	}
+};
+
 const ensureConfigInStorage = () => {
 	log('ensureConfigInStorage');
+	let configObj;
 	let shouldUseDefaultConfig = true;
-	const savedConfig = localStorage.getItem(localStorageConfigKey);
-	if (savedConfig) {
-		const configObj = JSON.parse(savedConfig);
+	const savedConfigStr = localStorage.getItem(localStorageConfigKey);
+	if (savedConfigStr) {
+		configObj = JSON.parse(savedConfigStr);
 		shouldUseDefaultConfig = configObj.configVersion !== currentConfigVer;
 	}
 	if (shouldUseDefaultConfig) {
 		localStorage.setItem(localStorageConfigKey, JSON.stringify(defaultConfigObj));
+	} else {
+		ensureConfigOk(configObj);
 	}
 };
 
