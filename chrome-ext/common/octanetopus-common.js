@@ -94,9 +94,9 @@ const defaultConfigObj = {
 	rssFeed: {
 		enabled: true,
 		refreshMinutes: 5,
-		url: 'http://rss.walla.co.il/feed/22',
-		_unused_url1: 'http://rss.walla.co.il/feed/22',
-		_unused_url2: 'http://www.ynet.co.il/Integration/StoryRss3254.xml',
+		url: 'https://rss.walla.co.il/feed/22',
+		_unused_url1: 'https://rss.walla.co.il/feed/22',
+		_unused_url2: 'https://www.ynet.co.il/Integration/StoryRss3254.xml',
 		_unused_url3: 'http://rss.cnn.com/rss/edition_world.rss',
 	},
 };
