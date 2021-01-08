@@ -362,6 +362,9 @@ const fetchAudioStreams = () => {
 		if (jsonObj['audioStreams']) {
 			audioStreams = [...audioStreams, ...jsonObj['audioStreams']];
 		}
+		if (jsonObj['_audioStreams'] && (window.location.hostname.startsWith('localhost') || window.location.hostname.startsWith('127.0.0.1'))) {
+			audioStreams = [...audioStreams, ...jsonObj['_audioStreams']];
+		}
 		shuffleArray(audioStreams);
 	});
 };
