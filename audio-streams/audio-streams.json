@@ -29,6 +29,7 @@
     {"name":"Radios 100FM Oldies", "src":"https://gb25.streamgates.net/radios-audio/100Oldies/icecast.audio"},
     {"name":"Reshet Bet", "src":"http://kanliveicy.media.kan.org.il/icy/kanbet_mp3"},
     {"name":"Reshet Gimmel", "src":"http://kanliveicy.media.kan.org.il/icy/kangimmel_mp3"},
+
     {"name":"80's Country", "src":"http://icyrelay.181.fm:80/181-80scountry_128k.mp3"},
     {"name":"80's Hairband", "src":"http://icyrelay.181.fm:80/181-hairband_128k.mp3"},
     {"name":"80's Lite RnB", "src":"http://icyrelay.181.fm:80/181-80sliternb_128k.mp3"},
@@ -56,7 +57,6 @@
     {"name":"Good Time Oldies", "src":"http://icyrelay.181.fm:80/181-goodtime_128k.mp3"},
     {"name":"Highway 181", "src":"http://icyrelay.181.fm:80/181-highway_128k.mp3"},
     {"name":"Jammin 181", "src":"http://icyrelay.181.fm:80/181-jammin_128k.mp3"},
-    {"name":"Jazz Mix", "src":"http://icyrelay.181.fm:80/181-jazzmix_128k.mp3"},
     {"name":"Jazz Mix", "src":"http://icyrelay.181.fm:80/181-jazzmix_128k.mp3"},
     {"name":"Kickin' Country", "src":"http://icyrelay.181.fm:80/181-kickincountry_128k.mp3"},
     {"name":"Lite 80's", "src":"http://icyrelay.181.fm:80/181-lite80s_128k.mp3"},
