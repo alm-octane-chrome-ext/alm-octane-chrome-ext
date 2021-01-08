@@ -1,4 +1,5 @@
 {
+  "version": 1,
   "radioHebrew": [
     {"name":"Eco 99FM", "src":"https://eco01.livecdn.biz/ecolive/99fm/icecast.audio"},
     {"name":"Emtza_Haderech 90FM", "src":"https://icy.streamgates.net/Radio_CDN/Emtza_Haderech/icecast.audio"},
