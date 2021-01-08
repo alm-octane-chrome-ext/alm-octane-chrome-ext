@@ -1,10 +1,10 @@
 let config = null;
 let clocks = [];
 let curNewsText = '';
-let isRadioOn = false;
+let isAudioOn = false;
 let isPlayTriggered = false;
-let radioStations = [];
-let stationIndex = 0;
+let audioStreams = [];
+let audioStreamIndex = 0;
 const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
 
 const log = (msg) => {
@@ -214,12 +214,12 @@ const playRadio = async () => {
 	const audioElm = document.getElementById('octanetopus--player--audio');
 	try {
 		playerElm.classList.add('octanetopus--player--active');
-		audioElm.setAttribute('src', radioStations[stationIndex].src);
+		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
-		radioElm.setAttribute('title', radioStations[stationIndex].name);
-		isRadioOn = true;
+		radioElm.setAttribute('title', audioStreams[audioStreamIndex].name);
+		isAudioOn = true;
 	} catch (err) {
-		log(`error playing audio from ${radioStations[stationIndex].name}`);
+		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
 		stopRadio();
 	} finally {
 		isPlayTriggered = false;
@@ -234,7 +234,7 @@ const stopRadio = () => {
 	playerElm.classList.remove('octanetopus--player--active');
 	audioElm.pause();
 	radioElm.setAttribute('title', '');
-	isRadioOn = false;
+	isAudioOn = false;
 };
 
 const onClickLed = async () => {
@@ -242,7 +242,7 @@ const onClickLed = async () => {
 	if (isPlayTriggered) {
 		return;
 	}
-	if (isRadioOn) {
+	if (isAudioOn) {
 		stopRadio();
 	} else {
 		await playRadio();
@@ -254,7 +254,7 @@ const onClickRadio = async () => {
 	if (isPlayTriggered) {
 		return;
 	}
-	if (isRadioOn) {
+	if (isAudioOn) {
 		stopRadio();
 	} else {
 		await playRadio();
@@ -262,11 +262,11 @@ const onClickRadio = async () => {
 };
 
 const getPrevStation = () => {
-	return (stationIndex - 1 + radioStations.length) % radioStations.length;
+	return (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
 };
 
 const getNextStation = () => {
-	return (stationIndex + 1 + radioStations.length) % radioStations.length;
+	return (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
 };
 
 const onClickPrevStation = async () => {
@@ -274,11 +274,11 @@ const onClickPrevStation = async () => {
 	if (isPlayTriggered) {
 		return;
 	}
-	const startIndex = stationIndex;
+	const startIndex = audioStreamIndex;
 	do {
-		stationIndex = getPrevStation();
+		audioStreamIndex = getPrevStation();
 		await playRadio();
-	} while(!isRadioOn && stationIndex !== startIndex);
+	} while(!isAudioOn && audioStreamIndex !== startIndex);
 };
 
 const onClickNextStation = async () => {
@@ -286,11 +286,11 @@ const onClickNextStation = async () => {
 	if (isPlayTriggered) {
 		return;
 	}
-	const startIndex = stationIndex;
+	const startIndex = audioStreamIndex;
 	do {
-		stationIndex = getNextStation();
+		audioStreamIndex = getNextStation();
 		await playRadio();
-	} while(!isRadioOn && stationIndex !== startIndex);
+	} while(!isAudioOn && audioStreamIndex !== startIndex);
 };
 
 const addPlayer = () => {
@@ -338,19 +338,44 @@ const addPlayer = () => {
 	parentElm.insertBefore(playerElm, parentElm.childNodes[0]);
 };
 
-const fetchRadioStations = () => {
-	log('fetchRadioStations');
-	(async () => {
-		const jsonUrl = 'https://raw.githubusercontent.com/alm-octane-chrome-ext/alm-octane-chrome-ext/master/radio-stations/radio-stations.json';
-		const res = await fetch(jsonUrl);
-		radioStations = await res.json();
-	})();
+const shuffleArray = (arr) => {
+	let ind = arr.length, tempVal, randInd;
+	while (0 !== ind) {
+		randInd = Math.floor(Math.random() * ind);
+		ind -= 1;
+		tempVal = arr[ind];
+		arr[ind] = arr[randInd];
+		arr[randInd] = tempVal;
+	}
+	return arr;
+};
+
+const fetchAudioStreams = () => {
+	log('fetchAudioStreams');
+	audioStreams = [];
+	chrome.runtime.sendMessage(
+	{
+		type: 'octanetopus-content-to-background--audio-streams',
+	},
+	response => {
+		const jsonObj = JSON.parse(response);
+		if (jsonObj['radioHebrew']) {
+			audioStreams = [...audioStreams, ...jsonObj['radioHebrew']];
+		}
+		if (jsonObj['radioEnglish']) {
+			audioStreams = [...audioStreams, ...jsonObj['radioEnglish']];
+		}
+		if (jsonObj['music']) {
+			audioStreams = [...audioStreams, ...jsonObj['music']];
+		}
+		shuffleArray(audioStreams);
+	});
 };
 
 const handlePlayer = () => {
 	log('handlePlayer');
 	addPlayer();
-	fetchRadioStations();
+	fetchAudioStreams();
 };
 
 const handleNews = () => {
