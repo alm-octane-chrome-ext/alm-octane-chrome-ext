@@ -5,6 +5,9 @@ let isAudioOn = false;
 let isPlayTriggered = false;
 let audioStreams = [];
 let audioStreamIndex = 0;
+let playerElm;
+let audioElm;
+let streamNameElm;
 const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
 
 const log = (/*msg*/) => {
@@ -209,9 +212,6 @@ const handleClocks = () => {
 const playRadio = async () => {
 	log('playRadio');
 	isPlayTriggered = true;
-	const playerElm = document.getElementById('octanetopus--player');
-	const audioElm = document.getElementById('octanetopus--player--audio');
-	const streamNameElm = document.getElementById('octanetopus--player--stream-name');
 	try {
 		playerElm.classList.add('octanetopus--player--active');
 		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
@@ -228,64 +228,63 @@ const playRadio = async () => {
 
 const stopRadio = () => {
 	log('stopRadio');
-	const playerElm = document.getElementById('octanetopus--player');
-	const audioElm = document.getElementById('octanetopus--player--audio');
-	const streamNameElm = document.getElementById('octanetopus--player--stream-name');
 	playerElm.classList.remove('octanetopus--player--active');
 	audioElm.pause();
 	streamNameElm.textContent = '';
 	isAudioOn = false;
 };
 
-const onClickLed = async () => {
-	log('onClickLed');
+const searchStation = async (isUp) => {
+	log('searchStation');
+	if (isPlayTriggered) {
+		return;
+	}
+	const startIndex = audioStreamIndex;
+	do {
+		if (isUp) {
+			audioStreamIndex = (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
+		} else {
+			audioStreamIndex = (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
+		}
+		await playRadio();
+	} while(!isAudioOn && audioStreamIndex !== startIndex);
+};
+
+const toggleRadio = async () => {
+	log('toggleRadio');
 	if (isPlayTriggered) {
 		return;
 	}
 	if (isAudioOn) {
 		stopRadio();
 	} else {
-		await playRadio();
+		(async () => {
+			await playRadio();
+			if (!isAudioOn) {
+				await searchStation(true);
+			}
+		})();
 	}
+};
+
+const onClickLed = async () => {
+	log('onClickLed');
+	await toggleRadio();
 };
 
 const onClickRadio = async () => {
 	log('onClickRadio');
-	if (isPlayTriggered) {
-		return;
-	}
-	if (isAudioOn) {
-		stopRadio();
-	} else {
-		await playRadio();
-		if (!isAudioOn) {
-			await onClickNextStream();
-		}
-	}
+	await toggleRadio();
 };
 
 const onClickPrevStream = async () => {
 	log('onClickPrevStream');
-	if (isPlayTriggered) {
-		return;
-	}
-	const startIndex = audioStreamIndex;
-	do {
-		audioStreamIndex = (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
-		await playRadio();
-	} while(!isAudioOn && audioStreamIndex !== startIndex);
+	await searchStation(false);
 };
 
 const onClickNextStream = async () => {
 	log('onClickNextStream');
-	if (isPlayTriggered) {
-		return;
-	}
-	const startIndex = audioStreamIndex;
-	do {
-		audioStreamIndex = (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
-		await playRadio();
-	} while(!isAudioOn && audioStreamIndex !== startIndex);
+	await searchStation(true);
 };
 
 const addPlayer = () => {
@@ -295,7 +294,7 @@ const addPlayer = () => {
 		return;
 	}
 
-	const playerElm = document.createElement('div');
+	playerElm = document.createElement('div');
 	playerElm.setAttribute('id', 'octanetopus--player');
 	playerElm.classList.add('octanetopus--player');
 
@@ -324,13 +323,13 @@ const addPlayer = () => {
 	rightArrow.addEventListener('click', onClickNextStream, false);
 	playerElm.appendChild(rightArrow);
 
-	const streamName = document.createElement('div');
-	streamName.setAttribute('id', 'octanetopus--player--stream-name');
-	streamName.classList.add('octanetopus--player--stream-name');
-	streamName.textContent = '';
-	playerElm.appendChild(streamName);
+	streamNameElm = document.createElement('div');
+	streamNameElm.setAttribute('id', 'octanetopus--player--stream-name');
+	streamNameElm.classList.add('octanetopus--player--stream-name');
+	streamNameElm.textContent = '';
+	playerElm.appendChild(streamNameElm);
 
-	const audioElm = document.createElement('audio');
+	audioElm = document.createElement('audio');
 	audioElm.pause();
 	audioElm.setAttribute('id', 'octanetopus--player--audio');
 	audioElm.setAttribute('preload', 'none');
