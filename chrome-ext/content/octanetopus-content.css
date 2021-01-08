@@ -90,11 +90,11 @@
 }
 .octanetopus--news {
     flex: 1 1 auto;
-    padding: 5px 15px 0 15px;
+    padding: 0 15px;
     overflow: hidden;
 }
 .octanetopus--news--item {
-    display: inline-block;
+    display: block;
     max-width: 600px;
     font-family: arial, sans-serif;
     font-size: 13px;
