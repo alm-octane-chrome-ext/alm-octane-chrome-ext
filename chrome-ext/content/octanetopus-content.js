@@ -3,19 +3,9 @@ let clocks = [];
 let curNewsText = '';
 let isRadioOn = false;
 let isPlayTriggered = false;
+let radioStations = [];
 let stationIndex = 0;
 const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
-
-const radioStations = [
-	{
-		name: 'kxt',
-		src: `https://kera-ice.streamguys1.com/kxtlive128`
-	},
-	{
-		name: 'cnn',
-		src: `https://tunein.streamguys1.com/cnn-new?ads.cust_params=partnerId%253dydvgH5BP%2526ads_partner_alias%253dydvgH5BP%2526premium%253dfalse%2526abtest%253d%2526language%253den-US%2526stationId%253ds20407%2526is_ondemand%253dfalse%2526genre_id%253dg3124%2526class%253dtalk%25252cspoken%25252cnews%2526is_family%253dfalse%2526is_mature%253dfalse%2526country_region_id%253d227%2526station_language%253denglish%2526programId%253dp1394237%2526is_event%253dtrue&amp;url=https%3a%2f%2ftunein.com%2fdesc%2fs20407%2f&amp;description_url=https%3a%2f%2ftunein.com%2fdesc%2fs20407%2f&amp;ads.npa=1&amp;ads.gdfp_req=1&amp;aw_0_1st.playerid=ydvgH5BP&amp;aw_0_1st.skey=1609869836&amp;aw_0_1st.platform=tunein`
-	},
-];
 
 const log = (msg) => {
 	console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
@@ -68,8 +58,8 @@ const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
 const onAppReady = () => {
 	log('onAppReady');
 	colorMasthead();
-	addClocks();
-	addPlayer();
+	handleClocks();
+	handlePlayer();
 	handleNews();
 };
 
@@ -140,8 +130,8 @@ const updateClocks = () => {
 	});
 };
 
-const addClocks = () => {
-	log('addClocks');
+const handleClocks = () => {
+	log('handleClocks');
 	clocks = [];
 	const parentElm = document.querySelector(parentElementQuerySelector);
 	if (!parentElm || !config || !config.mastheadClocks || !config.mastheadClocks.length || config.mastheadClocks.length === 0) {
@@ -346,6 +336,21 @@ const addPlayer = () => {
 	playerElm.appendChild(audioElm);
 
 	parentElm.insertBefore(playerElm, parentElm.childNodes[0]);
+};
+
+const fetchRadioStations = () => {
+	log('fetchRadioStations');
+	(async () => {
+		const jsonUrl = 'https://raw.githubusercontent.com/alm-octane-chrome-ext/alm-octane-chrome-ext/master/radio-stations/radio-stations.json';
+		const res = await fetch(jsonUrl);
+		radioStations = await res.json();
+	})();
+};
+
+const handlePlayer = () => {
+	log('handlePlayer');
+	addPlayer();
+	fetchRadioStations();
 };
 
 const handleNews = () => {
