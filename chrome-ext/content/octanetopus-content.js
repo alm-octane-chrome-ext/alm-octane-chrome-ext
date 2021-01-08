@@ -258,6 +258,9 @@ const onClickRadio = async () => {
 		stopRadio();
 	} else {
 		await playRadio();
+		if (!isAudioOn) {
+			await onClickNextStream();
+		}
 	}
 };
 
