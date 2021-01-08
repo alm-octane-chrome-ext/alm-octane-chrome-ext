@@ -215,8 +215,8 @@ const playRadio = async () => {
 	const streamNameElm = document.getElementById('octanetopus--player--stream-name');
 	try {
 		playerElm.classList.add('octanetopus--player--active');
-		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
+		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
 		radioElm.setAttribute('title', audioStreams[audioStreamIndex].name);
 		isAudioOn = true;
