@@ -200,11 +200,11 @@
 }
 .octanetopus--player--stream-name {
     position: absolute;
+    top: -14px;
     left: 50%;
     transform: translateX(-50%);
-    bottom: -14px;
     white-space: nowrap;
-    color: #999;
+    color: #888;
     font-family: arial, sans-serif;
     font-size: 11px;
 }
