@@ -26,8 +26,6 @@
     {"name":"Galgalatz Sof Shavua", "src":"http://player.gl.bynetcdn.com/Redirector/glz/glglz_sofshavua/ICE-live"},
     {"name":"Lelo Hafsaka 103FM", "src":"http://103fm.live.streamgates.net/103fm_live/1multix/icecast.audio"},
     {"name":"Love Radio", "src":"http://cradio.co.il:9000/;"},
-    {"name":"Radio Jerusalem", "src":"http://101.cdnwz.net/101fm"},
-    {"name":"Radio Sol", "src":"http://sol.cdnwz.net/sol"},
 
     {"name":"80's Country", "src":"http://icyrelay.181.fm:80/181-80scountry_128k.mp3"},
     {"name":"80's Hairband", "src":"http://icyrelay.181.fm:80/181-hairband_128k.mp3"},
