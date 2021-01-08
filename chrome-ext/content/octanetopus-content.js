@@ -261,14 +261,6 @@ const onClickRadio = async () => {
 	}
 };
 
-const getPrevStream = () => {
-	return (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
-};
-
-const getNextStream = () => {
-	return (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
-};
-
 const onClickPrevStream = async () => {
 	log('onClickPrevStream');
 	if (isPlayTriggered) {
@@ -276,7 +268,7 @@ const onClickPrevStream = async () => {
 	}
 	const startIndex = audioStreamIndex;
 	do {
-		audioStreamIndex = getPrevStream();
+		audioStreamIndex = (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
 		await playRadio();
 	} while(!isAudioOn && audioStreamIndex !== startIndex);
 };
@@ -288,7 +280,7 @@ const onClickNextStream = async () => {
 	}
 	const startIndex = audioStreamIndex;
 	do {
-		audioStreamIndex = getNextStream();
+		audioStreamIndex = (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
 		await playRadio();
 	} while(!isAudioOn && audioStreamIndex !== startIndex);
 };
@@ -296,7 +288,7 @@ const onClickNextStream = async () => {
 const addPlayer = () => {
 	log('addPlayer');
 	const parentElm = document.querySelector(parentElementQuerySelector);
-	if (!parentElm) {
+	if (!parentElm || (config && config.radio && !config.radio.enabled)) {
 		return;
 	}
 
