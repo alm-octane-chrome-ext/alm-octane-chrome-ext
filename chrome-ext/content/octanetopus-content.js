@@ -210,7 +210,6 @@ const playRadio = async () => {
 	log('playRadio');
 	isPlayTriggered = true;
 	const playerElm = document.getElementById('octanetopus--player');
-	const radioElm = document.getElementById('octanetopus--player--radio');
 	const audioElm = document.getElementById('octanetopus--player--audio');
 	const streamNameElm = document.getElementById('octanetopus--player--stream-name');
 	try {
@@ -218,7 +217,6 @@ const playRadio = async () => {
 		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
-		radioElm.setAttribute('title', audioStreams[audioStreamIndex].name);
 		isAudioOn = true;
 	} catch (err) {
 		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
@@ -231,13 +229,11 @@ const playRadio = async () => {
 const stopRadio = () => {
 	log('stopRadio');
 	const playerElm = document.getElementById('octanetopus--player');
-	const radioElm = document.getElementById('octanetopus--player--radio');
 	const audioElm = document.getElementById('octanetopus--player--audio');
 	const streamNameElm = document.getElementById('octanetopus--player--stream-name');
 	playerElm.classList.remove('octanetopus--player--active');
 	audioElm.pause();
 	streamNameElm.textContent = '';
-	radioElm.setAttribute('title', '');
 	isAudioOn = false;
 };
 
