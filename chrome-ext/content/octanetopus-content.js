@@ -359,14 +359,8 @@ const fetchAudioStreams = () => {
 	},
 	response => {
 		const jsonObj = JSON.parse(response);
-		if (jsonObj['radioHebrew']) {
-			audioStreams = [...audioStreams, ...jsonObj['radioHebrew']];
-		}
-		if (jsonObj['radioEnglish']) {
-			audioStreams = [...audioStreams, ...jsonObj['radioEnglish']];
-		}
-		if (jsonObj['music']) {
-			audioStreams = [...audioStreams, ...jsonObj['music']];
+		if (jsonObj['audioStreams']) {
+			audioStreams = [...audioStreams, ...jsonObj['audioStreams']];
 		}
 		shuffleArray(audioStreams);
 	});
