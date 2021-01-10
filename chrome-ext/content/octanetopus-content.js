@@ -187,7 +187,7 @@ const getNews = () => {
 		if (items.length > 0) {
 			const item = items[0];
 			const timeStr = item.pubDate.substr(17, 5);
-			const text = `(${timeStr}) ${item.title}`;
+			const text = `${timeStr} - ${item.title}`;
 			if (text !== curNewsText) {
 				//log(`news item: ${text}`);
 				const newsElm = document.getElementById('octanetopus--news');
