@@ -66,24 +66,24 @@ const defaultConfigObj = {
 			countryCode: 'us',
 			timeZone: 'America/Los_Angeles'
 		},
-		{
-			longName: 'London',
-			shortName: 'LON',
-			countryCode: 'gb',
-			timeZone: 'Europe/London'
-		},
+		// {
+		// 	longName: 'London',
+		// 	shortName: 'LON',
+		// 	countryCode: 'gb',
+		// 	timeZone: 'Europe/London'
+		// },
 		{
 			longName: 'Tel Aviv',
 			shortName: 'TLV',
 			countryCode: 'il',
 			timeZone: 'Asia/Jerusalem'
 		},
-		{
-			longName: 'New Delhi',
-			shortName: 'DL',
-			countryCode: 'in',
-			timeZone: 'Asia/Kolkata'
-		},
+		// {
+		// 	longName: 'New Delhi',
+		// 	shortName: 'DL',
+		// 	countryCode: 'in',
+		// 	timeZone: 'Asia/Kolkata'
+		// },
 		{
 			longName: 'Shanghai',
 			shortName: 'SH',
