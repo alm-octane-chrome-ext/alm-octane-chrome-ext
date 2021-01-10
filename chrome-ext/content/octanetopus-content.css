@@ -8,10 +8,12 @@
 
 .octanetopus--clocks {
     display: flex;
+    margin: 0 10px;
 }
 .octanetopus--clock {
     display: flex;
     height: 26px;
+    min-width: 72px;
     overflow: hidden;
     user-select: none;
 }
@@ -30,7 +32,7 @@
 .octanetopus--clock--name {
     margin-left: -1px;
     margin-top: 6px;
-    width: 47px;
+    width: 39px;
     height: 10px;
     line-height: 10px;
     font-size: 10px;
@@ -40,7 +42,7 @@
     position: relative;
     margin-left: 2px;
     margin-top: -1px;
-    width: 44px;
+    width: 36px;
     height: 1em;
     overflow: hidden;
     line-height: 1em;
@@ -80,7 +82,7 @@
 
 .octanetopus--news {
     flex: 1 1 auto;
-    padding: 0 15px;
+    margin: 0 10px;
     overflow: hidden;
 }
 @keyframes octanetopus--news--item--appear-animation {
@@ -121,7 +123,6 @@
     display: flex;
     min-width: 94px;
     height: 26px;
-    margin-right: 12px;
     border-radius: 13px;
     border: 1px solid #666;
     background-color: #333;
