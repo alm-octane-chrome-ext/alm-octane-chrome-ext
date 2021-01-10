@@ -9,14 +9,14 @@ const log = (msg) => {
 
 const ensureConfigOk = (configObj) => {
 	let isSaveNeeded = false;
-	if (configObj.rssFeed && configObj.rssFeed.url === 'http://rss.walla.co.il/feed/22') {
-		configObj.rssFeed.url = 'https://rss.walla.co.il/feed/22';
-		isSaveNeeded = true;
-	}
-	if (!configObj.audioStreaming) {
-		configObj.audioStreaming = {...defaultConfigObj.audioStreaming};
-		isSaveNeeded = true;
-	}
+	// if (configObj.rssFeed && configObj.rssFeed.url === 'http://rss.walla.co.il/feed/22') {
+	// 	configObj.rssFeed.url = 'https://rss.walla.co.il/feed/22';
+	// 	isSaveNeeded = true;
+	// }
+	// if (!configObj.audioStreaming) {
+	// 	configObj.audioStreaming = {...defaultConfigObj.audioStreaming};
+	// 	isSaveNeeded = true;
+	// }
 	if (isSaveNeeded) {
 		localStorage.setItem(localStorageConfigKey, JSON.stringify(configObj));
 	}

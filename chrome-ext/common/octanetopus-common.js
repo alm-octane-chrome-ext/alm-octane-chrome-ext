@@ -1,7 +1,7 @@
 const localStorageConfigKey = 'octanetopus-config';
-const currentConfigVer = 2;
+const currentConfigVer = 3;
 const defaultConfigObj = {
-	configVersion: 2,
+	configVersion: 3,
 	octaneInstances: [
 		{
 			name: 'Local',
