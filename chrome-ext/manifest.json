@@ -29,6 +29,7 @@
   ],
   "web_accessible_resources": [
     "img/flags/*.svg",
+    "img/note.svg",
     "img/radio.svg",
     "img/arrow-left.svg",
     "img/arrow-right.svg"
