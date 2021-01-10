@@ -1,70 +1,11 @@
 let config = null;
-let clocks = [];
-let curNewsText = '';
-let isAudioOn = false;
-let isPlayTriggered = false;
-let audioStreams = [];
-let audioStreamIndex = 0;
-let playerElm;
-let audioElm;
-let streamNameElm;
 const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
 
 const log = (/*msg*/) => {
 	//console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
 };
 
-const waitForConfigMaxNumberOfTries = 60;
-const waitForConfigRetryFrequencyMillis = 1000;
-const waitForConfig = (onConfigReady, curTryNumber = 1) => {
-	log(`waitForConfig - try #${curTryNumber}`);
-	if (config) {
-		log('config ready');
-		onConfigReady();
-	} else if (curTryNumber < waitForConfigMaxNumberOfTries) {
-		log('No config yet - will try again');
-		setTimeout(() => {
-			waitForConfig(onConfigReady, curTryNumber+1);
-		},
-		waitForConfigRetryFrequencyMillis
-		);
-	} else {
-		log('Max number of retries exceeded - give up');
-	}
-};
-
-const onConfigReady = () => {
-	log('onConfigReady');
-	waitForAppReady('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)', onAppReady);
-};
-
-const waitForAppReadyMaxNumberOfTries = 30;
-const waitForAppReadyRetryFrequencyMillis = 1000;
-const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
-	log(`waitForAppReady - try #${curTryNumber}`);
-	const elm = document.querySelector(selectorToFind);
-	if (elm) {
-		log('app ready');
-		onAppReady();
-	} else if (curTryNumber < waitForAppReadyMaxNumberOfTries) {
-		log('Unable to find DOM element - will try again');
-		setTimeout(() => {
-			waitForAppReady(selectorToFind, onAppReady, curTryNumber+1);
-		},
-		waitForAppReadyRetryFrequencyMillis
-		);
-	} else {
-		log('Max number of retries exceeded - give up');
-	}
-};
-
-const onAppReady = () => {
-	log('onAppReady');
-	colorMasthead();
-	handleClocks();
-	handlePlayer();
-	handleNews();
-};
+// Background ----------------------------------------------------------------------------------------------------------
 
 const colorMasthead = () => {
 	log('colorMasthead');
@@ -77,6 +18,10 @@ const colorMasthead = () => {
 		}
 	});
 };
+
+// Clocks --------------------------------------------------------------------------------------------------------------
+
+let clocks = [];
 
 const displayClockTime = (clockIdx, ...digits) => {
 	digits.forEach((d, digitIdx) => {
@@ -209,25 +154,102 @@ const handleClocks = () => {
 	}, 60000);
 };
 
-const playRadio = async () => {
-	log('playRadio');
+// News ----------------------------------------------------------------------------------------------------------------
+
+let curNewsText = '';
+
+const handleNews = () => {
+	log('handleNews');
+	const parentElm = document.querySelector(parentElementQuerySelector);
+	if (!parentElm || !config.rssFeed || !config.rssFeed.enabled) {
+		return;
+	}
+
+	const newsElm = document.createElement('div');
+	newsElm.setAttribute('id', 'octanetopus--news');
+	newsElm.classList.add('octanetopus--news');
+	parentElm.insertBefore(newsElm, parentElm.childNodes[0]);
+
+	getNews();
+	setInterval(() => {
+		getNews();
+	}, config.rssFeed.refreshMinutes * 60 * 1000);
+};
+
+const getNews = () => {
+	//log('getNews');
+	chrome.runtime.sendMessage(
+	{
+		type: 'octanetopus-content-to-background--news'
+	},
+	response => {
+		const items = JSON.parse(response || '[]');
+		if (items.length > 0) {
+			const item = items[0];
+			const timeStr = item.pubDate.substr(17, 5);
+			const text = `(${timeStr}) ${item.title}`;
+			if (text !== curNewsText) {
+				//log(`news item: ${text}`);
+				const newsElm = document.getElementById('octanetopus--news');
+				newsElm.innerHTML = '';
+				const hebrewLetters = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת';
+				const isHebrew = (new RegExp('[' + hebrewLetters + ']+')).test(text);
+				newsElm.style['text-align'] = isHebrew ? 'right' : 'left';
+				newsElm.style['direction'] = isHebrew ? 'rtl' : 'ltr';
+				const titleElm = document.createElement('a');
+				titleElm.textContent = text;
+				titleElm.setAttribute('href', item.link);
+				titleElm.setAttribute('target', '_blank');
+				let tooltip = '';
+				let count = 0;
+				items.forEach(i => {
+					count++;
+					if (count <= 15) {
+						const timeStr = i.pubDate.substr(17, 5);
+						tooltip += `${count > 1 ? '\n' : ''}${timeStr} - ${i.title}`;
+					}
+				});
+				titleElm.setAttribute('title', tooltip);
+				titleElm.classList.add('octanetopus--news--item', 'octanetopus-ellipsis');
+				newsElm.appendChild(titleElm);
+				curNewsText = text;
+			}
+		}
+	}
+	);
+};
+
+// Audio ---------------------------------------------------------------------------------------------------------------
+
+let isAudioOn = false;
+let isPlayTriggered = false;
+let audioStreams = [];
+let audioStreamIndex = 0;
+let playerElm;
+let audioElm;
+let streamNameElm;
+
+const playAudio = async () => {
+	log('playAudio');
 	isPlayTriggered = true;
 	try {
 		playerElm.classList.add('octanetopus--player--active');
 		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
+		streamNameElm.classList.remove('octanetopus--player--stream-name--fade-out');
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
 		isAudioOn = true;
+		streamNameElm.classList.add('octanetopus--player--stream-name--fade-out');
 	} catch (err) {
 		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
-		stopRadio();
+		stopAudio();
 	} finally {
 		isPlayTriggered = false;
 	}
 };
 
-const stopRadio = () => {
-	log('stopRadio');
+const stopAudio = () => {
+	log('stopAudio');
 	playerElm.classList.remove('octanetopus--player--active');
 	audioElm.pause();
 	streamNameElm.textContent = '';
@@ -246,20 +268,20 @@ const searchStation = async (isUp) => {
 		} else {
 			audioStreamIndex = (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
 		}
-		await playRadio();
+		await playAudio();
 	} while(!isAudioOn && audioStreamIndex !== startIndex);
 };
 
-const toggleRadio = async () => {
-	log('toggleRadio');
+const toggleAudio = async () => {
+	log('toggleAudio');
 	if (isPlayTriggered) {
 		return;
 	}
 	if (isAudioOn) {
-		stopRadio();
+		stopAudio();
 	} else {
 		(async () => {
-			await playRadio();
+			await playAudio();
 			if (!isAudioOn) {
 				await searchStation(true);
 			}
@@ -269,12 +291,12 @@ const toggleRadio = async () => {
 
 const onClickLed = async () => {
 	log('onClickLed');
-	await toggleRadio();
+	await toggleAudio();
 };
 
-const onClickRadio = async () => {
-	log('onClickRadio');
-	await toggleRadio();
+const onClickAudio = async () => {
+	log('onClickAudio');
+	await toggleAudio();
 };
 
 const onClickPrevStream = async () => {
@@ -290,7 +312,7 @@ const onClickNextStream = async () => {
 const addPlayer = () => {
 	log('addPlayer');
 	const parentElm = document.querySelector(parentElementQuerySelector);
-	if (!parentElm || (config && config.radio && !config.radio.enabled)) {
+	if (!parentElm || (config && config.audioStreaming && !config.audioStreaming.enabled)) {
 		return;
 	}
 
@@ -310,12 +332,12 @@ const addPlayer = () => {
 	leftArrow.addEventListener('click', onClickPrevStream, false);
 	playerElm.appendChild(leftArrow);
 
-	const radioElm = document.createElement('img');
-	radioElm.setAttribute('id', 'octanetopus--player--radio');
-	radioElm.setAttribute('src', chrome.extension.getURL(`img/radio.svg`));
-	radioElm.classList.add('octanetopus--player--radio');
-	radioElm.addEventListener('click', onClickRadio, false);
-	playerElm.appendChild(radioElm);
+	const imageElm = document.createElement('img');
+	imageElm.setAttribute('id', 'octanetopus--player--image');
+	imageElm.setAttribute('src', chrome.extension.getURL(`img/note.svg`));
+	imageElm.classList.add('octanetopus--player--image');
+	imageElm.addEventListener('click', onClickAudio, false);
+	playerElm.appendChild(imageElm);
 
 	const rightArrow = document.createElement('img');
 	rightArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-right.svg`));
@@ -365,6 +387,7 @@ const fetchAudioStreams = () => {
 		if (jsonObj['_audioStreams'] && (window.location.hostname.startsWith('localhost') || window.location.hostname.startsWith('127.0.0.1'))) {
 			audioStreams = [...audioStreams, ...jsonObj['_audioStreams']];
 		}
+		//audioStreams = [{name: "KXT", src: "https://kera-ice.streamguys1.com/kxtlive128"}];
 		shuffleArray(audioStreams);
 	});
 };
@@ -375,65 +398,59 @@ const handlePlayer = () => {
 	fetchAudioStreams();
 };
 
-const handleNews = () => {
-	log('handleNews');
-	const parentElm = document.querySelector(parentElementQuerySelector);
-	if (!parentElm || !config.rssFeed || !config.rssFeed.enabled) {
-		return;
-	}
 
-	const newsElm = document.createElement('div');
-	newsElm.setAttribute('id', 'octanetopus--news');
-	newsElm.classList.add('octanetopus--news');
-	parentElm.insertBefore(newsElm, parentElm.childNodes[0]);
+// ---------------------------------------------------------------------------------------------------------------------
 
-	getNews();
-	setInterval(() => {
-		getNews();
-	}, config.rssFeed.refreshMinutes * 60 * 1000);
+const onAppReady = () => {
+	log('onAppReady');
+	colorMasthead();
+	handleClocks();
+	handlePlayer();
+	handleNews();
 };
 
-const getNews = () => {
-	//log('getNews');
-	chrome.runtime.sendMessage(
-		{
-			type: 'octanetopus-content-to-background--news'
+const onConfigReady = () => {
+	log('onConfigReady');
+	waitForAppReady('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)', onAppReady);
+};
+
+const waitForConfigMaxNumberOfTries = 60;
+const waitForConfigRetryFrequencyMillis = 1000;
+const waitForConfig = (onConfigReady, curTryNumber = 1) => {
+	log(`waitForConfig - try #${curTryNumber}`);
+	if (config) {
+		log('config ready');
+		onConfigReady();
+	} else if (curTryNumber < waitForConfigMaxNumberOfTries) {
+		log('No config yet - will try again');
+		setTimeout(() => {
+			waitForConfig(onConfigReady, curTryNumber+1);
 		},
-		response => {
-			const items = JSON.parse(response || '[]');
-			if (items.length > 0) {
-				const item = items[0];
-				const timeStr = item.pubDate.substr(17, 5);
-				const text = `(${timeStr}) ${item.title}`;
-				if (text !== curNewsText) {					
-					//log(`news item: ${text}`);										
-					const newsElm = document.getElementById('octanetopus--news');
-					newsElm.innerHTML = '';
-					const hebrewLetters = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת';
-					const isHebrew = (new RegExp('[' + hebrewLetters + ']+')).test(text);
-					newsElm.style['text-align'] = isHebrew ? 'right' : 'left';
-					newsElm.style['direction'] = isHebrew ? 'rtl' : 'ltr';
-					const titleElm = document.createElement('a');
-					titleElm.textContent = text;
-					titleElm.setAttribute('href', item.link);
-					titleElm.setAttribute('target', '_blank');
-					let tooltip = '';
-					let count = 0;
-					items.forEach(i => {
-						count++;
-						if (count <= 15) {
-							const timeStr = i.pubDate.substr(17, 5);
-							tooltip += `${count > 1 ? '\n' : ''}${timeStr} - ${i.title}`;
-						}
-					});
-					titleElm.setAttribute('title', tooltip);
-					titleElm.classList.add('octanetopus--news--item', 'octanetopus-ellipsis');
-					newsElm.appendChild(titleElm);
-					curNewsText = text;					
-				}
-			}
-		}
-	);
+		waitForConfigRetryFrequencyMillis
+		);
+	} else {
+		log('Max number of retries exceeded - give up');
+	}
+};
+
+const waitForAppReadyMaxNumberOfTries = 30;
+const waitForAppReadyRetryFrequencyMillis = 1000;
+const waitForAppReady = (selectorToFind, onAppReady, curTryNumber = 1) => {
+	log(`waitForAppReady - try #${curTryNumber}`);
+	const elm = document.querySelector(selectorToFind);
+	if (elm) {
+		log('app ready');
+		onAppReady();
+	} else if (curTryNumber < waitForAppReadyMaxNumberOfTries) {
+		log('Unable to find DOM element - will try again');
+		setTimeout(() => {
+			waitForAppReady(selectorToFind, onAppReady, curTryNumber+1);
+		},
+		waitForAppReadyRetryFrequencyMillis
+		);
+	} else {
+		log('Max number of retries exceeded - give up');
+	}
 };
 
 const go = () => {

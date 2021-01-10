@@ -13,8 +13,8 @@ const ensureConfigOk = (configObj) => {
 		configObj.rssFeed.url = 'https://rss.walla.co.il/feed/22';
 		isSaveNeeded = true;
 	}
-	if (!configObj.radio) {
-		configObj.radio = {...defaultConfigObj.radio};
+	if (!configObj.audioStreaming) {
+		configObj.audioStreaming = {...defaultConfigObj.audioStreaming};
 		isSaveNeeded = true;
 	}
 	if (isSaveNeeded) {

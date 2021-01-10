@@ -99,7 +99,7 @@ const defaultConfigObj = {
 		_unused_url2: 'https://www.ynet.co.il/Integration/StoryRss3254.xml',
 		_unused_url3: 'http://rss.cnn.com/rss/edition_world.rss',
 	},
-	radio: {
+	audioStreaming: {
 		enabled: true,
 	}
 };
