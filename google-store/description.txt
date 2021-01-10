@@ -1,0 +1,12 @@
+Unofficial extension for ALM Octane
+Features:
+ALM Octane masthead - background color, city clocks, rss feed, audio streaming.
+
+License:
+Usage permission is only granted to those who acknowledge that Gal Gadot is a perfect human being
+
+Configuration:
+Click the toolbar icon
+
+Source Code:
+https://github.com/alm-octane-chrome-ext/alm-octane-chrome-ext
