@@ -17,6 +17,7 @@
     {"name": "Reshet Gimmel", "src": "http://kanliveicy.media.kan.org.il/icy/kangimmel_mp3"},
 
     {"name": "1.FM 50's & 60's", "src": "https://strm112.1.fm/60s_70s_mobile_mp3"},
+    {"name": "1.FM Absolute 70's Pop Radio", "src": "https://strm112.1.fm/70s_mobile_mp3"},
     {"name": "1.FM Blues Radio", "src": "https://strm112.1.fm/blues_mobile_mp3"},
     {"name": "60's and Beyond", "src": "https://ais-edge09-live365-dal02.cdnstream.com/a26545"},
     {"name": "90s90s Dance", "src": "https://90s90s.hoerradar.de/90s90s-eurodance-mp3-hq"},
@@ -40,16 +41,12 @@
     {"name": "GotRadio Soft Rock Café", "src": "https://pureplay.cdnstream1.com/6010_128.mp3"},
     {"name": "GotRadio The 50's", "src": "https://pureplay.cdnstream1.com/6005_128.mp3"},
     {"name": "GotRadio The 60's", "src": "https://pureplay.cdnstream1.com/6011_128.mp3"},
+    {"name": "GotRadio The 70's", "src": "https://pureplay.cdnstream1.com/6013_128.mp3"},
     {"name": "KXT", "src": "https://kera-ice.streamguys1.com/kxtlive128"},
     {"name": "Lounge Radio", "src": "https://fr1.streamhosting.ch/lounge128.mp3"},
     {"name": "Radio 10 60's & 70's hits", "src": "https://21293.live.streamtheworld.com/TLPSTR18.mp3"},
     {"name": "Radio 10 Non-stop", "src": "https://20133.live.streamtheworld.com/TLPSTR15.mp3"},
     {"name": "Radio Vintage", "src": "https://solid41.streamupsolutions.com/proxy/boahybvx?mp=/stream"},
-    {"name": "The World of Blues", "src": "https://ais-sa2.cdnstream1.com/2263_128.mp3"},
-    {"name": "Totally Radio 60s", "src": "https://18553.live.streamtheworld.com/T_RAD_60S_S01.mp3"},
-    {"name": "WBRF Classic Country", "src": "https://prod-34-82-224-53.wostreaming.net/blueridgeradio-wbrffmmp3-ibc4"},
-    {"name": "WLNG", "src": "https://ssl.shoutcaststreaming.us:8056/stream/"},
-
     {"name": "SomaFM BAGeL Radio", "src": "http://ice1.somafm.com/bagel-128-mp3"},
     {"name": "SomaFM Beat Blender", "src": "http://ice1.somafm.com/beatblender-128-mp3"},
     {"name": "SomaFM Black Rock FM", "src": "http://ice1.somafm.com/brfm-128-mp3"},
@@ -84,7 +81,15 @@
     {"name": "SomaFM The Trip", "src": "http://ice1.somafm.com/thetrip-128-mp3"},
     {"name": "SomaFM ThistleRadio", "src": "http://ice1.somafm.com/thistle-128-mp3"},
     {"name": "SomaFM Underground 80s", "src": "http://ice1.somafm.com/u80s-128-mp3"},
-    {"name": "SomaFM Vaporwaves", "src": "http://ice1.somafm.com/vaporwaves-128-mp3"}
+    {"name": "SomaFM Vaporwaves", "src": "http://ice1.somafm.com/vaporwaves-128-mp3"},
+    {"name": "That 70's Channel", "src": "https://ais-sa5.cdnstream1.com/b68000_128mp3"},
+    {"name": "The Disco Palace", "src": "https://broadcast.miami/proxy/thediscopalace?mp=/stream/;"},
+    {"name": "The World of Blues", "src": "https://ais-sa2.cdnstream1.com/2263_128.mp3"},
+    {"name": "Totally Radio 60s", "src": "https://18553.live.streamtheworld.com/T_RAD_60S_S01.mp3"},
+    {"name": "Totally Radio 70s", "src": "https://18813.live.streamtheworld.com/T_RAD_70S_S01.mp3"},
+    {"name": "WBRF Classic Country", "src": "https://prod-34-82-224-53.wostreaming.net/blueridgeradio-wbrffmmp3-ibc4"},
+    {"name": "WLNG", "src": "https://ssl.shoutcaststreaming.us:8056/stream/"}
+
   ],
   "_err_audioStreams": [
 
