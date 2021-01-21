@@ -16,7 +16,7 @@
     {"name": "Reshet Bet", "src": "http://kanliveicy.media.kan.org.il/icy/kanbet_mp3"},
     {"name": "Reshet Gimmel", "src": "http://kanliveicy.media.kan.org.il/icy/kangimmel_mp3"},
 
-    {"name": "1.FM 50s & 60s", "src": "https://strm112.1.fm/60s_70s_mobile_mp3"},
+    {"name": "1.FM 50s and 60s", "src": "https://strm112.1.fm/60s_70s_mobile_mp3"},
     {"name": "1.FM Absolute 70s Pop Radio", "src": "https://strm112.1.fm/70s_mobile_mp3"},
     {"name": "1.FM Blues Radio", "src": "https://strm112.1.fm/blues_mobile_mp3"},
     {"name": "60s and Beyond", "src": "https://ais-edge09-live365-dal02.cdnstream.com/a26545"},
@@ -25,7 +25,6 @@
     {"name": "80s Forever Radio", "src": "https://azuracast.ssl-stream.com/radio/8050/256.mp3"},
     {"name": "80s80s Radio", "src": "https://80s80s.hoerradar.de/80s80s-mweb-mp3-hq"},
     {"name": "90s90s Dance", "src": "https://90s90s.hoerradar.de/90s90s-eurodance-mp3-hq"},
-    {"name": "98.7 WNNS", "src": "https://crystalout.surfernetwork.com:8001/WNNS-FM_MP3"},
     {"name": "Aardvark Blues", "src": "https://ais-sa5.cdnstream1.com/b77280_128mp3"},
     {"name": "ABC 50s", "src": "https://igor.torontocast.com:1875/stream"},
     {"name": "ABC Classic 2", "src": "https://live-radio01.mediahubaustralia.com/FM2W/mp3/"},
@@ -41,7 +40,7 @@
     {"name": "Chilltrax", "src": "https://streamssl.chilltrax.com/index.html?sid=1"},
     {"name": "Classic Hits Ireland", "src": "https://stream.audioxi.com/CLASSIC"},
     {"name": "CNN", "src": "https://tunein.streamguys1.com/cnn-new"},
-    {"name": "Dreamboats & Petticoats", "src": "https://ssl.shoutcaststreaming.us:8036/;"},
+    {"name": "Dreamboats and Petticoats", "src": "https://ssl.shoutcaststreaming.us:8036/;"},
     {"name": "Electronic Dance Experience", "src": "https://patmos.cdnstream.com/proxy/aamppcre?mp=/stream"},
     {"name": "FFH The 80s", "src": "https://mp3.ffh.de/ffhchannels/hq80er.mp3"},
     {"name": "FFH The 90s", "src": "https://mp3.ffh.de/ffhchannels/hq90er.mp3"},
@@ -53,6 +52,7 @@
     {"name": "GotRadio The 80s", "src": "https://pureplay.cdnstream1.com/6009_128.mp3"},
     {"name": "Hard Rock Heaven", "src": "https://ais-sa2.cdnstream1.com/1521_128"},
     {"name": "Hot Hitz 80s", "src": "https://s1.reliastream.com/proxy/hothitz80s?mp=/stream"},
+    {"name": "Hot Mix Radio 2000", "src": "https://streaming.hotmixradio.fr/hotmixradio-2k-64.mp3"},
     {"name": "KXT", "src": "https://kera-ice.streamguys1.com/kxtlive128"},
     {"name": "Lounge Radio", "src": "https://fr1.streamhosting.ch/lounge128.mp3"},
     {"name": "Non-stop 90s", "src": "https://stream.btsstream.com:8042/nonstop90s"},
@@ -61,7 +61,7 @@
     {"name": "Positively 70s", "src": "https://streaming.positivity.radio/pr/posi70s/icecast.audio"},
     {"name": "Positively 80s", "src": "https://streaming.positivity.radio/pr/posi80s/icecast.audio"},
     {"name": "Positively 90s", "src": "https://streaming.positivity.radio/pr/posi90s/icecast.audio"},
-    {"name": "Radio 10 60s & 70s hits", "src": "https://21293.live.streamtheworld.com/TLPSTR18.mp3"},
+    {"name": "Radio 10 60s and 70s Hits", "src": "https://21293.live.streamtheworld.com/TLPSTR18.mp3"},
     {"name": "Radio 10 Non-stop", "src": "https://20133.live.streamtheworld.com/TLPSTR15.mp3"},
     {"name": "Radio Ton", "src": "https://live.radioton.de/rt-live-bw?usid=0-0-H-M-V-02"},
     {"name": "Radio Vintage", "src": "https://solid41.streamupsolutions.com/proxy/boahybvx?mp=/stream"},
@@ -109,7 +109,8 @@
     {"name": "Totally Radio 80s", "src": "https://14933.live.streamtheworld.com/T_RAD_80S_S01.mp3"},
     {"name": "Totally Radio 90s", "src": "https://18813.live.streamtheworld.com/T_RAD_90S_S01.mp3"},
     {"name": "WBRF Classic Country", "src": "https://prod-34-82-224-53.wostreaming.net/blueridgeradio-wbrffmmp3-ibc4"},
-    {"name": "WLNG", "src": "https://ssl.shoutcaststreaming.us:8056/stream/"}
+    {"name": "WLNG 92.1FM", "src": "https://ssl.shoutcaststreaming.us:8056/stream/"},
+    {"name": "WNNS 98.7FM", "src": "https://crystalout.surfernetwork.com:8001/WNNS-FM_MP3"}
 
   ]
 }
