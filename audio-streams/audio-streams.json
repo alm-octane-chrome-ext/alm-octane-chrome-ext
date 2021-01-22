@@ -16,6 +16,11 @@
     {"name": "Reshet Gimmel", "src": "http://kanliveicy.media.kan.org.il/icy/kangimmel_mp3"},
     {"name": "Tel Aviv 102FM", "src": "https://102.livecdn.biz/102fm_aac"},
 
+
+
+
+
+
     {"name": "1.FM 50s and 60s", "src": "https://strm112.1.fm/60s_70s_mobile_mp3"},
     {"name": "1.FM Absolute 70s Pop", "src": "https://strm112.1.fm/70s_mobile_mp3"},
     {"name": "1.FM America's Best Ballads", "src": "https://strm112.1.fm/onelive_mobile_mp3"},
@@ -34,6 +39,7 @@
     {"name": "ABC Classic 2", "src": "https://live-radio01.mediahubaustralia.com/FM2W/mp3/"},
     {"name": "ABC Jazz", "src": "https://live-radio01.mediahubaustralia.com/JAZW/mp3/"},
     {"name": "Absolute Chillout", "src": "https://ais-sa5.cdnstream1.com/b05055_128mp3"},
+    {"name": "African FM", "src": "https://str2b.openstream.co/615"},
     {"name": "All Classical Portland", "src": "https://allclassical-ice.streamguys.com/ac96kmp3"},
     {"name": "All Hit Remixes", "src": "https://jenny.torontocast.com:8134/stream"},
     {"name": "Alternative Rock Variety", "src": "https://jenny.torontocast.com:8082/stream"},
@@ -55,6 +61,7 @@
     {"name": "Classic Rock 109", "src": "https://tunes1.classicrock109.com/cr109"},
     {"name": "CNN", "src": "https://tunein.streamguys1.com/cnn-new"},
     {"name": "Cool 94.5", "src": "https://live.leanstream.co/CIBUFM-MP3"},
+    {"name": "Dakar Musique", "src": "https://listen.senemultimedia.net:8092/stream"},
     {"name": "Disco Palace", "src": "https://broadcast.miami/proxy/thediscopalace?mp=/stream/;"},
     {"name": "Double J", "src": "https://live-radio01.mediahubaustralia.com/DJDW/mp3/"},
     {"name": "Easy 97.2", "src": "https://n02.radiojar.com/60thkx2r3vduv?rj-ttl=5&rj-tok=AAABdydTJE0AhH4-RptYWQavwg"},
@@ -63,6 +70,7 @@
     {"name": "Folk Alley", "src": "https://freshgrass.streamguys1.com/folkalley-128mp3-tunein"},
     {"name": "Freedom 92", "src": "https://stream.btsstream.com:8072/freedom.mp3"},
     {"name": "Funky Corner", "src": "https://ais-sa2.cdnstream1.com/2447_192.mp3"},
+    {"name": "GHRadio1", "src": "https://centova.radioservers.biz/proxy/s2port9946/?mp=/stream"},
     {"name": "Gong 97.1", "src": "https://gong971-ais-edge-3071-fra-eco-cdn.cast.addradio.de/gong971/live/mp3/high"},
     {"name": "GotRadio Alternative", "src": "https://pureplay.cdnstream1.com/6033_128.mp3"},
     {"name": "GotRadio R&B Classics", "src": "https://pureplay.cdnstream1.com/6023_128.mp3"},
@@ -95,6 +103,7 @@
     {"name": "Positively Easy", "src": "https://streaming.positivity.radio/pr/posieasy/icecast.audio"},
     {"name": "Radio 10 60s and 70s Hits", "src": "https://21293.live.streamtheworld.com/TLPSTR18.mp3"},
     {"name": "Radio 10 Non-stop", "src": "https://20133.live.streamtheworld.com/TLPSTR15.mp3"},
+    {"name": "Radio Africana", "src": "https://s39.myradiostream.com/:8888/listen.mp3"},
     {"name": "Radio Ton", "src": "https://live.radioton.de/rt-live-bw?usid=0-0-H-M-V-02"},
     {"name": "Radio Vintage", "src": "https://solid41.streamupsolutions.com/proxy/boahybvx?mp=/stream"},
     {"name": "Rastafari Jams", "src": "https://s2.radio.co/sccc2dccb5/listen"},
