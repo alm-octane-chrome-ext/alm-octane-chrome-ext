@@ -117,8 +117,7 @@
     {"name": "Totally Radio 90s", "src": "https://18813.live.streamtheworld.com/T_RAD_90S_S01.mp3"},
     {"name": "WBRF Classic Country", "src": "https://prod-34-82-224-53.wostreaming.net/blueridgeradio-wbrffmmp3-ibc4"},
     {"name": "WLNG 92.1", "src": "https://ssl.shoutcaststreaming.us:8056/stream/"},
-    {"name": "WNNS 98.7", "src": "https://crystalout.surfernetwork.com:8001/WNNS-FM_MP3"},
-    {"name": "Yoga Chill", "src": "https://radio4.vip-radios.fm:18027/secure-128mp3-YogaChill"}
+    {"name": "WNNS 98.7", "src": "https://crystalout.surfernetwork.com:8001/WNNS-FM_MP3"}
 
   ]
 }
