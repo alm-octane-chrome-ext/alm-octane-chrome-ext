@@ -21,7 +21,6 @@
     {"name": "1.FM America's Best Ballads", "src": "https://strm112.1.fm/onelive_mobile_mp3"},
     {"name": "1.FM Blues", "src": "https://strm112.1.fm/blues_mobile_mp3"},
     {"name": "60s and Beyond", "src": "https://ais-edge09-live365-dal02.cdnstream.com/a26545"},
-    {"name": "80s", "src": "https://sec-fluxfm.hoerradar.de/flux-80er-mp3-hq"},
     {"name": "80s Alive", "src": "https://media2.hostin.cc/80s-alive.mp3"},
     {"name": "80s Forever", "src": "https://azuracast.ssl-stream.com/radio/8050/256.mp3"},
     {"name": "80s80s", "src": "https://80s80s.hoerradar.de/80s80s-mweb-mp3-hq"},
@@ -43,13 +42,12 @@
     {"name": "Chill", "src": "https://media-ice.musicradio.com/ChillMP3"},
     {"name": "Chilltrax", "src": "https://streamssl.chilltrax.com/index.html?sid=1"},
     {"name": "CNN", "src": "https://tunein.streamguys1.com/cnn-new"},
-    {"name": "Costa Del Mar Chillout", "src": "https://radio4.cdm-radio.com:18020/stream-mp3-Chill"},
-    {"name": "Costa Del Mar Zen", "src": "https://radio4.cdm-radio.com:18004/stream-mp3-Zen"},
     {"name": "Dreamboats and Petticoats", "src": "https://ssl.shoutcaststreaming.us:8036/;"},
     {"name": "Easy 97.2", "src": "https://n02.radiojar.com/60thkx2r3vduv?rj-ttl=5&rj-tok=AAABdydTJE0AhH4-RptYWQavwg"},
     {"name": "Electronic Dance Experience", "src": "https://patmos.cdnstream.com/proxy/aamppcre?mp=/stream"},
     {"name": "FFH The 80s", "src": "https://mp3.ffh.de/ffhchannels/hq80er.mp3"},
     {"name": "FFH The 90s", "src": "https://mp3.ffh.de/ffhchannels/hq90er.mp3"},
+    {"name": "Flux 80s", "src": "https://sec-fluxfm.hoerradar.de/flux-80er-mp3-hq"},
     {"name": "Folk Alley", "src": "https://freshgrass.streamguys1.com/folkalley-128mp3-tunein"},
     {"name": "Freedom 92", "src": "https://stream.btsstream.com:8072/freedom.mp3"},
     {"name": "GotRadio Soft Rock Café", "src": "https://pureplay.cdnstream1.com/6010_128.mp3"},
@@ -118,8 +116,8 @@
     {"name": "Totally Radio 80s", "src": "https://14933.live.streamtheworld.com/T_RAD_80S_S01.mp3"},
     {"name": "Totally Radio 90s", "src": "https://18813.live.streamtheworld.com/T_RAD_90S_S01.mp3"},
     {"name": "WBRF Classic Country", "src": "https://prod-34-82-224-53.wostreaming.net/blueridgeradio-wbrffmmp3-ibc4"},
-    {"name": "WLNG 92.1FM", "src": "https://ssl.shoutcaststreaming.us:8056/stream/"},
-    {"name": "WNNS 98.7FM", "src": "https://crystalout.surfernetwork.com:8001/WNNS-FM_MP3"},
+    {"name": "WLNG 92.1", "src": "https://ssl.shoutcaststreaming.us:8056/stream/"},
+    {"name": "WNNS 98.7", "src": "https://crystalout.surfernetwork.com:8001/WNNS-FM_MP3"},
     {"name": "Yoga Chill", "src": "https://radio4.vip-radios.fm:18027/secure-128mp3-YogaChill"}
 
   ]
