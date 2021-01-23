@@ -122,7 +122,6 @@
     {"name": "Radio10 60s and 70s", "src": "https://21293.live.streamtheworld.com/TLPSTR18.mp3"},
     {"name": "Radio10 Non-stop", "src": "https://20133.live.streamtheworld.com/TLPSTR15.mp3"},
     {"name": "Rastafari Jams", "src": "https://s2.radio.co/sccc2dccb5/listen"},
-    {"name": "Retro Hit Mix", "src": "https://ais-sa2.cdnstream1.com/1340_128"},
     {"name": "Romantic Italy", "src": "https://streaming.theloveclinicradioshow.com/play"},
     {"name": "Ronin Japan", "src": "https://s3.radio.co/sff133d65b/listen"},
     {"name": "Smooth Motion", "src": "https://vm.motionfm.com/motiontwo_free"},
@@ -163,12 +162,10 @@
     {"name": "SomaFM Vaporwaves", "src": "http://ice1.somafm.com/vaporwaves-128-mp3"},
     {"name": "Spoon", "src": "https://spoonradio.ice.infomaniak.ch/spoonradio-hd.mp3"},
     {"name": "Studio19 Greece", "src": "https://stream.crete.ovh:8443/1"},
-    {"name": "Sunshine", "src": "https://stream.audioxi.com/SUN"},
     {"name": "Surf Shack", "src": "https://streamer.radio.co/s74e0a4911/listen"},
     {"name": "Tamil", "src": "https://streaming.radio.co/s0cfc93915/listen"},
     {"name": "That 70s Channel", "src": "https://ais-sa5.cdnstream1.com/b68000_128mp3"},
     {"name": "The Fox 103.9", "src": "https://crystalout.surfernetwork.com:8001/WRSR-FM_MP3"},
-    {"name": "Ton", "src": "https://live.radioton.de/rt-live-bw?usid=0-0-H-M-V-02"},
     {"name": "TotallyRadio 00s", "src": "https://18553.live.streamtheworld.com/T_RAD_00S_S01.mp3"},
     {"name": "TotallyRadio 60s", "src": "https://18553.live.streamtheworld.com/T_RAD_60S_S01.mp3"},
     {"name": "TotallyRadio 70s", "src": "https://18813.live.streamtheworld.com/T_RAD_70S_S01.mp3"},
@@ -178,7 +175,6 @@
     {"name": "TotallyRadio Hits", "src": "https://18813.live.streamtheworld.com/T_RAD_HITS_S01.mp3"},
     {"name": "Vintage", "src": "https://solid41.streamupsolutions.com/proxy/boahybvx?mp=/stream"},
     {"name": "WBRF Classic Country", "src": "https://prod-34-82-224-53.wostreaming.net/blueridgeradio-wbrffmmp3-ibc4"},
-    {"name": "WLNG 92.1", "src": "https://ssl.shoutcaststreaming.us:8056/stream/"},
     {"name": "World of Blues", "src": "https://ais-sa2.cdnstream1.com/2263_128.mp3"},
     {"name": "WNNS 98.7", "src": "https://crystalout.surfernetwork.com:8001/WNNS-FM_MP3"}
 
