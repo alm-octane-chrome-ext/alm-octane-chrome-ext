@@ -221,7 +221,6 @@ const getNews = () => {
 
 // Audio ---------------------------------------------------------------------------------------------------------------
 
-let isAudioOn = false;
 let isPlayTriggered = false;
 let audioStreams = [];
 let audioStreamIndex = 0;
@@ -238,7 +237,6 @@ const playAudio = async () => {
 		streamNameElm.classList.remove('octanetopus--player--stream-name--fade-out');
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
-		isAudioOn = true;
 		streamNameElm.classList.add('octanetopus--player--stream-name--fade-out');
 	} catch (err) {
 		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
@@ -253,7 +251,6 @@ const stopAudio = () => {
 	playerElm.classList.remove('octanetopus--player--active');
 	audioElm.pause();
 	streamNameElm.textContent = '';
-	isAudioOn = false;
 };
 
 const searchStation = async (isUp) => {
@@ -269,7 +266,7 @@ const searchStation = async (isUp) => {
 			audioStreamIndex = (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
 		}
 		await playAudio();
-	} while(!isAudioOn && audioStreamIndex !== startIndex);
+	} while(audioElm.paused && audioStreamIndex !== startIndex);
 };
 
 const toggleAudio = async () => {
@@ -277,15 +274,15 @@ const toggleAudio = async () => {
 	if (isPlayTriggered) {
 		return;
 	}
-	if (isAudioOn) {
-		stopAudio();
-	} else {
+	if (audioElm.paused) {
 		(async () => {
 			await playAudio();
-			if (!isAudioOn) {
+			if (audioElm.paused) {
 				await searchStation(true);
 			}
 		})();
+	} else {
+		stopAudio();
 	}
 };
 
