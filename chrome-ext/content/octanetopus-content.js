@@ -387,8 +387,10 @@ const fetchAudioStreams = () => {
 		if (jsonObj['_audioStreams'] && (window.location.hostname.startsWith('localhost') || window.location.hostname.startsWith('127.0.0.1'))) {
 			audioStreams = [...audioStreams, ...jsonObj['_audioStreams']];
 		}
-		//audioStreams = [{name: "KXT", src: "https://kera-ice.streamguys1.com/kxtlive128"}];
 		shuffleArray(audioStreams);
+		// audioStreams = [
+		// 	{"name": "CNN", "src": "https://tunein.streamguys1.com/cnn-new"},
+		// ];
 	});
 };
 
