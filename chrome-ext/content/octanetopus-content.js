@@ -5,6 +5,19 @@ const log = (/*msg*/) => {
 	//console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
 };
 
+const debounce = (func, wait) => {
+	let timeout;
+	return () => {
+		const context = this;
+		const later = () => {
+			timeout = null;
+			func.apply(context);
+		};
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+	};
+};
+
 // Background ----------------------------------------------------------------------------------------------------------
 
 const colorMasthead = () => {
@@ -221,6 +234,7 @@ const getNews = () => {
 
 // Audio ---------------------------------------------------------------------------------------------------------------
 
+const CHANGE_STATION_DELAY = 3000;
 let isPlayTriggered = false;
 let audioStreams = [];
 let audioStreamIndex = 0;
@@ -253,6 +267,9 @@ const stopAudio = () => {
 	streamNameElm.textContent = '';
 };
 
+const getPrevStreamIndex = () => (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
+const getNextStreamIndex = () => (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
+
 const searchStation = async (isUp) => {
 	log('searchStation');
 	if (isPlayTriggered) {
@@ -261,9 +278,9 @@ const searchStation = async (isUp) => {
 	const startIndex = audioStreamIndex;
 	do {
 		if (isUp) {
-			audioStreamIndex = (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
+			audioStreamIndex = getNextStreamIndex();
 		} else {
-			audioStreamIndex = (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
+			audioStreamIndex = getPrevStreamIndex();
 		}
 		await playAudio();
 	} while(audioElm.paused && audioStreamIndex !== startIndex);
@@ -296,14 +313,36 @@ const onClickAudio = async () => {
 	await toggleAudio();
 };
 
+const debouncePrevStream = debounce(async () => {
+	audioStreamIndex = getNextStreamIndex();
+	await searchStation(false);
+}, CHANGE_STATION_DELAY);
+
 const onClickPrevStream = async () => {
 	log('onClickPrevStream');
-	await searchStation(false);
+	if (audioElm.paused) {
+		await toggleAudio();
+	} else {
+		audioStreamIndex = getPrevStreamIndex();
+		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
+		debouncePrevStream();
+	}
 };
+
+const debounceNextStream = debounce(async () => {
+	audioStreamIndex = getPrevStreamIndex();
+	await searchStation(true);
+}, CHANGE_STATION_DELAY);
 
 const onClickNextStream = async () => {
 	log('onClickNextStream');
-	await searchStation(true);
+	if (audioElm.paused) {
+		await toggleAudio();
+	} else {
+		audioStreamIndex = getNextStreamIndex();
+		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
+		debounceNextStream();
+	}
 };
 
 const addPlayer = () => {
@@ -396,7 +435,6 @@ const handlePlayer = () => {
 	addPlayer();
 	fetchAudioStreams();
 };
-
 
 // ---------------------------------------------------------------------------------------------------------------------
 
