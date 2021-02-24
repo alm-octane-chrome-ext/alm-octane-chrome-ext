@@ -2,8 +2,6 @@
   "version": 1,
   "audioStreams": [
     
-    {"name": "KissFM", "src": "https://live.kissfm.ro/kissfm.aacp"},    
-
     {"name": "Eco 99", "src": "https://eco01.livecdn.biz/ecolive/99fm/icecast.audio"},
     {"name": "Emtza Haderech", "src": "https://icy.streamgates.net/Radio_CDN/Emtza_Haderech/icecast.audio"},
     {"name": "Galatz", "src": "http://glzwizzlv.bynetcdn.com/glz_mp3"},
@@ -17,6 +15,8 @@
     {"name": "Reshet Bet", "src": "http://kanliveicy.media.kan.org.il/icy/kanbet_mp3"},
     {"name": "Reshet Gimmel", "src": "http://kanliveicy.media.kan.org.il/icy/kangimmel_mp3"},
     {"name": "Tel Aviv 102", "src": "https://102.livecdn.biz/102fm_aac"},
+    
+    {"name": "KissFM", "src": "https://live.kissfm.ro/kissfm.aacp"},
 
     {"name": "1.FM 50s & 60s", "src": "https://strm112.1.fm/60s_70s_mobile_mp3"},
     {"name": "1.FM Absolute 70s Pop", "src": "https://strm112.1.fm/70s_mobile_mp3"},
