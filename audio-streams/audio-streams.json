@@ -1,6 +1,8 @@
 {
   "version": 1,
   "audioStreams": [
+    
+    {"name": "KissFM", "src": "https://live.kissfm.ro/kissfm.aacp"},    
 
     {"name": "Eco 99", "src": "https://eco01.livecdn.biz/ecolive/99fm/icecast.audio"},
     {"name": "Emtza Haderech", "src": "https://icy.streamgates.net/Radio_CDN/Emtza_Haderech/icecast.audio"},
