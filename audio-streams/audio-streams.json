@@ -15,8 +15,16 @@
     {"name": "Reshet Bet", "src": "http://kanliveicy.media.kan.org.il/icy/kanbet_mp3"},
     {"name": "Reshet Gimmel", "src": "http://kanliveicy.media.kan.org.il/icy/kangimmel_mp3"},
     {"name": "Tel Aviv 102", "src": "https://102.livecdn.biz/102fm_aac"},
-    
+
+    {"name": "DanceFM", "src": "https://edge126.rcs-rds.ro/profm/dancefm.mp3"},
+    {"name": "DigiFM", "src": "https://edge76.rcs-rds.ro/digifm/digifm.mp3"},
+    {"name": "EuropaFM", "src": "https://astreaming.edi.ro:8443/EuropaFM_aac"},
     {"name": "KissFM", "src": "https://live.kissfm.ro/kissfm.aacp"},
+    {"name": "MagicFM", "src": "https://live.magicfm.ro/magicfm.aacp"},
+    {"name": "ProFM", "src": "https://edge126.rcs-rds.ro/profm/profm.mp3"},
+    {"name": "RadioGuerilla", "src": "https://live.guerrillaradio.ro:8443/guerrilla.aac"},
+    {"name": "RockFM", "src": "https://live.rockfm.ro/rockfm.aacp"},
+    {"name": "VirginRadio", "src": "https://astreaming.edi.ro:8443/VirginRadio_aac"},
 
     {"name": "1.FM 50s & 60s", "src": "https://strm112.1.fm/60s_70s_mobile_mp3"},
     {"name": "1.FM Absolute 70s Pop", "src": "https://strm112.1.fm/70s_mobile_mp3"},
