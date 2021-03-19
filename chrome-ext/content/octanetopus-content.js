@@ -292,12 +292,10 @@ const toggleAudio = async () => {
 		return;
 	}
 	if (audioElm.paused) {
-		(async () => {
-			await playAudio();
-			if (audioElm.paused) {
-				await searchStation(true);
-			}
-		})();
+		await playAudio();
+		if (audioElm.paused) {
+			await searchStation(true);
+		}
 	} else {
 		stopAudio();
 	}
