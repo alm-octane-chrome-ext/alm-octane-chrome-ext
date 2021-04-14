@@ -523,6 +523,7 @@ const fetchAudioStreams = () => {
 		const savedStreamIndex = loadLastStreamIndex();
 		if (savedStreamIndex > -1) {
 			audioStreamIndex = savedStreamIndex;
+			markFavoriteState(audioStreams[audioStreamIndex].name);
 		}
 	});
 };
