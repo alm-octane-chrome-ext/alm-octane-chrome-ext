@@ -121,7 +121,7 @@
 .octanetopus--player {
     position: relative;
     display: flex;
-    min-width: 94px;
+    min-width: 122px;
     height: 26px;
     border-radius: 13px;
     border: 1px solid #666;
@@ -164,19 +164,30 @@
 .octanetopus--player--led:hover {
     opacity: 0.8;
 }
-.octanetopus--player--image {
-    position: relative;
-    height: 20px;
-    top: 2px;
+.octanetopus--player--star-empty-image,
+.octanetopus--player--star-full-image,
+.octanetopus--player--music-list-image {
+    width: 24px;
+    height: 24px;
     opacity: 0.6;
     transition: all 0.25s ease-in-out;
     cursor: pointer;
 }
-.octanetopus--player--active > .octanetopus--player--image {
+.octanetopus--player--active > .octanetopus--player--star-empty-image,
+.octanetopus--player--active > .octanetopus--player--star-full-image,
+.octanetopus--player--active > .octanetopus--player--music-list-image {
     opacity: 1;
 }
-.octanetopus--player--image:hover {
+.octanetopus--player--star-empty-image:hover,
+.octanetopus--player--star-full-image:hover,
+.octanetopus--player--music-list-image:hover {
     opacity: 0.8;
+}
+.octanetopus--player--favorite-station > .octanetopus--player--star-empty-image {
+    display: none;
+}
+:not(.octanetopus--player--favorite-station) > .octanetopus--player--star-full-image {
+    display: none;
 }
 .octanetopus--player--navigate--button {
     position: relative;

@@ -238,6 +238,7 @@ const CHANGE_STATION_DELAY = 3000;
 let isPlayTriggered = false;
 let audioStreams = [];
 let audioStreamIndex = 0;
+let favoriteStreamNames = [];
 let playerElm;
 let audioElm;
 let streamNameElm;
@@ -246,11 +247,14 @@ const playAudio = async () => {
 	log('playAudio');
 	isPlayTriggered = true;
 	try {
+		const streamName = audioStreams[audioStreamIndex].name;
 		playerElm.classList.add('octanetopus--player--active');
-		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
+		streamNameElm.textContent = streamName;
+		markFavoriteState(streamName);
 		streamNameElm.classList.remove('octanetopus--player--stream-name--fade-out');
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
+		saveLastStreamName(streamName);
 		streamNameElm.classList.add('octanetopus--player--stream-name--fade-out');
 	} catch (err) {
 		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
@@ -306,9 +310,88 @@ const onClickLed = async () => {
 	await toggleAudio();
 };
 
-const onClickAudio = async () => {
-	log('onClickAudio');
-	await toggleAudio();
+const loadLastStreamIndex = () => {
+	log('loadLastStreamName');
+	const loadedStreamName = localStorage.getItem('octanetopusLastStreamName') || '';
+	return audioStreams.findIndex(audioStream => audioStream.name === loadedStreamName);
+};
+
+const saveLastStreamName = (streamName) => {
+	log('saveLastStreamName');
+	localStorage.setItem('octanetopusLastStreamName', streamName);
+};
+
+const saveFavoriteStreams = () => {
+	log('saveFavoriteStreams');
+	localStorage.setItem('octanetopusFavoriteStreamNames', JSON.stringify(favoriteStreamNames));
+}
+
+const loadFavoriteStreams = () => {
+	log('loadFavoriteStreams');
+	favoriteStreamNames = [];
+	const loadedFavoriteStreamNamesStr = localStorage.getItem('octanetopusFavoriteStreamNames') || '[]';
+	const loadedFavoriteStreamNames = JSON.parse(loadedFavoriteStreamNamesStr);
+	loadedFavoriteStreamNames.forEach(loadedFavoriteStreamName => {
+		if (audioStreams.find(audioStream => audioStream.name === loadedFavoriteStreamName)) {
+			favoriteStreamNames.push(loadedFavoriteStreamName);
+		}
+	});
+	if (favoriteStreamNames.length > 0) {
+		favoriteStreamNames.sort();
+		saveFavoriteStreams();
+	}
+};
+
+const isStreamFavorite = (streamName) => {
+	log('isStreamFavorite');
+	return favoriteStreamNames.findIndex(favoriteStreamName => favoriteStreamName === streamName) > -1;
+}
+
+const markFavoriteState = (streamName) => {
+	const favoriteStationClass = 'octanetopus--player--favorite-station';
+	if (isStreamFavorite(streamName)) {
+		playerElm.classList.add(favoriteStationClass);
+	} else {
+		playerElm.classList.remove(favoriteStationClass);
+	}
+};
+
+const addToFavoriteStreams = (streamName) => {
+	log('addToFavorites');
+	favoriteStreamNames.push(streamName);
+	favoriteStreamNames.sort();
+	saveFavoriteStreams();
+}
+
+const removeFromFavoriteStreams = (streamName) => {
+	log('removeFromFavoriteStreams');
+	const index = favoriteStreamNames.findIndex(favoriteStreamName => favoriteStreamName === streamName);
+	if (index > -1) {
+		favoriteStreamNames.splice(index, 1);
+	}
+	favoriteStreamNames.sort();
+	saveFavoriteStreams();
+}
+
+const onClickToggleFavoriteStream = async() => {
+	log('onClickToggleFavoriteStream');
+	if (audioElm.paused) {
+		return;
+	}
+	const favoriteStationClass = 'octanetopus--player--favorite-station';
+	const streamName = audioStreams[audioStreamIndex].name;
+	if (isStreamFavorite(streamName)) {
+		playerElm.classList.remove(favoriteStationClass);
+		removeFromFavoriteStreams(streamName);
+	} else {
+		playerElm.classList.add(favoriteStationClass);
+		addToFavoriteStreams(streamName);
+	}
+};
+
+const onClickStreamList = async () => {
+	log('onClickStreamList');
+	//await toggleAudio();
 };
 
 const debouncePrevStream = debounce(async () => {
@@ -322,7 +405,9 @@ const onClickPrevStream = async () => {
 		await toggleAudio();
 	} else {
 		audioStreamIndex = getPrevStreamIndex();
-		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
+		const streamName = audioStreams[audioStreamIndex].name;
+		streamNameElm.textContent = streamName;
+		markFavoriteState(streamName);
 		debouncePrevStream();
 	}
 };
@@ -338,7 +423,9 @@ const onClickNextStream = async () => {
 		await toggleAudio();
 	} else {
 		audioStreamIndex = getNextStreamIndex();
-		streamNameElm.textContent = audioStreams[audioStreamIndex].name;
+		const streamName = audioStreams[audioStreamIndex].name;
+		streamNameElm.textContent = streamName;
+		markFavoriteState(streamName);
 		debounceNextStream();
 	}
 };
@@ -351,14 +438,24 @@ const addPlayer = () => {
 	}
 
 	playerElm = document.createElement('div');
-	playerElm.setAttribute('id', 'octanetopus--player');
 	playerElm.classList.add('octanetopus--player');
 
 	const ledElm = document.createElement('div');
-	ledElm.setAttribute('id', 'octanetopus--player--led');
 	ledElm.classList.add('octanetopus--player--led');
 	ledElm.addEventListener('click', onClickLed, false);
 	playerElm.appendChild(ledElm);
+
+	const starEmptyImageElm = document.createElement('img');
+	starEmptyImageElm.setAttribute('src', chrome.extension.getURL(`img/star-empty.svg`));
+	starEmptyImageElm.classList.add('octanetopus--player--star-empty-image');
+	starEmptyImageElm.addEventListener('click', onClickToggleFavoriteStream, false);
+	playerElm.appendChild(starEmptyImageElm);
+
+	const starFullImageElm = document.createElement('img');
+	starFullImageElm.setAttribute('src', chrome.extension.getURL(`img/star-full.svg`));
+	starFullImageElm.classList.add('octanetopus--player--star-full-image');
+	starFullImageElm.addEventListener('click', onClickToggleFavoriteStream, false);
+	playerElm.appendChild(starFullImageElm);
 
 	const leftArrow = document.createElement('img');
 	leftArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-left.svg`));
@@ -367,10 +464,9 @@ const addPlayer = () => {
 	playerElm.appendChild(leftArrow);
 
 	const imageElm = document.createElement('img');
-	imageElm.setAttribute('id', 'octanetopus--player--image');
-	imageElm.setAttribute('src', chrome.extension.getURL(`img/note.svg`));
-	imageElm.classList.add('octanetopus--player--image');
-	imageElm.addEventListener('click', onClickAudio, false);
+	imageElm.setAttribute('src', chrome.extension.getURL(`img/music-list.svg`));
+	imageElm.classList.add('octanetopus--player--music-list-image');
+	imageElm.addEventListener('click', onClickStreamList, false);
 	playerElm.appendChild(imageElm);
 
 	const rightArrow = document.createElement('img');
@@ -380,14 +476,12 @@ const addPlayer = () => {
 	playerElm.appendChild(rightArrow);
 
 	streamNameElm = document.createElement('div');
-	streamNameElm.setAttribute('id', 'octanetopus--player--stream-name');
 	streamNameElm.classList.add('octanetopus--player--stream-name');
 	streamNameElm.textContent = '';
 	playerElm.appendChild(streamNameElm);
 
 	audioElm = document.createElement('audio');
 	audioElm.pause();
-	audioElm.setAttribute('id', 'octanetopus--player--audio');
 	audioElm.setAttribute('preload', 'none');
 	playerElm.appendChild(audioElm);
 
@@ -425,6 +519,11 @@ const fetchAudioStreams = () => {
 		// audioStreams = [
 		// 	{"name": "CNN", "src": "https://tunein.streamguys1.com/cnn-new"},
 		// ];
+		loadFavoriteStreams();
+		const savedStreamIndex = loadLastStreamIndex();
+		if (savedStreamIndex > -1) {
+			audioStreamIndex = savedStreamIndex;
+		}
 	});
 };
 
