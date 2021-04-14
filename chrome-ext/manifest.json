@@ -29,8 +29,11 @@
   ],
   "web_accessible_resources": [
     "img/flags/*.svg",
+    "img/star-empty.svg",
+    "img/star-full.svg",
     "img/note.svg",
     "img/radio.svg",
+    "img/music-list.svg",
     "img/arrow-left.svg",
     "img/arrow-right.svg"
   ]
