@@ -442,35 +442,41 @@ const addPlayer = () => {
 
 	const ledElm = document.createElement('div');
 	ledElm.classList.add('octanetopus--player--led');
+	ledElm.setAttribute('title', 'power on/off');
 	ledElm.addEventListener('click', onClickLed, false);
 	playerElm.appendChild(ledElm);
 
+	const imageElm = document.createElement('img');
+	imageElm.setAttribute('src', chrome.extension.getURL(`img/music-list.svg`));
+	imageElm.setAttribute('title', 'station list');
+	imageElm.classList.add('octanetopus--player--music-list-image');
+	imageElm.addEventListener('click', onClickStreamList, false);
+	playerElm.appendChild(imageElm);
+
 	const starEmptyImageElm = document.createElement('img');
 	starEmptyImageElm.setAttribute('src', chrome.extension.getURL(`img/star-empty.svg`));
+	starEmptyImageElm.setAttribute('title', 'add to favorites');
 	starEmptyImageElm.classList.add('octanetopus--player--star-empty-image');
 	starEmptyImageElm.addEventListener('click', onClickToggleFavoriteStream, false);
 	playerElm.appendChild(starEmptyImageElm);
 
 	const starFullImageElm = document.createElement('img');
 	starFullImageElm.setAttribute('src', chrome.extension.getURL(`img/star-full.svg`));
+	starFullImageElm.setAttribute('title', 'remove from favorites');
 	starFullImageElm.classList.add('octanetopus--player--star-full-image');
 	starFullImageElm.addEventListener('click', onClickToggleFavoriteStream, false);
 	playerElm.appendChild(starFullImageElm);
 
 	const leftArrow = document.createElement('img');
 	leftArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-left.svg`));
+	leftArrow.setAttribute('title', 'previous station');
 	leftArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--prev');
 	leftArrow.addEventListener('click', onClickPrevStream, false);
 	playerElm.appendChild(leftArrow);
 
-	const imageElm = document.createElement('img');
-	imageElm.setAttribute('src', chrome.extension.getURL(`img/music-list.svg`));
-	imageElm.classList.add('octanetopus--player--music-list-image');
-	imageElm.addEventListener('click', onClickStreamList, false);
-	playerElm.appendChild(imageElm);
-
 	const rightArrow = document.createElement('img');
 	rightArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-right.svg`));
+	rightArrow.setAttribute('title', 'next station');
 	rightArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--next');
 	rightArrow.addEventListener('click', onClickNextStream, false);
 	playerElm.appendChild(rightArrow);
