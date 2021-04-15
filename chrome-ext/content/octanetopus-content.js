@@ -242,6 +242,7 @@ let favoriteStreamNames = [];
 let playerElm;
 let audioElm;
 let streamNameElm;
+let stationListElm;
 
 const playAudio = async () => {
 	log('playAudio');
@@ -307,6 +308,7 @@ const toggleAudio = async () => {
 
 const onClickLed = async () => {
 	log('onClickLed');
+	hideStreamList();
 	await toggleAudio();
 };
 
@@ -389,11 +391,6 @@ const onClickToggleFavoriteStream = async() => {
 	}
 };
 
-const onClickStreamList = async () => {
-	log('onClickStreamList');
-	//await toggleAudio();
-};
-
 const debouncePrevStream = debounce(async () => {
 	audioStreamIndex = getNextStreamIndex();
 	await searchStation(false);
@@ -404,6 +401,7 @@ const onClickPrevStream = async () => {
 	if (audioElm.paused) {
 		await toggleAudio();
 	} else {
+		hideStreamList();
 		audioStreamIndex = getPrevStreamIndex();
 		const streamName = audioStreams[audioStreamIndex].name;
 		streamNameElm.textContent = streamName;
@@ -422,11 +420,73 @@ const onClickNextStream = async () => {
 	if (audioElm.paused) {
 		await toggleAudio();
 	} else {
+		hideStreamList();
 		audioStreamIndex = getNextStreamIndex();
 		const streamName = audioStreams[audioStreamIndex].name;
 		streamNameElm.textContent = streamName;
 		markFavoriteState(streamName);
 		debounceNextStream();
+	}
+};
+
+const onClickStreamName = async (e) => {
+	log('onClickStreamName');
+	const showStationListClass = 'octanetopus--player--show-station-list';
+	playerElm.classList.remove(showStationListClass);
+	const streamName = e.target.textContent;
+	const index = audioStreams.findIndex(s => s.name === streamName);
+	if (index === -1) {
+		return;
+	}
+	streamNameElm.textContent = streamName;
+	markFavoriteState(streamName);
+	audioStreamIndex = index;
+	audioStreamIndex = getPrevStreamIndex();
+	await searchStation(true);
+}
+
+const populateStreamList = () => {
+	log('populateStreamList');
+	let sortedAudioStreamNames = audioStreams.map(s => s.name).sort();
+	const playingStreamName = audioStreams[audioStreamIndex].name;
+	stationListElm.innerHTML = '';
+	sortedAudioStreamNames.forEach(streamName => {
+		const stationElm = document.createElement('div');
+		stationElm.textContent = streamName;
+		stationElm.classList.add('octanetopus--player--station');
+		if (streamName === playingStreamName) {
+			stationElm.classList.add('octanetopus--player--station--playing');
+		} else if (isStreamFavorite(streamName)) {
+			stationElm.classList.add('octanetopus--player--station--favorite');
+		}
+		stationElm.addEventListener('click', onClickStreamName, false);
+		stationListElm.appendChild(stationElm);
+	});
+};
+
+const showStreamList = () => {
+	log('showStreamList');
+	const showStationListClass = 'octanetopus--player--show-station-list';
+	playerElm.classList.add(showStationListClass);
+};
+
+const hideStreamList = () => {
+	log('hideStreamList');
+	const showStationListClass = 'octanetopus--player--show-station-list';
+	playerElm.classList.remove(showStationListClass);
+};
+
+const onClickStreamList = async () => {
+	log('onClickStreamList');
+	if (audioElm.paused) {
+		return;
+	}
+	populateStreamList();
+	const showStationListClass = 'octanetopus--player--show-station-list';
+	if (playerElm.classList.contains(showStationListClass)) {
+		hideStreamList();
+	} else {
+		showStreamList();
 	}
 };
 
@@ -452,6 +512,10 @@ const addPlayer = () => {
 	imageElm.classList.add('octanetopus--player--music-list-image');
 	imageElm.addEventListener('click', onClickStreamList, false);
 	playerElm.appendChild(imageElm);
+
+	stationListElm = document.createElement('div');
+	stationListElm.classList.add('octanetopus--player--station-list');
+	playerElm.appendChild(stationListElm);
 
 	const starEmptyImageElm = document.createElement('img');
 	starEmptyImageElm.setAttribute('src', chrome.extension.getURL(`img/star-empty.svg`));
@@ -521,7 +585,12 @@ const fetchAudioStreams = () => {
 		if (jsonObj['_audioStreams'] && (window.location.hostname.startsWith('localhost') || window.location.hostname.startsWith('127.0.0.1'))) {
 			audioStreams = [...audioStreams, ...jsonObj['_audioStreams']];
 		}
-		shuffleArray(audioStreams);
+		audioStreams.sort((a,b) => {
+			if (a.name < b.name) return -1;
+			if (a.name > b.name) return 1;
+			return 0;
+		});
+		//shuffleArray(audioStreams);
 		// audioStreams = [
 		// 	{"name": "CNN", "src": "https://tunein.streamguys1.com/cnn-new"},
 		// ];
@@ -531,6 +600,7 @@ const fetchAudioStreams = () => {
 			audioStreamIndex = savedStreamIndex;
 			markFavoriteState(audioStreams[audioStreamIndex].name);
 		}
+		populateStreamList();
 	});
 };
 
