@@ -244,6 +244,8 @@ let playerElm;
 let audioElm;
 let streamNameElm;
 let stationListElm;
+const doStationsTest = false;
+let lastStationsTestTime = 0;
 
 const playAudio = async () => {
 	log('playAudio');
@@ -257,17 +259,15 @@ const playAudio = async () => {
 		streamNameElm.classList.remove('octanetopus--player--stream-name--fade-out');
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
+		stationIsOk(streamName);
 		saveLastStreamName(streamName);
 		streamNameElm.classList.add('octanetopus--player--stream-name--fade-out');
 	} catch (err) {
 		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
-		if (!errorStreamNames.includes(streamName)) {
-			errorStreamNames.push(streamName);
-		}
+		stationIsError(streamName);
 		stopAudio();
 	} finally {
 		isPlayTriggered = false;
-		populateStreamList();
 	}
 };
 
@@ -436,8 +436,6 @@ const onClickNextStream = async () => {
 
 const onClickStreamName = async (e) => {
 	log('onClickStreamName');
-	//const showStationListClass = 'octanetopus--player--show-station-list';
-	//playerElm.classList.remove(showStationListClass);
 	const streamName = e.target.textContent;
 	const index = audioStreams.findIndex(s => s.name === streamName);
 	if (index === -1) {
@@ -478,10 +476,52 @@ const populateStreamList = () => {
 	});
 };
 
+const testAllStations = () => {
+	log('testAllStations');
+	audioStreams.forEach(s => {
+		(async () => {
+			const a = document.createElement('audio');
+			a.pause();
+			a.setAttribute('volume', '0');
+			a.setAttribute('preload', 'none');
+			a.setAttribute('src', s.src);
+			try {
+				await a.play();
+				a.pause();
+				stationIsOk(s.name);
+			} catch (err) {
+				stationIsError(s.name);
+			}
+		})();
+	});
+};
+
 const showStreamList = () => {
 	log('showStreamList');
 	const showStationListClass = 'octanetopus--player--show-station-list';
 	playerElm.classList.add(showStationListClass);
+	if (doStationsTest && (Date.now() - lastStationsTestTime) > 1000*60*60) {
+		lastStationsTestTime = Date.now();
+		setTimeout(() => {
+			testAllStations();
+		}, 3000);
+	}
+};
+
+const stationIsOk = (streamName) => {
+	const index = errorStreamNames.indexOf(streamName);
+	if (index > -1) {
+		errorStreamNames.splice(index, 1);
+	}
+	populateStreamList();
+};
+
+const stationIsError = (streamName) => {
+	if (!errorStreamNames.includes(streamName)) {
+		errorStreamNames.push(streamName);
+	}
+	populateStreamList();
+
 };
 
 const hideStreamList = () => {
