@@ -255,6 +255,7 @@ const playAudio = async () => {
 		streamNameElm.classList.remove('octanetopus--player--stream-name--fade-out');
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
+		populateStreamList();
 		saveLastStreamName(streamName);
 		streamNameElm.classList.add('octanetopus--player--stream-name--fade-out');
 	} catch (err) {
@@ -400,11 +401,11 @@ const onClickPrevStream = async () => {
 	if (audioElm.paused) {
 		await toggleAudio();
 	} else {
-		hideStreamList();
 		audioStreamIndex = getPrevStreamIndex();
 		const streamName = audioStreams[audioStreamIndex].name;
 		streamNameElm.textContent = streamName;
 		markFavoriteState(streamName);
+		populateStreamList();
 		debouncePrevStream();
 	}
 };
@@ -419,19 +420,19 @@ const onClickNextStream = async () => {
 	if (audioElm.paused) {
 		await toggleAudio();
 	} else {
-		hideStreamList();
 		audioStreamIndex = getNextStreamIndex();
 		const streamName = audioStreams[audioStreamIndex].name;
 		streamNameElm.textContent = streamName;
 		markFavoriteState(streamName);
+		populateStreamList();
 		debounceNextStream();
 	}
 };
 
 const onClickStreamName = async (e) => {
 	log('onClickStreamName');
-	const showStationListClass = 'octanetopus--player--show-station-list';
-	playerElm.classList.remove(showStationListClass);
+	//const showStationListClass = 'octanetopus--player--show-station-list';
+	//playerElm.classList.remove(showStationListClass);
 	const streamName = e.target.textContent;
 	const index = audioStreams.findIndex(s => s.name === streamName);
 	if (index === -1) {
@@ -440,6 +441,7 @@ const onClickStreamName = async (e) => {
 	streamNameElm.textContent = streamName;
 	markFavoriteState(streamName);
 	audioStreamIndex = index;
+	populateStreamList();
 	audioStreamIndex = getPrevStreamIndex();
 	await searchStation(true);
 }
@@ -507,7 +509,7 @@ const addPlayer = () => {
 
 	const imageElm = document.createElement('img');
 	imageElm.setAttribute('src', chrome.extension.getURL(`img/music-list.svg`));
-	imageElm.setAttribute('title', 'station list');
+	imageElm.setAttribute('title', 'show/hide station list');
 	imageElm.classList.add('octanetopus--player--music-list-image');
 	imageElm.addEventListener('click', onClickStreamList, false);
 	playerElm.appendChild(imageElm);
