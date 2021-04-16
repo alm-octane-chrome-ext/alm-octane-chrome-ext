@@ -262,9 +262,6 @@
     font-family: arial, sans-serif;
     font-size: 11px;
 }
-.octanetopus--player--favorite-station > .octanetopus--player--stream-name {
-    color: #fc0;
-}
 @keyframes octanetopus--player--stream-name--fade-out-animation {
     from {
         opacity: 1;
