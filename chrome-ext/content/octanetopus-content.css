@@ -196,6 +196,11 @@
 }
 .octanetopus--player--station--playing {
     color: #0f0;
+    cursor: default;
+}
+.octanetopus--player--station--error {
+    color: #666;
+    cursor: default;
 }
 .octanetopus--player--station:hover {
     opacity: 1;

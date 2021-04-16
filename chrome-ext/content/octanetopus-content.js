@@ -239,6 +239,7 @@ let isPlayTriggered = false;
 let audioStreams = [];
 let audioStreamIndex = 0;
 let favoriteStreamNames = [];
+let errorStreamNames = [];
 let playerElm;
 let audioElm;
 let streamNameElm;
@@ -247,22 +248,26 @@ let stationListElm;
 const playAudio = async () => {
 	log('playAudio');
 	isPlayTriggered = true;
+	let streamName;
 	try {
-		const streamName = audioStreams[audioStreamIndex].name;
+		streamName = audioStreams[audioStreamIndex].name;
 		playerElm.classList.add('octanetopus--player--active');
 		streamNameElm.textContent = streamName;
 		markFavoriteState(streamName);
 		streamNameElm.classList.remove('octanetopus--player--stream-name--fade-out');
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
-		populateStreamList();
 		saveLastStreamName(streamName);
 		streamNameElm.classList.add('octanetopus--player--stream-name--fade-out');
 	} catch (err) {
 		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
+		if (!errorStreamNames.includes(streamName)) {
+			errorStreamNames.push(streamName);
+		}
 		stopAudio();
 	} finally {
 		isPlayTriggered = false;
+		populateStreamList();
 	}
 };
 
@@ -455,12 +460,20 @@ const populateStreamList = () => {
 		const stationElm = document.createElement('div');
 		stationElm.textContent = streamName;
 		stationElm.classList.add('octanetopus--player--station');
+		let canSelect = true;
 		if (streamName === playingStreamName) {
 			stationElm.classList.add('octanetopus--player--station--playing');
+			canSelect = false;
 		} else if (isStreamFavorite(streamName)) {
 			stationElm.classList.add('octanetopus--player--station--favorite');
 		}
-		stationElm.addEventListener('click', onClickStreamName, false);
+		if (errorStreamNames.includes(streamName)) {
+			stationElm.classList.add('octanetopus--player--station--error');
+			canSelect = false;
+		}
+		if (canSelect) {
+			stationElm.addEventListener('click', onClickStreamName, false);
+		}
 		stationListElm.appendChild(stationElm);
 	});
 };
