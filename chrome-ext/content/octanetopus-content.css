@@ -178,7 +178,7 @@
     padding: 10px;
     white-space: nowrap;
     background-color: #222;
-    color: #aaa;
+    color: #ccc;
     font-family: arial, sans-serif;
     font-size: 11px;
     cursor: pointer;
@@ -187,11 +187,18 @@
 .octanetopus--player--active.octanetopus--player--show-station-list > .octanetopus--player--station-list {
     display: grid;
 }
+.octanetopus--player--station {
+    opacity: 0.9;
+    transition: all 0.1s linear;
+}
 .octanetopus--player--station--favorite {
     color: #fc0;
 }
 .octanetopus--player--station--playing {
     color: #0f0;
+}
+.octanetopus--player--station:hover {
+    opacity: 1;
 }
 .octanetopus--player--star-empty-image,
 .octanetopus--player--star-full-image,
