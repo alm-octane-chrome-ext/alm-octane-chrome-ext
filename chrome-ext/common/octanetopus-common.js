@@ -1,4 +1,5 @@
 const localStorageConfigKey = 'octanetopus-config';
+const localStorageFavoriteStreamsKey = 'octanetopus-favorite-streams';
 const currentConfigVer = 3;
 const defaultConfigObj = {
 	configVersion: 3,

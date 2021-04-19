@@ -330,24 +330,12 @@ const saveLastStreamName = (streamName) => {
 
 const saveFavoriteStreams = () => {
 	log('saveFavoriteStreams');
-	localStorage.setItem('octanetopusFavoriteStreamNames', JSON.stringify(favoriteStreamNames));
-}
-
-const loadFavoriteStreams = () => {
-	log('loadFavoriteStreams');
-	favoriteStreamNames = [];
-	const loadedFavoriteStreamNamesStr = localStorage.getItem('octanetopusFavoriteStreamNames') || '[]';
-	const loadedFavoriteStreamNames = JSON.parse(loadedFavoriteStreamNamesStr);
-	loadedFavoriteStreamNames.forEach(loadedFavoriteStreamName => {
-		if (audioStreams.find(audioStream => audioStream.name === loadedFavoriteStreamName)) {
-			favoriteStreamNames.push(loadedFavoriteStreamName);
-		}
+	chrome.runtime.sendMessage(
+	{
+		type: 'octanetopus-content-to-background--save-favorite-streams',
+		favoriteStreamNamesStr: JSON.stringify(favoriteStreamNames),
 	});
-	if (favoriteStreamNames.length > 0) {
-		favoriteStreamNames.sort();
-		saveFavoriteStreams();
-	}
-};
+}
 
 const isStreamFavorite = (streamName) => {
 	log('isStreamFavorite');
@@ -547,7 +535,7 @@ const onClickStreamList = async () => {
 const addPlayer = () => {
 	log('addPlayer');
 	const parentElm = document.querySelector(parentElementQuerySelector);
-	if (!parentElm || (config && config.audioStreaming && !config.audioStreaming.enabled)) {
+	if (!parentElm) {
 		return;
 	}
 
@@ -647,19 +635,38 @@ const fetchAudioStreams = () => {
 		// 	return 0;
 		// });
 		shuffleArray(audioStreams);
-		loadFavoriteStreams();
-		const loadedStreamName = loadLastStreamName();
-		const index = audioStreams.findIndex(audioStream => audioStream.name === loadedStreamName);
-		if (index > -1) {
-			audioStreamIndex = index;
-			markFavoriteState(audioStreams[audioStreamIndex].name);
-		}
-		populateStreamList();
+
+		chrome.runtime.sendMessage(
+		{
+			type: 'octanetopus-content-to-background--load-favorite-streams',
+		},
+		response => {
+			const loadedFavoriteStreamNames = JSON.parse(response);
+			loadedFavoriteStreamNames.forEach(loadedFavoriteStreamName => {
+				if (audioStreams.find(audioStream => audioStream.name === loadedFavoriteStreamName)) {
+					favoriteStreamNames.push(loadedFavoriteStreamName);
+				}
+			});
+			if (favoriteStreamNames.length > 0) {
+				favoriteStreamNames.sort();
+				saveFavoriteStreams();
+			}
+			const loadedStreamName = loadLastStreamName();
+			const index = audioStreams.findIndex(audioStream => audioStream.name === loadedStreamName);
+			if (index > -1) {
+				audioStreamIndex = index;
+				markFavoriteState(audioStreams[audioStreamIndex].name);
+			}
+			populateStreamList();
+		});
 	});
 };
 
 const handlePlayer = () => {
 	log('handlePlayer');
+	if (config && config.audioStreaming && !config.audioStreaming.enabled) {
+		return;
+	}
 	addPlayer();
 	fetchAudioStreams();
 };

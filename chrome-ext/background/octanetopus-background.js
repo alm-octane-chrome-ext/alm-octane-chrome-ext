@@ -87,6 +87,14 @@ const addMessageListener = () => {
 				responseFunc(JSON.stringify(result));
 			});
 			return true;
+		} else if (request.type === 'octanetopus-content-to-background--load-favorite-streams') {
+			log(request.type);
+			const loadedFavoriteStreamNamesStr = localStorage.getItem(localStorageFavoriteStreamsKey) || '[]';
+			log('send favorite audio streams response to content script');
+			responseFunc(loadedFavoriteStreamNamesStr);
+		} else if (request.type === 'octanetopus-content-to-background--save-favorite-streams') {
+			log(request.type);
+			localStorage.setItem(localStorageFavoriteStreamsKey, request.favoriteStreamNamesStr);
 		}
 	});
 };
