@@ -187,7 +187,7 @@
     display: grid;
 }
 .octanetopus--player--stream {
-    opacity: 0.9;
+    opacity: 0.8;
     transition: all 0.1s linear;
     cursor: pointer;
 }
