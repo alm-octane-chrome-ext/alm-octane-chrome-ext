@@ -164,7 +164,7 @@
 .octanetopus--player--led:hover {
     opacity: 0.8;
 }
-.octanetopus--player--station-list {
+.octanetopus--player--stream-list {
     display: none;
     position: absolute;
     left: 50%;
@@ -184,29 +184,29 @@
     cursor: pointer;
     z-index: 1100;
 }
-.octanetopus--player--active.octanetopus--player--show-station-list > .octanetopus--player--station-list {
+.octanetopus--player--active.octanetopus--player--show-stream-list > .octanetopus--player--stream-list {
     display: grid;
 }
-.octanetopus--player--station {
+.octanetopus--player--stream {
     opacity: 0.9;
     transition: all 0.1s linear;
 }
-.octanetopus--player--station--favorite {
+.octanetopus--player--stream--favorite {
     color: #fc0;
 }
-.octanetopus--player--station--playing {
+.octanetopus--player--stream--playing {
     color: #0f0;
     cursor: default;
 }
-.octanetopus--player--station--error {
+.octanetopus--player--stream--error {
     color: #666;
     cursor: default;
 }
-.octanetopus--player--station--error {
+.octanetopus--player--stream--error {
     color: #666;
     cursor: default;
 }
-.octanetopus--player--station:hover {
+.octanetopus--player--stream:hover {
     opacity: 1;
 }
 .octanetopus--player--star-empty-image,
@@ -231,13 +231,13 @@
 .octanetopus--player--star-empty-image {
     display: block;
 }
-.octanetopus--player--active.octanetopus--player--favorite-station > .octanetopus--player--star-empty-image {
+.octanetopus--player--active.octanetopus--player--favorite-stream > .octanetopus--player--star-empty-image {
     display: none;
 }
 .octanetopus--player--star-full-image {
     display: none;
 }
-.octanetopus--player--active.octanetopus--player--favorite-station > .octanetopus--player--star-full-image {
+.octanetopus--player--active.octanetopus--player--favorite-stream > .octanetopus--player--star-full-image {
     display: block;
 }
 .octanetopus--player--navigate--button {

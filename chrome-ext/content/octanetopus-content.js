@@ -234,7 +234,7 @@ const getNews = () => {
 
 // Audio ---------------------------------------------------------------------------------------------------------------
 
-const CHANGE_STATION_DELAY = 3000;
+const CHANGE_STREAM_DELAY = 3000;
 let isPlayTriggered = false;
 let audioStreams = [];
 let audioStreamIndex = 0;
@@ -243,9 +243,11 @@ let errorStreamNames = [];
 let playerElm;
 let audioElm;
 let streamNameElm;
-let stationListElm;
-const doStationsTest = false;
-let lastStationsTestTime = 0;
+let streamListElm;
+const doStreamsTest = false;
+let lastStreamsTestTime = 0;
+const showStreamListClass = 'octanetopus--player--show-stream-list';
+const favoriteStreamClass = 'octanetopus--player--favorite-stream';
 
 const playAudio = async () => {
 	log('playAudio');
@@ -259,12 +261,12 @@ const playAudio = async () => {
 		streamNameElm.classList.remove('octanetopus--player--stream-name--fade-out');
 		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
 		await audioElm.play();
-		stationIsOk(streamName);
+		streamIsOk(streamName);
 		saveLastStreamName(streamName);
 		streamNameElm.classList.add('octanetopus--player--stream-name--fade-out');
 	} catch (err) {
 		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
-		stationIsError(streamName);
+		streamIsError(streamName);
 		stopAudio();
 	} finally {
 		isPlayTriggered = false;
@@ -281,8 +283,8 @@ const stopAudio = () => {
 const getPrevStreamIndex = () => (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
 const getNextStreamIndex = () => (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
 
-const searchStation = async (isUp) => {
-	log('searchStation');
+const searchStream = async (isUp) => {
+	log('searchStream');
 	if (isPlayTriggered) {
 		return;
 	}
@@ -305,7 +307,7 @@ const toggleAudio = async () => {
 	if (audioElm.paused) {
 		await playAudio();
 		if (audioElm.paused) {
-			await searchStation(true);
+			await searchStream(true);
 		}
 	} else {
 		stopAudio();
@@ -343,11 +345,10 @@ const isStreamFavorite = (streamName) => {
 }
 
 const markFavoriteState = (streamName) => {
-	const favoriteStationClass = 'octanetopus--player--favorite-station';
 	if (isStreamFavorite(streamName)) {
-		playerElm.classList.add(favoriteStationClass);
+		playerElm.classList.add(favoriteStreamClass);
 	} else {
-		playerElm.classList.remove(favoriteStationClass);
+		playerElm.classList.remove(favoriteStreamClass);
 	}
 };
 
@@ -373,21 +374,20 @@ const onClickToggleFavoriteStream = async() => {
 	if (audioElm.paused) {
 		return;
 	}
-	const favoriteStationClass = 'octanetopus--player--favorite-station';
 	const streamName = audioStreams[audioStreamIndex].name;
 	if (isStreamFavorite(streamName)) {
-		playerElm.classList.remove(favoriteStationClass);
+		playerElm.classList.remove(favoriteStreamClass);
 		removeFromFavoriteStreams(streamName);
 	} else {
-		playerElm.classList.add(favoriteStationClass);
+		playerElm.classList.add(favoriteStreamClass);
 		addToFavoriteStreams(streamName);
 	}
 };
 
 const debouncePrevStream = debounce(async () => {
 	audioStreamIndex = getNextStreamIndex();
-	await searchStation(false);
-}, CHANGE_STATION_DELAY);
+	await searchStream(false);
+}, CHANGE_STREAM_DELAY);
 
 const onClickPrevStream = async () => {
 	log('onClickPrevStream');
@@ -405,8 +405,8 @@ const onClickPrevStream = async () => {
 
 const debounceNextStream = debounce(async () => {
 	audioStreamIndex = getPrevStreamIndex();
-	await searchStation(true);
-}, CHANGE_STATION_DELAY);
+	await searchStream(true);
+}, CHANGE_STREAM_DELAY);
 
 const onClickNextStream = async () => {
 	log('onClickNextStream');
@@ -434,38 +434,38 @@ const onClickStreamName = async (e) => {
 	audioStreamIndex = index;
 	populateStreamList();
 	audioStreamIndex = getPrevStreamIndex();
-	await searchStation(true);
+	await searchStream(true);
 }
 
 const populateStreamList = () => {
 	log('populateStreamList');
 	let sortedAudioStreamNames = audioStreams.map(s => s.name).sort();
 	const playingStreamName = audioStreams[audioStreamIndex].name;
-	stationListElm.innerHTML = '';
+	streamListElm.innerHTML = '';
 	sortedAudioStreamNames.forEach(streamName => {
-		const stationElm = document.createElement('div');
-		stationElm.textContent = streamName;
-		stationElm.classList.add('octanetopus--player--station');
+		const streamElm = document.createElement('div');
+		streamElm.textContent = streamName;
+		streamElm.classList.add('octanetopus--player--stream');
 		let canSelect = true;
 		if (streamName === playingStreamName) {
-			stationElm.classList.add('octanetopus--player--station--playing');
+			streamElm.classList.add('octanetopus--player--stream--playing');
 			canSelect = false;
 		} else if (isStreamFavorite(streamName)) {
-			stationElm.classList.add('octanetopus--player--station--favorite');
+			streamElm.classList.add('octanetopus--player--stream--favorite');
 		}
 		if (errorStreamNames.includes(streamName)) {
-			stationElm.classList.add('octanetopus--player--station--error');
+			streamElm.classList.add('octanetopus--player--stream--error');
 			canSelect = false;
 		}
 		if (canSelect) {
-			stationElm.addEventListener('click', onClickStreamName, false);
+			streamElm.addEventListener('click', onClickStreamName, false);
 		}
-		stationListElm.appendChild(stationElm);
+		streamListElm.appendChild(streamElm);
 	});
 };
 
-const testAllStations = () => {
-	log('testAllStations');
+const testAllStreams = () => {
+	log('testAllStreams');
 	audioStreams.forEach(s => {
 		(async () => {
 			const a = document.createElement('audio');
@@ -476,9 +476,9 @@ const testAllStations = () => {
 			try {
 				await a.play();
 				a.pause();
-				stationIsOk(s.name);
+				streamIsOk(s.name);
 			} catch (err) {
-				stationIsError(s.name);
+				streamIsError(s.name);
 			}
 		})();
 	});
@@ -486,17 +486,17 @@ const testAllStations = () => {
 
 const showStreamList = () => {
 	log('showStreamList');
-	const showStationListClass = 'octanetopus--player--show-station-list';
-	playerElm.classList.add(showStationListClass);
-	if (doStationsTest && (Date.now() - lastStationsTestTime) > 1000*60*60) {
-		lastStationsTestTime = Date.now();
+	playerElm.classList.add(showStreamListClass);
+	if (doStreamsTest && (Date.now() - lastStreamsTestTime) > 1000*60*60) {
+		lastStreamsTestTime = Date.now();
 		setTimeout(() => {
-			testAllStations();
+			testAllStreams();
 		}, 3000);
 	}
 };
 
-const stationIsOk = (streamName) => {
+const streamIsOk = (streamName) => {
+	log('streamIsOk');
 	const index = errorStreamNames.indexOf(streamName);
 	if (index > -1) {
 		errorStreamNames.splice(index, 1);
@@ -504,7 +504,8 @@ const stationIsOk = (streamName) => {
 	populateStreamList();
 };
 
-const stationIsError = (streamName) => {
+const streamIsError = (streamName) => {
+	log('streamIsError');
 	if (!errorStreamNames.includes(streamName)) {
 		errorStreamNames.push(streamName);
 	}
@@ -514,8 +515,7 @@ const stationIsError = (streamName) => {
 
 const hideStreamList = () => {
 	log('hideStreamList');
-	const showStationListClass = 'octanetopus--player--show-station-list';
-	playerElm.classList.remove(showStationListClass);
+	playerElm.classList.remove(showStreamListClass);
 };
 
 const onClickStreamList = async () => {
@@ -524,8 +524,7 @@ const onClickStreamList = async () => {
 		return;
 	}
 	populateStreamList();
-	const showStationListClass = 'octanetopus--player--show-station-list';
-	if (playerElm.classList.contains(showStationListClass)) {
+	if (playerElm.classList.contains(showStreamListClass)) {
 		hideStreamList();
 	} else {
 		showStreamList();
@@ -550,13 +549,13 @@ const addPlayer = () => {
 
 	const imageElm = document.createElement('img');
 	imageElm.setAttribute('src', chrome.extension.getURL(`img/music-list.svg`));
-	imageElm.setAttribute('title', 'show/hide station list');
+	imageElm.setAttribute('title', 'show/hide stream list');
 	imageElm.classList.add('octanetopus--player--music-list-image');
 	imageElm.addEventListener('click', onClickStreamList, false);
 	playerElm.appendChild(imageElm);
-	stationListElm = document.createElement('div');
-	stationListElm.classList.add('octanetopus--player--station-list');
-	playerElm.appendChild(stationListElm);
+	streamListElm = document.createElement('div');
+	streamListElm.classList.add('octanetopus--player--stream-list');
+	playerElm.appendChild(streamListElm);
 
 	const starEmptyImageElm = document.createElement('img');
 	starEmptyImageElm.setAttribute('src', chrome.extension.getURL(`img/star-empty.svg`));
@@ -574,14 +573,14 @@ const addPlayer = () => {
 
 	const leftArrow = document.createElement('img');
 	leftArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-left.svg`));
-	leftArrow.setAttribute('title', 'change station');
+	leftArrow.setAttribute('title', 'change stream');
 	leftArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--prev');
 	leftArrow.addEventListener('click', onClickPrevStream, false);
 	playerElm.appendChild(leftArrow);
 
 	const rightArrow = document.createElement('img');
 	rightArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-right.svg`));
-	rightArrow.setAttribute('title', 'change station');
+	rightArrow.setAttribute('title', 'change stream');
 	rightArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--next');
 	rightArrow.addEventListener('click', onClickNextStream, false);
 	playerElm.appendChild(rightArrow);
