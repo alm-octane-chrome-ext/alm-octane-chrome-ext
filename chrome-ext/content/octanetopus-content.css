@@ -97,7 +97,7 @@
 }
 .octanetopus--news--item {
     display: block;
-    max-width: 600px;
+    max-width: 500px;
     font-family: arial, sans-serif;
     font-size: 13px;
     color: #ccc;
@@ -170,9 +170,9 @@
     left: 50%;
     transform: translateX(-50%);
     top: 24px;
-    width: 1000px;
+    width: 1200px;
     grid-auto-flow: column;
-    grid-template-rows: repeat(33, 1fr);
+    grid-template-rows: repeat(27, 1fr);
     border-radius: 13px;
     border: 1px solid #666;
     padding: 10px;
