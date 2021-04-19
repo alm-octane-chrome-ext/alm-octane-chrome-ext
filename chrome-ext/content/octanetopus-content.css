@@ -181,7 +181,6 @@
     color: #ccc;
     font-family: arial, sans-serif;
     font-size: 11px;
-    cursor: pointer;
     z-index: 1100;
 }
 .octanetopus--player--active.octanetopus--player--show-stream-list > .octanetopus--player--stream-list {
@@ -190,6 +189,7 @@
 .octanetopus--player--stream {
     opacity: 0.9;
     transition: all 0.1s linear;
+    cursor: pointer;
 }
 .octanetopus--player--stream--favorite {
     color: #fc0;
