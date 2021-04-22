@@ -237,7 +237,8 @@ const getNews = () => {
 const CHANGE_STREAM_DELAY = 3000;
 let isPlayTriggered = false;
 let audioStreams = [];
-let audioStreamIndex = 0;
+let targetStreamIndex = 0;
+let playingStreamIndex = 0;
 let favoriteStreamNames = [];
 let errorStreamNames = [];
 let playerElm;
@@ -245,6 +246,7 @@ let audioElm;
 let streamNameElm;
 let streamListElm;
 const doStreamsTest = false;
+const disableErrorStreams = false;
 let lastStreamsTestTime = 0;
 const showStreamListClass = 'octanetopus--player--show-stream-list';
 const favoriteStreamClass = 'octanetopus--player--favorite-stream';
@@ -252,24 +254,29 @@ const favoriteStreamClass = 'octanetopus--player--favorite-stream';
 const playAudio = async () => {
 	log('playAudio');
 	isPlayTriggered = true;
+	playerElm.classList.add('octanetopus--player--triggered');
+	const index = targetStreamIndex;
 	let streamName;
 	try {
-		streamName = audioStreams[audioStreamIndex].name;
+		streamName = audioStreams[index].name;
 		playerElm.classList.add('octanetopus--player--active');
 		streamNameElm.textContent = streamName;
 		markFavoriteState(streamName);
 		streamNameElm.classList.remove('octanetopus--player--stream-name--fade-out');
-		audioElm.setAttribute('src', audioStreams[audioStreamIndex].src);
+		audioElm.setAttribute('src', audioStreams[index].src);
 		await audioElm.play();
+		playingStreamIndex = index;
 		streamIsOk(streamName);
 		saveLastStreamName(streamName);
 		streamNameElm.classList.add('octanetopus--player--stream-name--fade-out');
 	} catch (err) {
-		log(`error playing audio from ${audioStreams[audioStreamIndex].name}`);
+		log(`error playing audio from ${audioStreams[index].name}`);
 		streamIsError(streamName);
 		stopAudio();
 	} finally {
 		isPlayTriggered = false;
+		playerElm.classList.remove('octanetopus--player--triggered');
+		populateStreamList();
 	}
 };
 
@@ -280,23 +287,24 @@ const stopAudio = () => {
 	streamNameElm.textContent = '';
 };
 
-const getPrevStreamIndex = () => (audioStreamIndex - 1 + audioStreams.length) % audioStreams.length;
-const getNextStreamIndex = () => (audioStreamIndex + 1 + audioStreams.length) % audioStreams.length;
+const getPrevStreamIndex = (index) => (index - 1 + audioStreams.length) % audioStreams.length;
+const getNextStreamIndex = (index) => (index + 1 + audioStreams.length) % audioStreams.length;
 
 const searchStream = async (isUp) => {
 	log('searchStream');
 	if (isPlayTriggered) {
 		return;
 	}
-	const startIndex = audioStreamIndex;
+	const startIndex = targetStreamIndex;
 	do {
 		if (isUp) {
-			audioStreamIndex = getNextStreamIndex();
+			targetStreamIndex = getNextStreamIndex(targetStreamIndex);
 		} else {
-			audioStreamIndex = getPrevStreamIndex();
+			targetStreamIndex = getPrevStreamIndex(targetStreamIndex);
 		}
 		await playAudio();
-	} while(audioElm.paused && audioStreamIndex !== startIndex);
+	} while (audioElm.paused && targetStreamIndex !== startIndex);
+	populateStreamList();
 };
 
 const toggleAudio = async () => {
@@ -374,7 +382,7 @@ const onClickToggleFavoriteStream = async() => {
 	if (audioElm.paused) {
 		return;
 	}
-	const streamName = audioStreams[audioStreamIndex].name;
+	const streamName = audioStreams[playingStreamIndex].name;
 	if (isStreamFavorite(streamName)) {
 		playerElm.classList.remove(favoriteStreamClass);
 		removeFromFavoriteStreams(streamName);
@@ -385,45 +393,44 @@ const onClickToggleFavoriteStream = async() => {
 };
 
 const debouncePrevStream = debounce(async () => {
-	audioStreamIndex = getNextStreamIndex();
-	await searchStream(false);
+	await playAudio();
+	if (audioElm.paused) {
+		await searchStream(false);
+	}
 }, CHANGE_STREAM_DELAY);
 
 const onClickPrevStream = async () => {
 	log('onClickPrevStream');
-	if (audioElm.paused) {
-		await toggleAudio();
-	} else {
-		audioStreamIndex = getPrevStreamIndex();
-		const streamName = audioStreams[audioStreamIndex].name;
-		streamNameElm.textContent = streamName;
-		markFavoriteState(streamName);
-		populateStreamList();
-		debouncePrevStream();
-	}
+	targetStreamIndex = getPrevStreamIndex(targetStreamIndex);
+	const streamName = audioStreams[targetStreamIndex].name;
+	streamNameElm.textContent = streamName;
+	markFavoriteState(streamName);
+	populateStreamList();
+	debouncePrevStream();
 };
 
 const debounceNextStream = debounce(async () => {
-	audioStreamIndex = getPrevStreamIndex();
-	await searchStream(true);
+	await playAudio();
+	if (audioElm.paused) {
+		await searchStream(true);
+	}
 }, CHANGE_STREAM_DELAY);
 
 const onClickNextStream = async () => {
 	log('onClickNextStream');
-	if (audioElm.paused) {
-		await toggleAudio();
-	} else {
-		audioStreamIndex = getNextStreamIndex();
-		const streamName = audioStreams[audioStreamIndex].name;
-		streamNameElm.textContent = streamName;
-		markFavoriteState(streamName);
-		populateStreamList();
-		debounceNextStream();
-	}
+	targetStreamIndex = getNextStreamIndex(targetStreamIndex);
+	const streamName = audioStreams[targetStreamIndex].name;
+	streamNameElm.textContent = streamName;
+	markFavoriteState(streamName);
+	populateStreamList();
+	debounceNextStream();
 };
 
 const onClickStreamName = async (e) => {
 	log('onClickStreamName');
+	if (isPlayTriggered) {
+		return;
+	}
 	const streamName = e.target.textContent;
 	const index = audioStreams.findIndex(s => s.name === streamName);
 	if (index === -1) {
@@ -431,16 +438,17 @@ const onClickStreamName = async (e) => {
 	}
 	streamNameElm.textContent = streamName;
 	markFavoriteState(streamName);
-	audioStreamIndex = index;
-	populateStreamList();
-	audioStreamIndex = getPrevStreamIndex();
-	await searchStream(true);
+	targetStreamIndex = index;
+	await playAudio();
+	if (audioElm.paused) {
+		await searchStream(true);
+	}
 }
 
 const populateStreamList = () => {
 	log('populateStreamList');
 	let sortedAudioStreamNames = audioStreams.map(s => s.name).sort();
-	const playingStreamName = audioStreams[audioStreamIndex].name;
+	const playingStreamName = audioStreams[playingStreamIndex].name;
 	streamListElm.innerHTML = '';
 	sortedAudioStreamNames.forEach(streamName => {
 		const streamElm = document.createElement('div');
@@ -453,7 +461,7 @@ const populateStreamList = () => {
 		} else if (isStreamFavorite(streamName)) {
 			streamElm.classList.add('octanetopus--player--stream--favorite');
 		}
-		if (errorStreamNames.includes(streamName)) {
+		if (disableErrorStreams && errorStreamNames.includes(streamName)) {
 			streamElm.classList.add('octanetopus--player--stream--error');
 			canSelect = false;
 		}
@@ -510,7 +518,6 @@ const streamIsError = (streamName) => {
 		errorStreamNames.push(streamName);
 	}
 	populateStreamList();
-
 };
 
 const hideStreamList = () => {
@@ -626,7 +633,22 @@ const fetchAudioStreams = () => {
 		// 	audioStreams = [...audioStreams, ...jsonObj['_audioStreams']];
 		// }
 		// audioStreams = [
-		// 	{"name": "CNN", "src": "https://tunein.streamguys1.com/cnn-new"},
+		// 	{"name": "Scanner CA Highway Patrol", "src":  "https://broadcastify.cdnstream1.com/10239"},
+		// 	{"name": "Scanner Chicago Police z01", "src": "https://broadcastify.cdnstream1.com/27730"},
+		// 	{"name": "Scanner Chicago Police z02", "src": "https://broadcastify.cdnstream1.com/17684"},
+		// 	{"name": "Scanner Chicago Police z04", "src": "https://broadcastify.cdnstream1.com/26296"},
+		// 	{"name": "Scanner Chicago Police z08", "src": "https://broadcastify.cdnstream1.com/27158"},
+		// 	{"name": "Scanner Chicago Police z10", "src": "https://broadcastify.cdnstream1.com/33922"},
+		// 	{"name": "Scanner Chicago Police z11", "src": "https://broadcastify.cdnstream1.com/32936"},
+		// 	{"name": "Scanner Chicago Police z12", "src": "https://broadcastify.cdnstream1.com/653"},
+		// 	{"name": "Scanner Chicago Police z13", "src": "https://broadcastify.cdnstream1.com/33923"},
+		// 	{"name": "Scanner Cleveland Police", "src": "https://broadcastify.cdnstream1.com/11446"},
+		// 	{"name": "Scanner Detroit Police", "src": "https://broadcastify.cdnstream1.com/13671"},
+		// 	{"name": "Scanner Detroit Fire", "src": "https://broadcastify.cdnstream1.com/18629"},
+		// 	{"name": "Scanner FDNY", "src": "https://broadcastify.cdnstream1.com/9358"},
+		// 	{"name": "Scanner FDNY Manhattan", "src": "https://broadcastify.cdnstream1.com/8535"},
+		// 	{"name": "Scanner LAPD South", "src": "https://broadcastify.cdnstream1.com/20296"},
+		// 	{"name": "Scanner SFPD", "src": "https://broadcastify.cdnstream1.com/20601"},
 		// ];
 		// audioStreams.sort((a,b) => {
 		// 	if (a.name < b.name) return -1;
@@ -653,8 +675,8 @@ const fetchAudioStreams = () => {
 			const loadedStreamName = loadLastStreamName();
 			const index = audioStreams.findIndex(audioStream => audioStream.name === loadedStreamName);
 			if (index > -1) {
-				audioStreamIndex = index;
-				markFavoriteState(audioStreams[audioStreamIndex].name);
+				targetStreamIndex = index;
+				markFavoriteState(audioStreams[index].name);
 			}
 			populateStreamList();
 		});

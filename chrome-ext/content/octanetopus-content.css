@@ -191,6 +191,9 @@
     transition: all 0.1s linear;
     cursor: pointer;
 }
+.octanetopus--player--triggered > .octanetopus--player--stream-list > .octanetopus--player--stream {
+    cursor: wait;
+}
 .octanetopus--player--stream--favorite {
     color: #fc0;
 }
