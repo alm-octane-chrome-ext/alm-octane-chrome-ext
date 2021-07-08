@@ -118,7 +118,7 @@ const addOnTabCompleteListener = () => {
 const fetchTime = async (timeZone) => {
 	log('fetchTime');
 	try {
-		const r = await fetch(`https://worldtimeapi.org/api/timezone/${timeZone}`);
+		const r = await fetch(`http://worldtimeapi.org/api/timezone/${timeZone}`);
 		if (!r.ok) {
 			log(`Error on fetchTime - ${r.status} ${r.statusText}`);
 			return null;
