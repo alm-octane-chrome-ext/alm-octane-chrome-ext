@@ -217,7 +217,7 @@ const getNews = () => {
 				let count = 0;
 				items.forEach(i => {
 					count++;
-					if (count <= 15) {
+					if (count <= 25) {
 						const timeStr = i.pubDate.substr(17, 5);
 						tooltip += `${count > 1 ? '\n' : ''}${timeStr} - ${i.title}`;
 					}
