@@ -141,7 +141,7 @@ const fetchNews = async () => {
 		items.forEach(item => {
 			log(`news item: ${item.querySelectorAll('title')[0].textContent}`);
 			result.push({
-				title: item.querySelectorAll('title')[0].textContent,
+				title: item.querySelectorAll('title')[0].textContent.replace('\n', ''),
 				link: item.querySelectorAll('link')[0].textContent,
 				pubDate: item.querySelectorAll('pubDate')[0].textContent
 			});
