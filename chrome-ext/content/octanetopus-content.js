@@ -119,7 +119,7 @@ const handleClocks = () => {
 		const flagElm = document.createElement('img');
 		flagElm.setAttribute('id', `octanetopus--clock--${i}--flag`);
 		flagElm.classList.add('octanetopus--clock--flag');
-		flagElm.setAttribute('src', chrome.extension.getURL(`img/flags/${c.countryCode}.svg`));
+		flagElm.setAttribute('src', chrome.runtime.getURL(`img/flags/${c.countryCode}.svg`));
 		clockElm.appendChild(flagElm);
 
 		const textElm = document.createElement('div');
@@ -196,7 +196,20 @@ const getNews = () => {
 		type: 'octanetopus-content-to-background--news'
 	},
 	response => {
-		const items = JSON.parse(response || '[]');
+		if (!response) {
+			return;
+		}
+		const items = [];
+		const xml = (new DOMParser()).parseFromString(response, 'text/xml');
+		const xmlItems = xml.querySelectorAll('item');
+		xmlItems.forEach(item => {
+			log(`news item: ${item.querySelectorAll('title')[0].textContent}`);
+			items.push({
+				title: item.querySelectorAll('title')[0].textContent.replace('\n', ''),
+				link: item.querySelectorAll('link')[0].textContent,
+				pubDate: item.querySelectorAll('pubDate')[0].textContent
+			});
+		});
 		if (items.length > 0) {
 			const item = items[0];
 			const timeStr = item.pubDate.substr(17, 5);
@@ -328,14 +341,20 @@ const onClickLed = async () => {
 	await toggleAudio();
 };
 
-const loadLastStreamName = () => {
+const loadLastStreamName = cb => {
 	log('loadLastStreamName');
-	return localStorage.getItem('octanetopusLastStreamName') || '';
+	loadValues({
+		octanetopusLastStreamName: ''
+	}, vals => {
+		cb(vals.octanetopusLastStreamName);
+	});
 };
 
 const saveLastStreamName = (streamName) => {
 	log('saveLastStreamName');
-	localStorage.setItem('octanetopusLastStreamName', streamName);
+	saveValues({
+		octanetopusLastStreamName: streamName
+	});
 };
 
 const saveFavoriteStreams = () => {
@@ -555,7 +574,7 @@ const addPlayer = () => {
 	playerElm.appendChild(ledElm);
 
 	const imageElm = document.createElement('img');
-	imageElm.setAttribute('src', chrome.extension.getURL(`img/music-list.svg`));
+	imageElm.setAttribute('src', chrome.runtime.getURL(`img/music-list.svg`));
 	imageElm.setAttribute('title', 'show/hide stream list');
 	imageElm.classList.add('octanetopus--player--music-list-image');
 	imageElm.addEventListener('click', onClickStreamList, false);
@@ -565,28 +584,28 @@ const addPlayer = () => {
 	playerElm.appendChild(streamListElm);
 
 	const starEmptyImageElm = document.createElement('img');
-	starEmptyImageElm.setAttribute('src', chrome.extension.getURL(`img/star-empty.svg`));
+	starEmptyImageElm.setAttribute('src', chrome.runtime.getURL(`img/star-empty.svg`));
 	starEmptyImageElm.setAttribute('title', 'add to favorites');
 	starEmptyImageElm.classList.add('octanetopus--player--star-empty-image');
 	starEmptyImageElm.addEventListener('click', onClickToggleFavoriteStream, false);
 	playerElm.appendChild(starEmptyImageElm);
 
 	const starFullImageElm = document.createElement('img');
-	starFullImageElm.setAttribute('src', chrome.extension.getURL(`img/star-full.svg`));
+	starFullImageElm.setAttribute('src', chrome.runtime.getURL(`img/star-full.svg`));
 	starFullImageElm.setAttribute('title', 'remove from favorites');
 	starFullImageElm.classList.add('octanetopus--player--star-full-image');
 	starFullImageElm.addEventListener('click', onClickToggleFavoriteStream, false);
 	playerElm.appendChild(starFullImageElm);
 
 	const leftArrow = document.createElement('img');
-	leftArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-left.svg`));
+	leftArrow.setAttribute('src', chrome.runtime.getURL(`img/arrow-left.svg`));
 	leftArrow.setAttribute('title', 'change stream');
 	leftArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--prev');
 	leftArrow.addEventListener('click', onClickPrevStream, false);
 	playerElm.appendChild(leftArrow);
 
 	const rightArrow = document.createElement('img');
-	rightArrow.setAttribute('src', chrome.extension.getURL(`img/arrow-right.svg`));
+	rightArrow.setAttribute('src', chrome.runtime.getURL(`img/arrow-right.svg`));
 	rightArrow.setAttribute('title', 'change stream');
 	rightArrow.classList.add('octanetopus--player--navigate--button', 'octanetopus--player--navigate--next');
 	rightArrow.addEventListener('click', onClickNextStream, false);
@@ -672,13 +691,14 @@ const fetchAudioStreams = () => {
 				favoriteStreamNames.sort();
 				saveFavoriteStreams();
 			}
-			const loadedStreamName = loadLastStreamName();
-			const index = audioStreams.findIndex(audioStream => audioStream.name === loadedStreamName);
-			if (index > -1) {
-				targetStreamIndex = index;
-				markFavoriteState(audioStreams[index].name);
-			}
-			populateStreamList();
+			loadLastStreamName(loadedStreamName => {
+				const index = audioStreams.findIndex(audioStream => audioStream.name === loadedStreamName);
+				if (index > -1) {
+					targetStreamIndex = index;
+					markFavoriteState(audioStreams[index].name);
+				}
+				populateStreamList();
+			});
 		});
 	});
 };

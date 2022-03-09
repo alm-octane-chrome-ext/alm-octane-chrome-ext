@@ -1,5 +1,8 @@
+self.importScripts('../common/common.js');
+
 const jsCheckScript = 'content/octanetopus-check.js';
 const cssContentScript = 'content/octanetopus-content.css';
+const jsCommonScript = 'common/common.js';
 const jsContentScript = 'content/octanetopus-content.js';
 let updatedTabId = 0;
 
@@ -18,7 +21,9 @@ const ensureConfigOk = (configObj) => {
 	// 	isSaveNeeded = true;
 	// }
 	if (isSaveNeeded) {
-		localStorage.setItem(localStorageConfigKey, JSON.stringify(configObj));
+		saveValues({
+			[localStorageConfigKey]: JSON.stringify(configObj)
+		});
 	}
 };
 
@@ -26,26 +31,32 @@ const ensureConfigInStorage = () => {
 	log('ensureConfigInStorage');
 	let configObj;
 	let shouldUseDefaultConfig = true;
-	const savedConfigStr = localStorage.getItem(localStorageConfigKey);
-	if (savedConfigStr) {
-		configObj = JSON.parse(savedConfigStr);
-		shouldUseDefaultConfig = configObj.configVersion !== currentConfigVer;
-	}
-	if (shouldUseDefaultConfig) {
-		localStorage.setItem(localStorageConfigKey, JSON.stringify(defaultConfigObj));
-	} else {
-		ensureConfigOk(configObj);
-	}
+	loadValues({
+		[localStorageConfigKey]: ''
+	}, vals => {
+		const savedConfigStr = vals[localStorageConfigKey];
+		if (savedConfigStr) {
+			configObj = JSON.parse(savedConfigStr);
+			shouldUseDefaultConfig = configObj.configVersion !== currentConfigVer;
+		}
+		if (shouldUseDefaultConfig) {
+			saveValues({
+				[localStorageConfigKey]: JSON.stringify(defaultConfigObj)
+			});
+		} else {
+			ensureConfigOk(configObj);
+		}
+	});
 };
 
-const injectCss = async (tabId, cssFilePath) => {
-	log(`injecting ${cssFilePath}`);
-	await chrome.tabs.insertCSS(tabId, {file: cssFilePath});
+const injectCss = async (tabId, file) => {
+	log(`injecting ${file}`);
+	await chrome.scripting.insertCSS({target: {tabId}, files: [file]}, () => {});
 };
 
-const injectJs = async (tabId, jsFilePath) => {
-	log(`injecting ${jsFilePath}`);
-	await chrome.tabs.executeScript(tabId, {file: jsFilePath});
+const injectJs = async (tabId, file) => {
+	log(`injecting ${file}`);
+	await chrome.scripting.executeScript({target: {tabId}, files: [file]}, () => {});
 };
 
 const addMessageListener = () => {
@@ -56,16 +67,21 @@ const addMessageListener = () => {
 			(async () => {
 				await injectCss(updatedTabId, cssContentScript);
 				await injectJs(updatedTabId, jsContentScript);
+				await injectJs(updatedTabId, jsCommonScript);
 			})();
 		} else if (request.type === 'octanetopus-content-to-background--init') {
 			log(request.type);
 			log('send init response to content script');
-			responseFunc(
-				{
-					type: 'octanetopus-background-to-content--config',
-					data: localStorage.getItem(localStorageConfigKey)
-				}
-			);
+			loadValues({
+				[localStorageConfigKey]: ''
+			}, vals => {
+				responseFunc(
+					{
+						type: 'octanetopus-background-to-content--config',
+						data: vals[localStorageConfigKey]
+					}
+				);
+			});
 		} else if (request.type === 'octanetopus-content-to-background--time') {
 			log(request.type);
 			fetchTime(request.timeZone).then(result => {
@@ -75,9 +91,9 @@ const addMessageListener = () => {
 			return true;
 		} else if (request.type === 'octanetopus-content-to-background--news') {
 			log(request.type);
-			fetchNews().then(result => {
+			fetchNews(result => {
 				log('send news response to content script');
-				responseFunc(JSON.stringify(result));
+				responseFunc(result);
 			});
 			return true;
 		} else if (request.type === 'octanetopus-content-to-background--audio-streams') {
@@ -89,29 +105,45 @@ const addMessageListener = () => {
 			return true;
 		} else if (request.type === 'octanetopus-content-to-background--load-favorite-streams') {
 			log(request.type);
-			const loadedFavoriteStreamNamesStr = localStorage.getItem(localStorageFavoriteStreamsKey) || '[]';
-			log('send favorite audio streams response to content script');
-			responseFunc(loadedFavoriteStreamNamesStr);
+
+			loadValues({
+				[localStorageFavoriteStreamsKey]: '[]'
+			}, vals => {
+				const loadedFavoriteStreamNamesStr = vals[localStorageFavoriteStreamsKey];
+				log('send favorite audio streams response to content script');
+				responseFunc(loadedFavoriteStreamNamesStr);
+			});
 		} else if (request.type === 'octanetopus-content-to-background--save-favorite-streams') {
 			log(request.type);
-			localStorage.setItem(localStorageFavoriteStreamsKey, request.favoriteStreamNamesStr);
+			saveValues({
+				[localStorageFavoriteStreamsKey]: request.favoriteStreamNamesStr
+			});
 		}
+		return true;
 	});
 };
 
 const addOnTabCompleteListener = () => {
 	chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-		const config = JSON.parse(localStorage.getItem(localStorageConfigKey));
-		if (changeInfo.status === 'complete' && config.octaneInstances && config.octaneInstances.length > 0) {
-			let found = false;
-			config.octaneInstances.forEach(octaneInstance => {
-				if (!found && tab.url.includes(octaneInstance.urlPart)) {
-					found = true;
-					updatedTabId = tabId;
-					injectJs(tabId, jsCheckScript).then(()=>{});
-				}
-			});
+		if (!tab || !tab.url) {
+			return true;
 		}
+		loadValues({
+			[localStorageConfigKey]: '{}'
+		}, vals => {
+			const config = JSON.parse(vals[localStorageConfigKey]);
+			if (changeInfo.status === 'complete' && config.octaneInstances && config.octaneInstances.length > 0) {
+				let found = false;
+				config.octaneInstances.forEach(octaneInstance => {
+					if (!found && tab.url.includes(octaneInstance.urlPart)) {
+						found = true;
+						updatedTabId = tabId;
+						injectJs(tabId, jsCheckScript).then(()=>{});
+					}
+				});
+			}
+		});
+		return true;
 	});
 };
 
@@ -130,26 +162,24 @@ const fetchTime = async (timeZone) => {
 	}
 };
 
-const fetchNews = async () => {
+const fetchNews = (cb) => {
 	log('fetchNews');
-	const result = [];
+	const result = '';
 	try {
-		const res = await fetch(JSON.parse(localStorage.getItem(localStorageConfigKey)).rssFeed.url);
-		const txt = await res.text();
-		const xml = (new DOMParser()).parseFromString(txt, 'text/xml');
-		const items = xml.querySelectorAll('item');
-		items.forEach(item => {
-			log(`news item: ${item.querySelectorAll('title')[0].textContent}`);
-			result.push({
-				title: item.querySelectorAll('title')[0].textContent.replace('\n', ''),
-				link: item.querySelectorAll('link')[0].textContent,
-				pubDate: item.querySelectorAll('pubDate')[0].textContent
-			});
+		loadValues({
+			[localStorageConfigKey]: '{}'
+		}, vals => {
+			(async () => {
+				const rssFeedUrl = JSON.parse(vals[localStorageConfigKey]).rssFeed.url;
+				const res = await fetch(rssFeedUrl);
+				const result = await res.text();
+				cb(result);
+			})();
 		});
 	} catch (err) {
 		log(`Error on fetchNews - ${err.message || err.toString()}`);
+		cb(result);
 	}
-	return result;
 };
 
 const fetchAudioStreams = async () => {

@@ -34,9 +34,13 @@ const checkConfig = () => {
 const onPopupLoad = () => {
 	log('onPopupLoad');
 	setDomElements();
-	initialConfigStr = JSON.stringify(JSON.parse(localStorage.getItem(localStorageConfigKey) || '{}'), null, 2);
-	configTextarea.value = initialConfigStr;
-	onConfigChange();
+	loadValues({
+		[localStorageConfigKey]: '{}'
+	}, vals => {
+		initialConfigStr = JSON.stringify(JSON.parse(vals[localStorageConfigKey]), null, 2);
+		configTextarea.value = initialConfigStr;
+		onConfigChange();
+	});
 };
 
 const onConfigChange = () => {
@@ -74,7 +78,9 @@ const onClickDefaults = () => {
 
 const onClickSave = () => {
 	log('onClickSave');
-	localStorage.setItem(localStorageConfigKey, configTextarea.value.trim());
+	saveValues({
+		[localStorageConfigKey]: configTextarea.value.trim()
+	});
 	window.close();
 };
 

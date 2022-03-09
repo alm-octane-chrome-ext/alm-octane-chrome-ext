@@ -1,3 +1,14 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	margin: 0;
+	padding: 0;
+}
+
 button[disabled] {
 	pointer-events: none;
 	border: 1px solid #ccc;
@@ -5,21 +16,22 @@ button[disabled] {
 }
 
 .octanetopus-popup-body {
-	margin: 15px;
+	margin: 0;
 	font-size: 16px;
 	color: #000;
 }
 
 .octanetopus-popup {
-	height: 370px;
-	width: 600px;
+	height: 570px;
+	width: 650px;
 	font-family: MetricWeb-Regular, arial, sans-serif;
 }
 
 .octanetopus-popup__header {
 	display: flex;
+	margin: 10px 10px 0 10px;
 	background-color: #444;
-	height: 30px;
+	height: 50px;
 	line-height: 30px;
     padding: 10px;
 }
@@ -43,8 +55,8 @@ button[disabled] {
 }
 
 .octanetopus-popup__content {
-	height: calc(100% - 100px);
-	margin-top: 10px;
+	height: 450px;
+	margin: 10px 10px 0 10px;
 }
 
 .octanetopus-popup__content__config {
@@ -67,7 +79,8 @@ button[disabled] {
 .octanetopus-popup__footer {
 	display: flex;
     justify-content: flex-end;
-    padding-top: 15px;
+    margin: 10px;
+	padding-top: 10px;
     border-top: 1px solid #ddd;
 }
 
