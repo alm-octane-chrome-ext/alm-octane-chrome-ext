@@ -636,69 +636,33 @@ const shuffleArray = (arr) => {
 	return arr;
 };
 
-const fetchAudioStreams = () => {
-	log('fetchAudioStreams');
-	audioStreams = [];
+const getAudioStreams = () => {
+	log('getAudioStreams');
+	audioStreams = [...allAudioStreams];
+	shuffleArray(audioStreams);
+
 	chrome.runtime.sendMessage(
 	{
-		type: 'octanetopus-content-to-background--audio-streams',
+		type: 'octanetopus-content-to-background--load-favorite-streams',
 	},
 	response => {
-		const jsonObj = JSON.parse(response);
-		if (jsonObj['audioStreams']) {
-			audioStreams = [...audioStreams, ...jsonObj['audioStreams']];
-		}
-		// if (jsonObj['_audioStreams'] && (window.location.hostname.startsWith('localhost') || window.location.hostname.startsWith('127.0.0.1'))) {
-		// 	audioStreams = [...audioStreams, ...jsonObj['_audioStreams']];
-		// }
-		// audioStreams = [
-		// 	{"name": "Scanner CA Highway Patrol", "src":  "https://broadcastify.cdnstream1.com/10239"},
-		// 	{"name": "Scanner Chicago Police z01", "src": "https://broadcastify.cdnstream1.com/27730"},
-		// 	{"name": "Scanner Chicago Police z02", "src": "https://broadcastify.cdnstream1.com/17684"},
-		// 	{"name": "Scanner Chicago Police z04", "src": "https://broadcastify.cdnstream1.com/26296"},
-		// 	{"name": "Scanner Chicago Police z08", "src": "https://broadcastify.cdnstream1.com/27158"},
-		// 	{"name": "Scanner Chicago Police z10", "src": "https://broadcastify.cdnstream1.com/33922"},
-		// 	{"name": "Scanner Chicago Police z11", "src": "https://broadcastify.cdnstream1.com/32936"},
-		// 	{"name": "Scanner Chicago Police z12", "src": "https://broadcastify.cdnstream1.com/653"},
-		// 	{"name": "Scanner Chicago Police z13", "src": "https://broadcastify.cdnstream1.com/33923"},
-		// 	{"name": "Scanner Cleveland Police", "src": "https://broadcastify.cdnstream1.com/11446"},
-		// 	{"name": "Scanner Detroit Police", "src": "https://broadcastify.cdnstream1.com/13671"},
-		// 	{"name": "Scanner Detroit Fire", "src": "https://broadcastify.cdnstream1.com/18629"},
-		// 	{"name": "Scanner FDNY", "src": "https://broadcastify.cdnstream1.com/9358"},
-		// 	{"name": "Scanner FDNY Manhattan", "src": "https://broadcastify.cdnstream1.com/8535"},
-		// 	{"name": "Scanner LAPD South", "src": "https://broadcastify.cdnstream1.com/20296"},
-		// 	{"name": "Scanner SFPD", "src": "https://broadcastify.cdnstream1.com/20601"},
-		// ];
-		// audioStreams.sort((a,b) => {
-		// 	if (a.name < b.name) return -1;
-		// 	if (a.name > b.name) return 1;
-		// 	return 0;
-		// });
-		shuffleArray(audioStreams);
-
-		chrome.runtime.sendMessage(
-		{
-			type: 'octanetopus-content-to-background--load-favorite-streams',
-		},
-		response => {
-			const loadedFavoriteStreamNames = JSON.parse(response);
-			loadedFavoriteStreamNames.forEach(loadedFavoriteStreamName => {
-				if (audioStreams.find(audioStream => audioStream.name === loadedFavoriteStreamName)) {
-					favoriteStreamNames.push(loadedFavoriteStreamName);
-				}
-			});
-			if (favoriteStreamNames.length > 0) {
-				favoriteStreamNames.sort();
-				saveFavoriteStreams();
+		const loadedFavoriteStreamNames = JSON.parse(response);
+		loadedFavoriteStreamNames.forEach(loadedFavoriteStreamName => {
+			if (audioStreams.find(audioStream => audioStream.name === loadedFavoriteStreamName)) {
+				favoriteStreamNames.push(loadedFavoriteStreamName);
 			}
-			loadLastStreamName(loadedStreamName => {
-				const index = audioStreams.findIndex(audioStream => audioStream.name === loadedStreamName);
-				if (index > -1) {
-					targetStreamIndex = index;
-					markFavoriteState(audioStreams[index].name);
-				}
-				populateStreamList();
-			});
+		});
+		if (favoriteStreamNames.length > 0) {
+			favoriteStreamNames.sort();
+			saveFavoriteStreams();
+		}
+		loadLastStreamName(loadedStreamName => {
+			const index = audioStreams.findIndex(audioStream => audioStream.name === loadedStreamName);
+			if (index > -1) {
+				targetStreamIndex = index;
+				markFavoriteState(audioStreams[index].name);
+			}
+			populateStreamList();
 		});
 	});
 };
@@ -709,7 +673,7 @@ const handlePlayer = () => {
 		return;
 	}
 	addPlayer();
-	fetchAudioStreams();
+	getAudioStreams();
 };
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -3,6 +3,7 @@ self.importScripts('../common/common.js');
 const jsCheckScript = 'content/octanetopus-check.js';
 const cssContentScript = 'content/octanetopus-content.css';
 const jsCommonScript = 'common/common.js';
+const jsAudioStream = 'content/audio-streams.js';
 const jsContentScript = 'content/octanetopus-content.js';
 let updatedTabId = 0;
 
@@ -66,8 +67,9 @@ const addMessageListener = () => {
 			log('injecting content scripts');
 			(async () => {
 				await injectCss(updatedTabId, cssContentScript);
-				await injectJs(updatedTabId, jsContentScript);
 				await injectJs(updatedTabId, jsCommonScript);
+				await injectJs(updatedTabId, jsAudioStream);
+				await injectJs(updatedTabId, jsContentScript);
 			})();
 		} else if (request.type === 'octanetopus-content-to-background--init') {
 			log(request.type);
@@ -94,13 +96,6 @@ const addMessageListener = () => {
 			fetchNews(result => {
 				log('send news response to content script');
 				responseFunc(result);
-			});
-			return true;
-		} else if (request.type === 'octanetopus-content-to-background--audio-streams') {
-			log(request.type);
-			fetchAudioStreams().then(result => {
-				log('send audio streams response to content script');
-				responseFunc(JSON.stringify(result));
 			});
 			return true;
 		} else if (request.type === 'octanetopus-content-to-background--load-favorite-streams') {
@@ -182,19 +177,19 @@ const fetchNews = (cb) => {
 	}
 };
 
-const fetchAudioStreams = async () => {
-	log('fetchAudioStreams');
-	try {
-		const r = await fetch(`https://raw.githubusercontent.com/alm-octane-chrome-ext/alm-octane-chrome-ext/master/audio-streams/audio-streams.json`);
-		if (!r.ok) {
-			log(`Error on fetchAudioStreams - ${r.status} ${r.statusText}`);
-		}
-		return await r.json();
-	} catch(err) {
-		log(`Error on fetchAudioStreams - ${err.message || err.toString()}`);
-		return [];
-	}
-};
+// const fetchAudioStreams = async () => {
+// 	log('fetchAudioStreams');
+// 	try {
+// 		const r = await fetch(`https://raw.githubusercontent.com/alm-octane-chrome-ext/alm-octane-chrome-ext/master/audio-streams/audio-streams.json`);
+// 		if (!r.ok) {
+// 			log(`Error on fetchAudioStreams - ${r.status} ${r.statusText}`);
+// 		}
+// 		return await r.json();
+// 	} catch(err) {
+// 		log(`Error on fetchAudioStreams - ${err.message || err.toString()}`);
+// 		return [];
+// 	}
+// };
 
 log('background page loaded');
 ensureConfigInStorage();
