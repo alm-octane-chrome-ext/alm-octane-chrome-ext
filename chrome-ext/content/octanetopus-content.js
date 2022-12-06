@@ -204,11 +204,13 @@ const getNews = () => {
 		const xmlItems = xml.querySelectorAll('item');
 		xmlItems.forEach(item => {
 			log(`news item: ${item.querySelectorAll('title')[0].textContent}`);
-			items.push({
-				title: item.querySelectorAll('title')[0].textContent.replace('\n', ''),
-				link: item.querySelectorAll('link')[0].textContent,
-				pubDate: item.querySelectorAll('pubDate')[0].textContent
-			});
+			if (item.querySelectorAll('pubDate')[0]) {
+				items.push({
+					title: item.querySelectorAll('title')[0].textContent.replace('\n', ''),
+					link: item.querySelectorAll('link')[0].textContent,
+					pubDate: item.querySelectorAll('pubDate')[0].textContent
+				});
+			}
 		});
 		if (items.length > 0) {
 			const item = items[0];
