@@ -99,7 +99,7 @@ const handleClocks = () => {
 		return;
 	}
 
-	parentElm.classList.add('flex', 'justify-content--center', 'align-items--center');
+	parentElm.classList.add('octanetopus-panel', 'flex', 'justify-content--center', 'align-items--center', 'overflow--hidden');
 	const clocksElm = document.createElement('div');
 	clocksElm.setAttribute('id', 'octanetopus--clocks');
 	clocksElm.classList.add('octanetopus--clocks');
