@@ -166,10 +166,10 @@
 }
 .octanetopus--player--stream-list {
     display: none;
-    position: absolute;
+    position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    top: 24px;
+    top: 40px;
     width: 1200px;
     grid-auto-flow: column;
     grid-template-rows: repeat(25, 1fr);
@@ -182,7 +182,6 @@
     color: #ccc;
     font-family: arial, sans-serif;
     font-size: 11px;
-    z-index: 1100;
 }
 .octanetopus--player--active.octanetopus--player--show-stream-list > .octanetopus--player--stream-list {
     display: grid;
