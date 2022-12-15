@@ -182,6 +182,7 @@
     color: #ccc;
     font-family: arial, sans-serif;
     font-size: 11px;
+    z-index: 1100;
 }
 .octanetopus--player--active.octanetopus--player--show-stream-list > .octanetopus--player--stream-list {
     display: grid;
