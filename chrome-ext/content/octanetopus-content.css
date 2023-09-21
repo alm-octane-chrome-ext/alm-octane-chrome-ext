@@ -2,10 +2,6 @@
     background-image: linear-gradient(to right, #333, #333, #333);
 }
 
-.mqm-masthead .masthead-logo-container {
-    background-color: #333;
-}
-
 .octanetopus--clocks {
     display: flex;
     margin: 0 10px;
