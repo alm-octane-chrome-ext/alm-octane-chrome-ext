@@ -1,5 +1,11 @@
-.mqm-masthead > .masthead-bg-color {
-    background-image: linear-gradient(to right, #333, #333, #333);
+.uxa-masthead-main-content {
+    justify-content: space-between !important;
+}
+
+.octanetopus--parent {
+    display: flex;
+    align-items: center;
+    margin-right: 72px;
 }
 
 .octanetopus--clocks {
@@ -80,6 +86,7 @@
     flex: 1 1 auto;
     margin: 0 10px;
     overflow: hidden;
+    max-width: 300px;
 }
 @keyframes octanetopus--news--item--appear-animation {
     from {
@@ -121,7 +128,6 @@
     height: 26px;
     border-radius: 13px;
     border: 1px solid #666;
-    background-color: #333;
     user-select: none;
 }
 .octanetopus--player--active {
@@ -166,9 +172,9 @@
     left: 50%;
     transform: translateX(-50%);
     top: 40px;
-    width: 1200px;
+    width: 900px;
     grid-auto-flow: column;
-    grid-template-rows: repeat(17, 1fr);
+    grid-template-rows: repeat(23, 1fr);
     justify-content: space-between;
     border-radius: 13px;
     border: 1px solid #666;
@@ -246,7 +252,7 @@
     height: 20px;
     margin: 2px;
     border-radius: 50%;
-    background-color: #666;
+    background-color: #ccc;
     opacity: 0.6;
     transition: all 0.25s ease-in-out;
     cursor: pointer;
