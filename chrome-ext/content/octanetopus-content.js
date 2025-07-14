@@ -1,5 +1,6 @@
 let config = null;
-const parentElementQuerySelector = '.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)';
+const mastheadMainContentQuerySelector = '.uxa-masthead-main-content';
+const parentElementQuerySelector = mastheadMainContentQuerySelector + ' .octanetopus--parent';
 
 const log = (/*msg*/) => {
 	//console.log(`OCTANETOPUS CONTENT SCRIPT | ${msg}`);
@@ -18,16 +19,27 @@ const debounce = (func, wait) => {
 	};
 };
 
+// Container -----------------------------------------------------------------------------------------------------------
+
+const createParentElement = () => {
+	log('createParentElement');
+	const mastheadMainContentElm = document.querySelector(mastheadMainContentQuerySelector);
+	if (mastheadMainContentElm) {
+		const parentElm = document.createElement('div');
+		parentElm.classList.add('octanetopus--parent');
+		mastheadMainContentElm.appendChild(parentElm);
+	}
+}
+
 // Background ----------------------------------------------------------------------------------------------------------
 
 const colorMasthead = () => {
 	log('colorMasthead');
 	config.octaneInstances.forEach(octaneInstance => {
 		if (window.location.href.includes(octaneInstance.urlPart) && octaneInstance.mastheadGradient) {
-			const elm = document.querySelector('.mqm-masthead > .masthead-bg-color');
-			if (elm) {
-				elm.style['background-image'] = `linear-gradient(to right, ${octaneInstance.mastheadGradient.join(', ')})`;
-			}
+			const styleElm = document.createElement('style');
+			styleElm.textContent = `.uxa-masthead::after { background-image: linear-gradient(to right, ${octaneInstance.mastheadGradient.join(', ')}) !important}`;
+			document.head.appendChild(styleElm);
 		}
 	});
 };
@@ -682,6 +694,7 @@ const handlePlayer = () => {
 
 const onAppReady = () => {
 	log('onAppReady');
+	createParentElement();
 	colorMasthead();
 	//handleClocks();
 	handlePlayer();
@@ -690,7 +703,7 @@ const onAppReady = () => {
 
 const onConfigReady = () => {
 	log('onConfigReady');
-	waitForAppReady('.uxa-masthead', onAppReady);
+	waitForAppReady('.uxa-masthead-main-content', onAppReady);
 };
 
 const waitForConfigMaxNumberOfTries = 60;
