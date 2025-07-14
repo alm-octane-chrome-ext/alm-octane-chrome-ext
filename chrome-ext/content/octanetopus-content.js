@@ -683,7 +683,7 @@ const handlePlayer = () => {
 const onAppReady = () => {
 	log('onAppReady');
 	colorMasthead();
-	handleClocks();
+	//handleClocks();
 	handlePlayer();
 	handleNews();
 };
