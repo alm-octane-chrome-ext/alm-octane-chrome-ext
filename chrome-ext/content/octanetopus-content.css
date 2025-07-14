@@ -91,7 +91,7 @@
     flex: 1 1 auto;
     margin: 0 10px;
     overflow: hidden;
-    max-width: 300px;
+    max-width: calc(100vw - 1340px);
 }
 .octanetopus--parent.hebrew .octanetopus--news {
     text-align: right;
