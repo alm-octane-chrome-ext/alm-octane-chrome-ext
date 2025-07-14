@@ -3,9 +3,14 @@
 }
 
 .octanetopus--parent {
+    flex: 1 1 auto;
     display: flex;
     align-items: center;
     margin-right: 72px;
+}
+.octanetopus--parent.hebrew {
+    justify-content: end;
+    flex-flow: row-reverse;
 }
 
 .octanetopus--clocks {
@@ -87,6 +92,10 @@
     margin: 0 10px;
     overflow: hidden;
     max-width: 300px;
+}
+.octanetopus--parent.hebrew .octanetopus--news {
+    text-align: right;
+    direction: rtl;
 }
 @keyframes octanetopus--news--item--appear-animation {
     from {

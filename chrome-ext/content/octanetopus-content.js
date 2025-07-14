@@ -168,7 +168,7 @@ const handleClocks = () => {
 
 		clocksElm.appendChild(clockElm);
 	});
-	parentElm.insertBefore(clocksElm, parentElm.childNodes[0]);
+	parentElm.appendChild(clocksElm);
 	config.mastheadClocks.forEach((c, i) => {
 		displayClockTime(i, '?', '?', '?', '?');
 	});
@@ -193,7 +193,7 @@ const handleNews = () => {
 	const newsElm = document.createElement('div');
 	newsElm.setAttribute('id', 'octanetopus--news');
 	newsElm.classList.add('octanetopus--news');
-	parentElm.insertBefore(newsElm, parentElm.childNodes[0]);
+	parentElm.appendChild(newsElm);
 
 	getNews();
 	setInterval(() => {
@@ -234,8 +234,12 @@ const getNews = () => {
 				newsElm.innerHTML = '';
 				const hebrewLetters = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת';
 				const isHebrew = (new RegExp('[' + hebrewLetters + ']+')).test(text);
-				newsElm.style['text-align'] = isHebrew ? 'right' : 'left';
-				newsElm.style['direction'] = isHebrew ? 'rtl' : 'ltr';
+				if (isHebrew) {
+					const parentElm = document.querySelector(parentElementQuerySelector);
+					if (parentElm) {
+						parentElm.classList.add('hebrew');
+					}
+				}
 				const titleElm = document.createElement('a');
 				titleElm.textContent = text;
 				titleElm.setAttribute('href', item.link);
