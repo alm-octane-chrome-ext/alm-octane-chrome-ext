@@ -690,7 +690,7 @@ const onAppReady = () => {
 
 const onConfigReady = () => {
 	log('onConfigReady');
-	waitForAppReady('.mqm-masthead > .masthead-bg-color > div > div:nth-child(2)', onAppReady);
+	waitForAppReady('.uxa-masthead', onAppReady);
 };
 
 const waitForConfigMaxNumberOfTries = 60;
