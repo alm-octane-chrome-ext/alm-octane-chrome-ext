@@ -136,10 +136,11 @@
     min-width: 122px;
     height: 26px;
     border-radius: 13px;
-    border: 1px solid #666;
+    border: 1px solid #999;
     user-select: none;
 }
 .octanetopus--player--active {
+    border: 1px solid #666;
 }
 .octanetopus--player--led {
     position: relative;
