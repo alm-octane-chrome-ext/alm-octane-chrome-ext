@@ -27,6 +27,9 @@ const createParentElement = () => {
 	if (mastheadMainContentElm) {
 		const parentElm = document.createElement('div');
 		parentElm.classList.add('octanetopus--parent');
+		if (config.rssFeed && config.rssFeed.enabled && (config.rssFeed.url.includes('ynet') || config.rssFeed.url.includes('walla'))) {
+			parentElm.classList.add('hebrew');
+		}
 		mastheadMainContentElm.appendChild(parentElm);
 	}
 }
@@ -234,12 +237,8 @@ const getNews = () => {
 				newsElm.innerHTML = '';
 				const hebrewLetters = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת';
 				const isHebrew = (new RegExp('[' + hebrewLetters + ']+')).test(text);
-				if (isHebrew) {
-					const parentElm = document.querySelector(parentElementQuerySelector);
-					if (parentElm) {
-						parentElm.classList.add('hebrew');
-					}
-				}
+				const parentElm = document.querySelector(parentElementQuerySelector);
+				parentElm.classList.toggle('hebrew', isHebrew);
 				const titleElm = document.createElement('a');
 				titleElm.textContent = text;
 				titleElm.setAttribute('href', item.link);
