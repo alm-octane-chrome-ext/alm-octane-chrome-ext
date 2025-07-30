@@ -283,7 +283,7 @@
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
-    color: #fff;
+    color: #666;
     font-family: arial, sans-serif;
     font-size: 11px;
 }
